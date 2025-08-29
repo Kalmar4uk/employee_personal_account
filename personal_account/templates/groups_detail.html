@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<section class="content">
+    <div class="group-header section">
+        <div class="group-info">
+            <h1>{{ group.title }}</h1>
+            <p><strong>Количество сотрудников:</strong> {{ employees.count }}</p>
+        </div>
+        <div class="group-stats">
+            <div class="stat-card">
+                <span class="stat-number">{{ count_work }}</span>
+                <span class="stat-label">Работают сегодня</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="filters section">
+        <div class="search-box">
+            <input type="text" placeholder="Поиск сотрудников..." id="employee-search">
+        </div>
+        <div class="filter-options">
+            <select id="status-filter">
+                <option value="all">Все статусы</option>
+                <option value="working">Работают сегодня</option>
+                <option value="dayoff">Выходной сегодня</option>
+            </select>
+            <select id="sort-by">
+                <option value="name">Сортировать по имени</option>
+                <option value="status">Сортировать по статусу</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="employees-list">
+        {% for employee in work_employees %}
+        {% if employee.work %}
+            <div class="employee-card working">
+                <div class="employee-avatar">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMCAydjRhMiAyIDAgMCAxLTIgMmEyIDIgMCAwIDAgMiAyYTIgMiAwIDAgMSAyIDJ2NGEyIDIgMCAwIDEtMiAySDZhMiAyIDAgMCAxLTItMnYtNGEyIDIgMCAwIDEgMi0yYTIgMiAwIDAgMCAyLTJhMiAyIDAgMCAxLTItMnYtNGEyIDIgMCAwIDEgMi0yaDEyYTIgMiAwIDAgMSAyIDJ6Ii8+PHBhdGggZD0iTTEyIDEwYTIgMiAwIDEgMCAwLTRhMiAyIDAgMCAwIDAgNHoiLz48cGF0aCBkPSJNMTggMjBhMiAyIDAgMCAwLTItMmEyIDIgMCAwIDEtMi0yYTIgMiAwIDAgMC0yLTJhMiAyIDAgMCAwLTIgMmEyIDIgMCAwIDEtMiAyYTIgMiAwIDAgMC0yIDIiLz48L3N2Zz4=" alt="Петров П.С.">
+                </div>
+                <div class="employee-info">
+                    <h3>{{ employee.employee.last_name }} {{ employee.employee.first_name|slice:":1" }}</h3>
+                    <p>{{ employee.employee.job_title}}</p>
+                </div>
+                <div class="employee-status">
+                    {% for work in employee.work %}
+                    <span class="status-badge working">Работает сегодня</span>
+                    <p>Время работы: {{ work.time_start }} - {{ work.time_end }}</p>
+                    <p>Текущее время: 14:30</p>
+                    {% endfor %}
+                </div>
+                <div class="employee-actions">
+                    <a href="{% url 'users:profile' employee.employee.username %}">
+                        <button class="profile-btn">Профиль</button>
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <div class="employee-card dayoff">
+                <div class="employee-avatar">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMCAydjRhMiAyIDAgMCAxLTIgMmEyIDIgMCAwIDAgMiAyYTIgMiAwIDAgMSAyIDJ2NGEyIDIgMCAwIDEtMiAySDZhMiAyIDAgMCAxLTItMnYtNGEyIDIgMCAwIDEgMi0yYTIgMiAwIDAgMCAyLTJhMiAyIDAgMCAxLTItMnYtNGEyIDIgMCAwIDEgMi0yaDEyYTIgMiAwIDAgMSAyIDJ6Ii8+PHBhdGggZD0iTTEyIDEwYTIgMiAwIDEgMCAwLTRhMiAyIDAgMCAwIDAgNHoiLz48cGF0aCBkPSJNMTggMjBhMiAyIDAgMCAwLTItMmEyIDIgMCAwIDEtMi0yYTIgMiAwIDAgMC0yLTJhMiAyIDAgMCAwLTIgMmEyIDIgMCAwIDEtMiAyYTIgMiAwIDAgMC0yIDIiLz48L3N2Zz4=" alt="Иванова О.К.">
+                </div>
+                <div class="employee-info">
+                    <h3>{{ employee.employee.last_name }} {{ employee.employee.first_name|slice:":1" }}</h3>
+                    <p>{{ employee.employee.job_title}}</p>
+                </div>
+                <div class="employee-status">
+                    <span class="status-badge dayoff">Выходной сегодня</span>
+                    <p>{% if employee.cause == "holiday" %}Причина: Отпуск{% else %}Причина: Выходной{% endif %}</p>
+                </div>
+                <div class="employee-actions">
+                    <a href="{% url 'users:profile' employee.employee.username %}">
+                        <button class="profile-btn">Профиль</button>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+        {% endfor %}
+        </div>
+    </div>
+</section>
+<script src="{% static 'js/groups_detail.js' %}"></script>
+{% endblock %}

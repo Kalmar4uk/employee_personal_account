@@ -1,0 +1,205 @@
+/* Стили для детальной страницы группы */
+
+/* Заголовок группы */
+.group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.group-info h1 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.group-info p {
+    margin-bottom: 8px;
+}
+
+.group-stats {
+    display: flex;
+    gap: 15px;
+}
+
+.stat-card {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    min-width: 120px;
+}
+
+.stat-number {
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+/* Фильтры */
+.filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.search-box {
+    flex-grow: 1;
+}
+
+.search-box input {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.filter-options {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-options select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 14px;
+}
+
+/* Карточки сотрудников */
+.employees-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.employee-card {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.employee-avatar img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.employee-info {
+    flex: 1;
+    min-width: 200px;
+}
+
+.employee-info h3 {
+    margin-bottom: 5px;
+    color: #2c3e50;
+}
+
+.employee-info p {
+    margin-bottom: 3px;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.employee-status {
+    min-width: 180px;
+}
+
+.employee-status p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-badge.working {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-badge.dayoff {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.employee-actions {
+    margin-left: auto;
+}
+
+.profile-btn {
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.profile-btn:hover {
+    background-color: #1a2530;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .group-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .group-stats {
+        width: 100%;
+        justify-content: space-around;
+    }
+    
+    .employee-card {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+    
+    .employee-actions {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .profile-btn {
+        width: 100%;
+    }
+    
+    .filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-box input {
+        max-width: 100%;
+    }
+    
+    .filter-options {
+        flex-direction: column;
+    }
+}
