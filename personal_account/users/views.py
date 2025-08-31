@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from users.models import User, GroupJob
 from lk.models import WorkShifts, Holiday
 from django.contrib.auth.decorators import login_required
@@ -14,7 +14,13 @@ CURRENT_MONTH = timezone.now().month
 class CustomLoginView(LoginView):
     def get_success_url(self):
         username = self.request.user.username
-        return reverse('users:profile', kwargs={'username': username})
+        return reverse("users:profile", kwargs={"username": username})
+
+
+@login_required
+def main(request):
+    username = request.user.username
+    return redirect(reverse("users:profile", kwargs={"username": username}))
 
 
 @login_required

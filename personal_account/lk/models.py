@@ -2,21 +2,21 @@ from django.db import models
 from users.models import User
 
 
-CHOICES_TYPE_WORK_SHIFT = {
-    "Сменный": "Сменный",
-    "5/2": "5/2"
-}
-CHOICES_STATUS_HOLIDAY = {
-    "Запланирован": "Запланирован",
-    "Завершен": "Завершен",
-    "Отменен": "Отменен"
-}
-CHOICES_TYPE_HOLIDAY = {
-    "Отпуск без сохранения заработной платы": (
+CHOICES_TYPE_WORK_SHIFT = (
+    ("Сменный", "Сменный"),
+    ("5/2", "5/2")
+)
+CHOICES_STATUS_HOLIDAY = (
+    ("Запланирован", "Запланирован"),
+    ("Завершен", "Завершен"),
+    ("Отменен", "Отменен")
+)
+CHOICES_TYPE_HOLIDAY = (
+    ("Отпуск без сохранения заработной платы", (
         "Отпуск без сохранения заработной платы"
-    ),
-    "Ежегодный оплачиваемый отпуск": "Ежегодный оплачиваемый отпуск"
-}
+    )),
+    ("Ежегодный оплачиваемый отпуск", "Ежегодный оплачиваемый отпуск")
+)
 
 
 class WorkShiftsAndHolidayModel(models.Model):
@@ -74,7 +74,7 @@ class Holiday(WorkShiftsAndHolidayModel):
     )
     status = models.CharField(
         "Статус",
-        max_length=15, 
+        max_length=15,
         choices=CHOICES_STATUS_HOLIDAY
     )
     count_day = models.PositiveSmallIntegerField("Кол-во дней")

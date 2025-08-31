@@ -8,7 +8,11 @@ SECRET_KEY = 'django-insecure-c)-q^bppy_4%hvo3qgz0d2c7tgw21=#h=a=atzt0%+=3^na(0t
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['kalmaro.pythonanywhere.com', 'www.kalmaro.pythonanywhere.com', 'localhost']
+ALLOWED_HOSTS = [
+    'kalmaro.pythonanywhere.com',
+    'www.kalmaro.pythonanywhere.com',
+    'localhost'
+]
 
 
 INSTALLED_APPS = [
@@ -52,6 +56,8 @@ TEMPLATES = [
 ]
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = BASE_DIR / 'collected_static'
 
 STATICFILES_DIRS = [
    os.path.join(BASE_DIR, "static"),
