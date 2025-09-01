@@ -4,6 +4,7 @@ from django.utils import timezone
 from users.models import User
 from lk.models import WorkShifts, Holiday
 from datetime import datetime, timedelta
+import calendar
 
 
 TIME_FORMAT = "%H:%M"
@@ -61,5 +62,15 @@ def parse_work_shifts(request):
                         )
                         night_shift = False
 
-    context = {"sheet": sheet}
-    return render(request, "for_parse.html", context)
+    return render(request, "for_parse.html")
+
+
+def create_date(request):
+    user = User.objects.get(username="rbespalov")
+    current_month = timezone.now().month
+    current_year = timezone.now().year
+    _, count_day_month = calendar.monthrange(current_year, current_month)
+    for day in range(1, count_day_month + 1):
+        date = datetime(current_year, current_month, day)
+        WorkShifts.objects.create(employee=user, date_start=date, date_end=date)
+    return render(request, "for_parse.html")
