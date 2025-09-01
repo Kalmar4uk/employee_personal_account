@@ -23,6 +23,7 @@ class MyUserAdmin(UserAdmin):
     )
     list_filter = ("is_active",)
     ordering = ("-date_joined",)
+    filter_horizontal = ("group_job", "groups")
     fieldsets = (
         (None, {"fields": (
             "username",
@@ -37,6 +38,8 @@ class MyUserAdmin(UserAdmin):
                 "fields": (
                     "personnel_number",
                     "job_title",
+                    "group_job",
+                    "is_main"
                 )
             }
         ),
@@ -67,6 +70,7 @@ class MyUserAdmin(UserAdmin):
                 "fields": (
                     "personnel_number",
                     "job_title",
+                    "group_job"
                 )
             }
         ),
@@ -86,4 +90,4 @@ class MyUserAdmin(UserAdmin):
 
 @admin.register(GroupJob)
 class GroupJobAdmin(admin.ModelAdmin):
-    filter_horizontal = ("employees",)
+    pass

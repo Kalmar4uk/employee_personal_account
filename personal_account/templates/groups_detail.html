@@ -5,7 +5,8 @@
     <div class="group-header section">
         <div class="group-info">
             <h1>{{ group.title }}</h1>
-            <p><strong>Количество сотрудников:</strong> {{ group.employees.count }}</p>
+            <p><strong>Руководитель:</strong> {{ boss.last_name }} {{ boss.first_name }}</p>
+            <p><strong>Количество сотрудников:</strong> {{ group.users.count }}</p>
         </div>
         <div class="group-stats">
             <div class="stat-card">

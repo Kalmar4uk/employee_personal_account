@@ -1,91 +1,308 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<div class="section">
-    <h2>Мой профиль</h2>
-    
+    <div class="section">
+        <h2>Профиль</h2>
+        
         <div class="info-blocks">
             <div class="info-block">
                 <h3>Личная информация</h3>
-                
-                <div class="info-item">
-                    <span class="info-label">ФИО:</span>
-                    <span class="info-value">{{ employee.last_name }} {{ employee.first_name }}</span>
-                </div>
-                
-                <div class="info-item">
-                    <span class="info-label">Должность:</span>
-                    <span class="info-value">{{ employee.job_title }}</span>
-                </div>
-                
-                <div class="info-item">
-                    <span class="info-label">Группа:</span>
+                <p><strong>ФИО:</strong> {{ employee.last_name }} {{ employee.first_name }}</p>
+                <p><strong>Должность:</strong> {{ employee.job_title }}</p>
+                <p><strong>Группа:</strong>
                     <a href="{% url 'users:groups_detail' group.id %}" class="group-pill">
-                        <span class="group-icon">👥</span>
                         {{ group.title }}
                         <span class="group-arrow">→</span>
                     </a>
-                </div>
             </div>
-        </div>
-        
-        <div class="info-block">
-            <h3>Контактная информация</h3>
-            <div class="info-item">
-                <span class="info-label">Email:</span>
-                <span class="info-value">{{ employee.email }}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Телефон:</span>
-                <span class="info-value">+7 (123) 456-78-90</span>
+            
+            <div class="info-block">
+                <h3>Контактная информация</h3>
+                <p><strong>Email:</strong> {{ employee.email }}</p>
+                <p><strong>Телефон:</strong> +7 (123) 456-78-90</p>
             </div>
         </div>
     </div>
-</div>
 
-<div class="section">
-    <h2>График работы</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Период</th>
-                <th>Тип графика</th>
-                <th>Время работы</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for work_shift in work_shifts %}
-            <tr>
-                <td>{{ work_shift.date_start|date:"d.m.Y" }} - {{ work_shift.date_end|date:"d.m.Y" }}</td>
-                <td>{{ work_shift.type }}</td>
-                <td>{{ work_shift.time_start }} - {{ work_shift.time_end }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+    <div class="section">
+        <h2>График работы</h2>
+        
+        <div class="schedule-filters">
+            <button class="filter-btn active" data-filter="all">Рабочие дни</button>
+            <button class="filter-btn" data-filter="current">Текущая неделя</button>
+        </div>
+        
+        <div class="schedule-container">
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>День недели</th>
+                        <th>Тип графика</th>
+                        <th>Время работы</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Неделя 1 -->
+                    <tr class="week-divider">
+                        <td colspan="5">Неделя 1 (28 июля - 3 августа)</td>
+                    </tr>
+                    <tr>
+                        <td>01.08.2025</td>
+                        <td><span class="day-icon work-day">Пн</span>Понедельник</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    
+                    <!-- Неделя 2 -->
+                    <tr class="week-divider">
+                        <td colspan="5">Неделя 2 (4 августа - 10 августа)</td>
+                    </tr>
+                    <tr>
+                        <td>04.08.2025</td>
+                        <td><span class="day-icon work-day">Пн</span>Понедельник</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>05.08.2025</td>
+                        <td><span class="day-icon work-day">Вт</span>Вторник</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>06.08.2025</td>
+                        <td><span class="day-icon work-day">Ср</span>Среда</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>07.08.2025</td>
+                        <td><span class="day-icon work-day">Чт</span>Четверг</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>08.08.2025</td>
+                        <td><span class="day-icon work-day">Пт</span>Пятница</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>09.08.2025</td>
+                        <td><span class="day-icon weekend">Сб</span>Суббота</td>
+                        <td>Выходной</td>
+                        <td>-</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>10.08.2025</td>
+                        <td><span class="day-icon weekend">Вс</span>Воскресенье</td>
+                        <td>Выходной</td>
+                        <td>-</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    
+                    <!-- Неделя 3 -->
+                    <tr class="week-divider">
+                        <td colspan="5">Неделя 3 (11 августа - 17 августа)</td>
+                    </tr>
+                    <tr>
+                        <td>11.08.2025</td>
+                        <td><span class="day-icon work-day">Пн</span>Понедельник</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>12.08.2025</td>
+                        <td><span class="day-icon work-day">Вт</span>Вторник</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>13.08.2025</td>
+                        <td><span class="day-icon work-day">Ср</span>Среда</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>14.08.2025</td>
+                        <td><span class="day-icon work-day">Чт</span>Четверг</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>15.08.2025</td>
+                        <td><span class="day-icon work-day">Пт</span>Пятница</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>16.08.2025</td>
+                        <td><span class="day-icon weekend">Сб</span>Суббота</td>
+                        <td>Выходной</td>
+                        <td>-</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>17.08.2025</td>
+                        <td><span class="day-icon weekend">Вс</span>Воскресенье</td>
+                        <td>Выходной</td>
+                        <td>-</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    
+                    <!-- Неделя 4 -->
+                    <tr class="week-divider">
+                        <td colspan="5">Неделя 4 (18 августа - 24 августа)</td>
+                    </tr>
+                    <tr>
+                        <td>18.08.2025</td>
+                        <td><span class="day-icon work-day">Пн</span>Понедельник</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>19.08.2025</td>
+                        <td><span class="day-icon work-day">Вт</span>Вторник</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>20.08.2025</td>
+                        <td><span class="day-icon work-day">Ср</span>Среда</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>21.08.2025</td>
+                        <td><span class="day-icon work-day">Чт</span>Четверг</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>22.08.2025</td>
+                        <td><span class="day-icon work-day">Пт</span>Пятница</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>23.08.2025</td>
+                        <td><span class="day-icon weekend">Сб</span>Суббота</td>
+                        <td>Выходной</td>
+                        <td>-</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    <tr>
+                        <td>24.08.2025</td>
+                        <td><span class="day-icon weekend">Вс</span>Воскресенье</td>
+                        <td>Выходной</td>
+                        <td>-</td>
+                        <td><span class="status-badge status-completed">Завершен</span></td>
+                    </tr>
+                    
+                    <!-- Неделя 5 -->
+                    <tr class="week-divider">
+                        <td colspan="5">Неделя 5 (25 августа - 31 августа)</td>
+                    </tr>
+                    <tr class="current-day">
+                        <td>25.08.2025</td>
+                        <td><span class="day-icon work-day">Пн</span>Понедельник</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-planned">Запланирован</span></td>
+                    </tr>
+                    <tr>
+                        <td>26.08.2025</td>
+                        <td><span class="day-icon work-day">Вт</span>Вторник</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-planned">Запланирован</span></td>
+                    </tr>
+                    <tr>
+                        <td>27.08.2025</td>
+                        <td><span class="day-icon work-day">Ср</span>Среда</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-planned">Запланирован</span></td>
+                    </tr>
+                    <tr>
+                        <td>28.08.2025</td>
+                        <td><span class="day-icon work-day">Чт</span>Четверг</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-planned">Запланирован</span></td>
+                    </tr>
+                    <tr>
+                        <td>29.08.2025</td>
+                        <td><span class="day-icon work-day">Пт</span>Пятница</td>
+                        <td>5/2</td>
+                        <td>9:00 - 18:00</td>
+                        <td><span class="status-badge status-planned">Запланирован</span></td>
+                    </tr>
+                    <tr>
+                        <td>30.08.2025</td>
+                        <td><span class="day-icon weekend">Сб</span>Суббота</td>
+                        <td>Выходной</td>
+                        <td>-</td>
+                        <td><span class="status-badge status-planned">Запланирован</span></td>
+                    </tr>
+                    <tr>
+                        <td>31.08.2025</td>
+                        <td><span class="day-icon weekend">Вс</span>Воскресенье</td>
+                        <td>Выходной</td>
+                        <td>-</td>
+                        <td><span class="status-badge status-planned">Запланирован</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-<div class="section">
-    <h2>Отпуска</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Период</th>
-                <th>Тип отпуска</th>
-                <th>Статус</th>
-                <th>Дней</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for holiday in holidays %}
-            <tr>
-                <td>{{ holiday.date_start|date:"d.m.Y" }} - {{ holiday.date_end|date:"d.m.Y" }}</td>
-                <td>{{ holiday.type }}</td>
-                <td><span class="status-badge status-completed">{{ holiday.status }}</span></td>
-                <td>{{ holiday.count_day }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+    <div class="section">
+        <h2>Отпуска</h2>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>Период</th>
+                    <th>Тип отпуска</th>
+                    <th>Статус</th>
+                    <th>Дней</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>01.07.2023 - 15.07.2023</td>
+                    <td>Ежегодный оплачиваемый</td>
+                    <td><span class="status-badge status-completed">Завершен</span></td>
+                    <td>15</td>
+                </tr>
+                <tr>
+                    <td>01.02.2024 - 14.02.2024</td>
+                    <td>Ежегодный оплачиваемый</td>
+                    <td><span class="status-badge status-planned">Запланирован</span></td>
+                    <td>14</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+<script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}

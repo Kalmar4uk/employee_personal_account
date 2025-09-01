@@ -11,6 +11,12 @@ class User(AbstractUser):
         max_length=20,
         unique=True
     )
+    group_job = models.ManyToManyField(
+        "GroupJob",
+        verbose_name="Группа сотрудника",
+        related_name="users"
+    )
+    is_main = models.BooleanField("Босс этой качалки", default=False)
 
     objects = CustomUserManager()
 
@@ -26,11 +32,6 @@ class User(AbstractUser):
 
 class GroupJob(models.Model):
     title = models.CharField("Название", max_length=100, unique=True)
-    employees = models.ManyToManyField(
-        User,
-        verbose_name="Сотрудники",
-        related_name="groupsjob"
-    )
 
     class Meta:
         verbose_name = "Рабочая группа"

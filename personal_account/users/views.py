@@ -26,10 +26,9 @@ def main(request):
 @login_required
 def profile(request, username):
     employee = User.objects.get(username=username)
-    work_shifts = employee.workshifts.filter(date_start__month=CURRENT_MONTH)
+    group = employee.group_job.get()
+    work_shifts = employee.workshifts.filter(date_start__month=CURRENT_MONTH).order_by("date_start")
     holidays = employee.holidays.all()
-    group = employee.groupsjob.get()
-
     context = {
         "employee": employee,
         "group": group,
@@ -42,7 +41,7 @@ def profile(request, username):
 
 @login_required
 def groups(request):
-    groups = GroupJob.objects.all().prefetch_related("employees")
+    groups = GroupJob.objects.all().prefetch_related("users")
     context = {
         "groups": groups
     }
@@ -52,22 +51,46 @@ def groups(request):
 @login_required
 def groups_detail(request, id):
     group = GroupJob.objects.get(id=id)
-    employees = group.employees.all()
+    employees = group.users.all()
     work_employees = []
     count_work = 0
+    boss = ""
     for employee in employees:
-        holiday = employee.holidays.filter(date_start__lte=timezone.now(), date_end__gte=timezone.now()).exists()
-        work = employee.workshifts.filter(date_start__day=timezone.now().day)
+        if employee.is_main:
+            boss = employee
+        holiday = employee.holidays.filter(
+            date_start__lte=timezone.now(),
+            date_end__gte=timezone.now()
+        ).exists()
+        work = employee.workshifts.filter(date_start=timezone.now())
         if holiday:
-            work_employees.append({"employee": employee, "work": None, "cause": "holiday"})
+            work_employees.append(
+                {
+                    "employee": employee,
+                    "work": None,
+                    "cause": "holiday"
+                }
+            )
         elif not work:
-            work_employees.append({"employee": employee, "work": None, "cause": "day_off"})
+            work_employees.append(
+                {
+                    "employee": employee,
+                    "work": None,
+                    "cause": "day_off"
+                }
+            )
         else:
-            work_employees.append({"employee": employee, "work": work})
+            work_employees.append(
+                {
+                    "employee": employee,
+                    "work": work
+                }
+            )
             count_work += 1
     context = {
         "group": group,
         "work_employees": work_employees,
-        "count_work": count_work
+        "count_work": count_work,
+        "boss": boss
     }
     return render(request, "groups_detail.html", context)

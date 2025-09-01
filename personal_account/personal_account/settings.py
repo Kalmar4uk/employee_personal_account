@@ -1,4 +1,5 @@
 import os
+import locale
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -95,6 +96,8 @@ LOGIN_REDIRECT_URL = 'users:profile user.username'
 LOGIN_URL = '/auth/login/'
 
 LANGUAGE_CODE = 'ru-Ru'
+
+locale.setlocale(locale.LC_TIME, 'ru_RU')
 
 TIME_ZONE = 'UTC'
 

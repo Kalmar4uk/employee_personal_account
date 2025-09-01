@@ -4,6 +4,9 @@ from lk.models import WorkShifts, Holiday
 
 @admin.register(WorkShifts)
 class WorkShiftsAdmin(admin.ModelAdmin):
+    search_fields = ("employee",)
+    list_display = ("employee", "date_start", "date_end", "time_start", "time_end", "night_shift")
+    list_filter = ("employee", "date_start", "date_end", "time_start", "time_end", "night_shift")
     raw_id_fields = ("employee",)
 
 
