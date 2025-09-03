@@ -131,14 +131,9 @@
         border-left: 4px solid #43a047;
     }
     
-    .day-shift-night {
-        background-color: #e3f2fd;
-        border-left: 4px solid #1e88e5;
-    }
-    
     .day-vacation {
-        background-color: #fff8e1;
-        border-left: 4px solid #ffb300;
+        background-color: #d6e8fa;
+        border-left: 4px solid #1e88e5;
     }
     
     .day-sick {

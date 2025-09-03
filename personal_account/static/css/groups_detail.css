@@ -1,6 +1,3 @@
-/* Стили для детальной страницы группы */
-
-/* Заголовок группы */
 .group-header {
     display: flex;
     justify-content: space-between;

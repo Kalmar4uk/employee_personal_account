@@ -1,22 +1,8 @@
 from django.db import models
+
 from users.models import User
-
-
-CHOICES_TYPE_WORK_SHIFT = (
-    ("Сменный", "Сменный"),
-    ("5/2", "5/2")
-)
-CHOICES_STATUS_HOLIDAY = (
-    ("Запланирован", "Запланирован"),
-    ("Завершен", "Завершен"),
-    ("Отменен", "Отменен")
-)
-CHOICES_TYPE_HOLIDAY = (
-    ("Отпуск без сохранения заработной платы", (
-        "Отпуск без сохранения заработной платы"
-    )),
-    ("Ежегодный оплачиваемый отпуск", "Ежегодный оплачиваемый отпуск")
-)
+from utils.constants import (CHOICES_STATUS_HOLIDAY, CHOICES_TYPE_HOLIDAY,
+                             CHOICES_TYPE_WORK_SHIFT)
 
 
 class WorkShiftsAndHolidayModel(models.Model):
@@ -55,17 +41,30 @@ class WorkShifts(WorkShiftsAndHolidayModel):
     class Meta:
         verbose_name = "Смена"
         verbose_name_plural = "Смены"
+        ordering = ("date_start",)
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["date_start", "date_end", "employee"],
+                name='unique_shifts'
+            )
+        ]
 
     def __str__(self):
         return f"Смена {self.employee}"
 
 
-class Holiday(WorkShiftsAndHolidayModel):
+class Holiday(models.Model):
     employee = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
         related_name="holidays"
+    )
+    date = models.DateField(
+        "Дата",
+        null=True,
+        blank=True
     )
     type = models.CharField(
         "Тип отпуска",
@@ -77,16 +76,18 @@ class Holiday(WorkShiftsAndHolidayModel):
         max_length=15,
         choices=CHOICES_STATUS_HOLIDAY
     )
-    count_day = models.PositiveSmallIntegerField("Кол-во дней")
 
     class Meta:
         verbose_name = "Отпуск"
         verbose_name_plural = "Отпуска"
+        ordering = ("date",)
 
-    def save(self, *args, **kwargs):
-        days = self.date_end - self.date_start
-        self.count_day = days.days + 1
-        super().save(*args, **kwargs)
+        constraints = [
+            models.UniqueConstraint(
+                fields=["date", "employee"],
+                name='unique_holidays'
+            )
+        ]
 
     def __str__(self):
         return f"Отпуск {self.employee}"

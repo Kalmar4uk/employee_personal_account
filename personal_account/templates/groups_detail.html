@@ -37,11 +37,8 @@
         {% for employee in work_employees %}
         {% if employee.work %}
             <div class="employee-card working">
-                <div class="employee-avatar">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMCAydjRhMiAyIDAgMCAxLTIgMmEyIDIgMCAwIDAgMiAyYTIgMiAwIDAgMSAyIDJ2NGEyIDIgMCAwIDEtMiAySDZhMiAyIDAgMCAxLTItMnYtNGEyIDIgMCAwIDEgMi0yYTIgMiAwIDAgMCAyLTJhMiAyIDAgMCAxLTItMnYtNGEyIDIgMCAwIDEgMi0yaDEyYTIgMiAwIDAgMSAyIDJ6Ii8+PHBhdGggZD0iTTEyIDEwYTIgMiAwIDEgMCAwLTRhMiAyIDAgMCAwIDAgNHoiLz48cGF0aCBkPSJNMTggMjBhMiAyIDAgMCAwLTItMmEyIDIgMCAwIDEtMi0yYTIgMiAwIDAgMC0yLTJhMiAyIDAgMCAwLTIgMmEyIDIgMCAwIDEtMiAyYTIgMiAwIDAgMC0yIDIiLz48L3N2Zz4=" alt="Петров П.С.">
-                </div>
                 <div class="employee-info">
-                    <h3>{{ employee.employee.last_name }} {{ employee.employee.first_name|slice:":1" }}</h3>
+                    <h3><a href="{% url 'users:profile' employee.employee.username %}">{{ employee.employee.last_name }} {{ employee.employee.first_name|slice:":1" }}</a></h3>
                     <p>{{ employee.employee.job_title}}</p>
                 </div>
                 <div class="employee-status">
@@ -59,15 +56,12 @@
             </div>
         {% else %}
             <div class="employee-card dayoff">
-                <div class="employee-avatar">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMCAydjRhMiAyIDAgMCAxLTIgMmEyIDIgMCAwIDAgMiAyYTIgMiAwIDAgMSAyIDJ2NGEyIDIgMCAwIDEtMiAySDZhMiAyIDAgMCAxLTItMnYtNGEyIDIgMCAwIDEgMi0yYTIgMiAwIDAgMCAyLTJhMiAyIDAgMCAxLTItMnYtNGEyIDIgMCAwIDEgMi0yaDEyYTIgMiAwIDAgMSAyIDJ6Ii8+PHBhdGggZD0iTTEyIDEwYTIgMiAwIDEgMCAwLTRhMiAyIDAgMCAwIDAgNHoiLz48cGF0aCBkPSJNMTggMjBhMiAyIDAgMCAwLTItMmEyIDIgMCAwIDEtMi0yYTIgMiAwIDAgMC0yLTJhMiAyIDAgMCAwLTIgMmEyIDIgMCAwIDEtMiAyYTIgMiAwIDAgMC0yIDIiLz48L3N2Zz4=" alt="Иванова О.К.">
-                </div>
                 <div class="employee-info">
-                    <h3>{{ employee.employee.last_name }} {{ employee.employee.first_name|slice:":1" }}</h3>
+                    <h3><a href="{% url 'users:profile' employee.employee.username %}">{{ employee.employee.last_name }} {{ employee.employee.first_name|slice:":1" }}</a></h3>
                     <p>{{ employee.employee.job_title}}</p>
                 </div>
                 <div class="employee-status">
-                    <span class="status-badge dayoff">Выходной сегодня</span>
+                    <span class="status-badge dayoff">Не работает сегодня</span>
                     <p>{% if employee.cause == "holiday" %}Причина: Отпуск{% else %}Причина: Выходной{% endif %}</p>
                 </div>
                 <div class="employee-actions">

@@ -25,7 +25,7 @@
     </div>
 
     <div class="section">
-        <h2>График работы на август 2025</h2>
+        <h2>График работы на сентябрь 2025</h2>
         <div class="calendar">
             
             <div class="weekdays">
@@ -40,59 +40,28 @@
             
             <div class="days-grid" id="calendar-days">
             </div>
-            
-            <div class="calendar-legend">
-                <div class="legend-item legend-day-off">
-                    <div class="legend-color"></div>
-                    <span>Выходной</span>
-                </div>
-                <div class="legend-item legend-day-shift">
-                    <div class="legend-color"></div>
-                    <span>Дневная смена (9:00-18:00)</span>
-                </div>
-                <div class="legend-item legend-night-shift">
-                    <div class="legend-color"></div>
-                    <span>Ночная смена (22:00-6:00)</span>
-                </div>
-                <div class="legend-item legend-vacation">
-                    <div class="legend-color"></div>
-                    <span>Отпуск</span>
-                </div>
-                <div class="legend-item legend-sick">
-                    <div class="legend-color"></div>
-                    <span>Больничный</span>
-                </div>
-            </div>
         </div>
     </div>
 
-    <div class="section">
-        <h2>Отпуска</h2>
-        <table class="schedule-table">
-            <thead>
-                <tr>
-                    <th>Период</th>
-                    <th>Тип отпуска</th>
-                    <th>Статус</th>
-                    <th>Дней</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>01.07.2023 - 15.07.2023</td>
-                    <td>Ежегодный оплачиваемый</td>
-                    <td><span class="status-badge status-completed">Завершен</span></td>
-                    <td>15</td>
-                </tr>
-                <tr>
-                    <td>01.02.2024 - 14.02.2024</td>
-                    <td>Ежегодный оплачиваемый</td>
-                    <td><span class="status-badge status-planned">Запланирован</span></td>
-                    <td>14</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    {% if first_date and last_date %}
+        <div class="section">
+            <h2>Отпуска</h2>
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>Период</th>
+                        <th>Дней</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ first_date|date:"d.m.Y" }} - {{ last_date|date:"d.m.Y" }}</td>
+                        <td>{{ count_days }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
 </div>
 
 <script>

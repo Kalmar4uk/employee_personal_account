@@ -1,34 +1,22 @@
-from django.shortcuts import render, redirect
-from users.models import User, GroupJob
-from lk.models import WorkShifts, Holiday
+import json
+from datetime import timedelta
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
+from django.core.serializers.json import DjangoJSONEncoder
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
-from django.db.models import Q
-from datetime import datetime
-from calendar import monthrange
-import json
-from django.core.serializers.json import DjangoJSONEncoder
 
-
-CURRENT_MONTH = timezone.now().month
+from users.models import GroupJob, User
+from utils.functions import (days_current_month,
+                             get_holidays_first_and_last_date)
 
 
 class CustomLoginView(LoginView):
     def get_success_url(self):
         username = self.request.user.username
         return reverse("users:profile", kwargs={"username": username})
-
-
-def days_current_month():
-    current_month = timezone.now().month
-    current_year = timezone.now().year
-    _, count_day_month = monthrange(current_year, current_month)
-    result = []
-    for day in range(1, count_day_month + 1):
-        result.append(datetime(current_year, current_month, day))
-    return result
 
 
 @login_required
@@ -41,24 +29,43 @@ def main(request):
 def profile(request, username):
     employee = User.objects.get(username=username)
     group = employee.group_job.get()
-    holidays = employee.holidays.all()
 
     dates = days_current_month()
     calendar = {}
     for date in dates:
         work = employee.workshifts.filter(date_start=date).first()
+        holiday = employee.holidays.filter(date=date).first()
         date_format = date.strftime("%Y-%m-%d")
         if work:
-            calendar[date_format] = {"type": "day-shift-day", "time": f"{work.time_start} - {work.time_end}"}
+            calendar[date_format] = {
+                "type": "day-shift-day",
+                "time": f"{work.time_start} - {work.time_end}"
+            }
+        elif holiday:
+            calendar[date_format] = {"type": "day-vacation", "time": "Отпуск"}
         else:
             calendar[date_format] = {"type": "day-off", "time": "Выходной"}
 
-    context = {
-        "employee": employee,
-        "group": group,
-        "holidays": holidays,
-        "calendar": json.dumps(calendar, cls=DjangoJSONEncoder)
-    }
+    first_date, last_date = get_holidays_first_and_last_date(employee=employee)
+
+    if first_date and last_date:
+        count_days = (last_date - first_date) + timedelta(days=1)
+
+        context = {
+            "employee": employee,
+            "group": group,
+            "first_date": first_date,
+            "last_date": last_date,
+            "count_days": count_days.days,
+            "calendar": json.dumps(calendar, cls=DjangoJSONEncoder)
+        }
+    else:
+
+        context = {
+            "employee": employee,
+            "group": group,
+            "calendar": json.dumps(calendar, cls=DjangoJSONEncoder)
+        }
 
     return render(request, "profile.html", context)
 
@@ -83,8 +90,7 @@ def groups_detail(request, id):
         if employee.is_main:
             boss = employee
         holiday = employee.holidays.filter(
-            date_start__lte=timezone.now(),
-            date_end__gte=timezone.now()
+            date__lte=timezone.now(),
         ).exists()
         work = employee.workshifts.filter(date_start=timezone.now())
         if holiday:
