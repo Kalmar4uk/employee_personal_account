@@ -9,4 +9,5 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-*.sqlite3
+personal_account/*.sqlite3
+personal_account/data_files/*.xlsx

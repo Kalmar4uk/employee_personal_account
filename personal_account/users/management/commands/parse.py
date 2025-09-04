@@ -21,28 +21,32 @@ class Command(BaseCommand):
         parser.add_argument(
             "type_parse",
             type=str,
-            help="Тип парсинга: shifts - смены | holidays - отпуск | all - все")
+            help=("Тип парсинга: shifts - смены | holidays - отпуск | all - все"))
 
     def handle(self, *args, **kwargs):
         type_parse = kwargs["type_parse"]
-        if type_parse == "shifts":
-            if parse_work_shifts():
-                self.success()
-        elif type_parse == "holidays":
-            if parse_holidays():
-                self.success()
-        elif type_parse == "all":
-            if parse_work_shifts() and parse_holidays():
-                self.success()
-        else:
-            self.bad()
+        try:
+            if type_parse == "shifts":
+                if parse_work_shifts():
+                    self.success()
+            elif type_parse == "holidays":
+                if parse_work_shifts():
+                    self.success()
+            elif type_parse == "all":
+                if parse_work_shifts() and parse_holidays():
+                    self.success()
+            else:
+                text = "\nНеизвестная команда!\nИспользуй shifts или holidays"
+                self.bad(txt=text)
+        except ValueError as e:
+            self.bad(txt=str(e))
 
     def success(self):
         self.stdout.write(
             self.style.SUCCESS('Данные из файла загружены')
         )
 
-    def bad(self):
+    def bad(self, txt):
         self.stdout.write(
             self.style.ERROR(
                 "\nНеизвестная команда!\nИспользуй shifts или holidays"
@@ -54,7 +58,7 @@ def parse_work_shifts() -> bool:
     try:
         sheet = open_wb()
     except ValueError as e:
-        return f"При обработке файла возникла ошибка: {e}"
+        raise ValueError(f"При обработке файла возникла ошибка: {e}")
 
     for cell in range(26, 33):
         for data in sheet:
@@ -65,7 +69,7 @@ def parse_work_shifts() -> bool:
                 try:
                     last_name, first_name = shift.split(" ", 1)
                 except Exception as e:
-                    return (
+                    raise ValueError(
                         f"При обработке файла возникла ошибка: {e}\n"
                         f"Необходимо проверить исходные данные"
                     )
@@ -76,7 +80,7 @@ def parse_work_shifts() -> bool:
                         first_name=first_name
                     )
                 except Exception:
-                    return (
+                    raise ValueError(
                         f"Сотрудника с именем {first_name} и "
                         f"фамилией {last_name} нет в базе.\n"
                         f"Вероятно нужно добавить."
@@ -105,7 +109,7 @@ def parse_work_shifts() -> bool:
                             type=prepare_time.get("type")
                         )
                     except Exception as e:
-                        return (
+                        raise ValueError(
                             f"При записи смен возникла ошибка {e}"
                             f"\n Входные данные: "
                             f"{prepare_time}"
@@ -117,7 +121,7 @@ def parse_holidays() -> bool:
     try:
         sheet = open_wb()
     except ValueError as e:
-        return f"При обработке файла возникла ошибка: {e}"
+        raise ValueError(f"При обработке файла возникла ошибка: {e}")
 
     for cell in range(26, 33):
         for data in sheet:
@@ -129,7 +133,7 @@ def parse_holidays() -> bool:
                     try:
                         last_name, first_name = data_cell.split(" ", 1)
                     except Exception as e:
-                        return (
+                        raise ValueError(
                             f"При обработке файла возникла ошибка: {e}\n"
                             f"Необходимо проверить исходные данные"
                         )
@@ -139,7 +143,7 @@ def parse_holidays() -> bool:
                             first_name=first_name
                         )
                     except Exception:
-                        return (
+                        raise ValueError(
                             f"Сотрудника с именем {first_name} и "
                             f"фамилией {last_name} нет в базе.\n"
                             f"Вероятно нужно добавить."
@@ -157,7 +161,7 @@ def parse_holidays() -> bool:
                             type="Ежегодный оплачиваемый"
                         )
                     except Exception as e:
-                        return (
+                        raise ValueError(
                             f"При записи отпуска возникла ошибка {e}"
                             "\n Входные данные: {user}, {date}, {status}"
                         )
