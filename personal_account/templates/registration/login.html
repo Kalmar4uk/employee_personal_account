@@ -145,7 +145,6 @@
             <p>Введите ваши учетные данные для входа</p>
         </div>
 
-        <!-- Сообщения Django -->
         {% if messages %}
         <div class="messages">
             {% for message in messages %}
@@ -156,11 +155,9 @@
         </div>
         {% endif %}
 
-        <!-- Форма входа Django -->
         <form method="post" action="{% url 'users:login' %}" class="login-form">
             {% csrf_token %}
             
-            <!-- Поле username -->
             <div class="form-group">
                 <label for="id_username">Имя пользователя</label>
                 <input type="text" name="username" id="id_username" class="form-control" 
@@ -175,7 +172,6 @@
                 {% endif %}
             </div>
             
-            <!-- Поле password -->
             <div class="form-group">
                 <label for="id_password">Пароль</label>
                 <input type="password" name="password" id="id_password" class="form-control" 
@@ -189,7 +185,6 @@
                 {% endif %}
             </div>
             
-            <!-- Общие ошибки формы -->
             {% if form.non_field_errors %}
             <div class="form-group">
                 <ul class="errorlist">
@@ -200,14 +195,13 @@
             </div>
             {% endif %}
             
-            <!-- Скрытое поле next для перенаправления -->
             <input type="hidden" name="next" value="{{ next }}">
             
             <button type="submit" class="btn btn-primary">Войти</button>
         </form>
         
         <div class="login-footer">
-            <p>© 2023 Компания. Все права защищены.</p>
+            <p>© 2025 LK.</p>
         </div>
     </div>
 </body>

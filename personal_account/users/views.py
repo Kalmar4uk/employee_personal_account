@@ -7,7 +7,6 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
-
 from users.models import GroupJob, User
 from utils.functions import (days_current_month,
                              get_holidays_first_and_last_date)

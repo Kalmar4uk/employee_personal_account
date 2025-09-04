@@ -2,18 +2,28 @@
 {% load static %}
 {% block content %}
 <div class="section">
-    <h2>Группы сотрудников</h2>
-    
+    <h2>Отдел технической поддержки</h2>
+
     <div class="info-blocks">
         {% for group in groups %}
         <div class="info-block group-card">
             <h2>{{ group.title }}</h2>
-            <p><strong>Количество сотрудников:</strong> {{ group.employees.count }}</p>
+            <p><strong>Количество сотрудников: {{ group.users.count }}</strong></p>
             <a href="{% url 'users:groups_detail' group.id %}">
-                <button class="view-schedule-btn">Посмотреть график</button>
+                <button class="view-schedule-btn">Посмотреть сотрудников</button>
             </a>
         </div>
         {% endfor %}
+    </div>
+</div>
+<div class="section">
+    <h2>ФИТ</h2>
+
+    <div class="info-blocks">
+        <div class="info-block group-card">
+            <h2>Hybris</h2>
+            <p><strong>Количество сотрудников:</strong> 0</p>
+        </div>
     </div>
 </div>
 {% endblock %}

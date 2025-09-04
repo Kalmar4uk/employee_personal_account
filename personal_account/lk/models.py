@@ -1,5 +1,4 @@
 from django.db import models
-
 from users.models import User
 from utils.constants import (CHOICES_STATUS_HOLIDAY, CHOICES_TYPE_HOLIDAY,
                              CHOICES_TYPE_WORK_SHIFT)
@@ -59,6 +58,7 @@ class Holiday(models.Model):
         User,
         on_delete=models.SET_NULL,
         null=True,
+        verbose_name="Сотрудник",
         related_name="holidays"
     )
     date = models.DateField(

@@ -71,6 +71,5 @@ function updateWorkingTime() {
     });
 }
 
-// Обновляем время каждую минуту
 setInterval(updateWorkingTime, 60000);
-updateWorkingTime(); // Первоначальное обновление
+updateWorkingTime();

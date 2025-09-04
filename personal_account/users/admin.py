@@ -1,26 +1,31 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
-
 from lk.models import WorkShifts
 from users.models import GroupJob, User
 
 
-class WorkShiftsTemplate(admin.TabularInline):
+class WorkShiftsInline(admin.TabularInline):
     model = WorkShifts
+    extra = 0
+
+
+class UserInline(admin.TabularInline):
+    model = User.group_job.through
+    can_delete = False
     extra = 0
 
 
 @admin.register(User)
 class MyUserAdmin(UserAdmin):
-    inlines = [WorkShiftsTemplate]
+    inlines = [WorkShiftsInline]
     search_fields = ("username", "email", "first_name", "last_name")
     list_display = (
         "username",
         "email",
         "first_name",
         "last_name",
-        "job_title"
+        "filter_job_group",
     )
     list_filter = ("is_active",)
     ordering = ("-date_joined",)
@@ -88,7 +93,11 @@ class MyUserAdmin(UserAdmin):
         ),
     )
 
+    @admin.display(description="Группа")
+    def filter_job_group(self, obj):
+        return ", ".join([group.title for group in obj.group_job.all()])
+
 
 @admin.register(GroupJob)
 class GroupJobAdmin(admin.ModelAdmin):
-    pass
+    inlines = [UserInline]

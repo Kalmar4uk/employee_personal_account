@@ -3,13 +3,12 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from openpyxl import load_workbook, Workbook
-from openpyxl.utils.exceptions import InvalidFileException
-
 from lk.models import Holiday, WorkShifts
+from openpyxl import Workbook, load_workbook
+from openpyxl.utils.exceptions import InvalidFileException
 from users.models import User
-from utils.constants import TIME_FORMAT
-
+from utils.constants import (COLUMN_FOR_GSMA, HOLIDAY_FOR_GSMA, TIME_FORMAT,
+                             TIME_SHIFT_FOR_GSMA, TYPE_HOLIDAY, TYPE_SHIFTS)
 
 PATH_TO_FILE = f"{settings.BASE_DIR}/data_files/work_shifts.xlsx"
 
@@ -48,9 +47,7 @@ class Command(BaseCommand):
 
     def bad(self, txt):
         self.stdout.write(
-            self.style.ERROR(
-                "\nНеизвестная команда!\nИспользуй shifts или holidays"
-            )
+            self.style.ERROR(txt)
         )
 
 
@@ -60,7 +57,7 @@ def parse_work_shifts() -> bool:
     except ValueError as e:
         raise ValueError(f"При обработке файла возникла ошибка: {e}")
 
-    for cell in range(26, 33):
+    for cell in COLUMN_FOR_GSMA:
         for data in sheet:
             shift = data[cell].value
             if isinstance(shift, datetime):
@@ -86,7 +83,7 @@ def parse_work_shifts() -> bool:
                         f"Вероятно нужно добавить."
                     )
 
-                time = data[24].value
+                time = data[TIME_SHIFT_FOR_GSMA].value
                 if time == "-" and shift is not None:
                     continue
                 else:
@@ -123,12 +120,12 @@ def parse_holidays() -> bool:
     except ValueError as e:
         raise ValueError(f"При обработке файла возникла ошибка: {e}")
 
-    for cell in range(26, 33):
+    for cell in COLUMN_FOR_GSMA:
         for data in sheet:
             data_cell = data[cell].value
             if isinstance(data_cell, datetime):
                 date = data_cell.date()
-            elif data[23].value == "Отпуск":
+            elif data[HOLIDAY_FOR_GSMA].value == "Отпуск":
                 if data_cell is not None and data_cell != "-":
                     try:
                         last_name, first_name = data_cell.split(" ", 1)
@@ -158,12 +155,12 @@ def parse_holidays() -> bool:
                             employee=user,
                             date=date,
                             status=status,
-                            type="Ежегодный оплачиваемый"
+                            type=TYPE_HOLIDAY.get("yearly")
                         )
                     except Exception as e:
                         raise ValueError(
                             f"При записи отпуска возникла ошибка {e}"
-                            "\n Входные данные: {user}, {date}, {status}"
+                            f"\n Входные данные: {user}, {date}, {status}"
                         )
     return True
 
@@ -200,10 +197,10 @@ def preparation_time(
         time_end.endswith("21:00") or
         time_start.startswith("21:00")
     ):
-        type = "Сменный"
+        type = TYPE_SHIFTS.get("schedule")
 
     else:
-        type = "5/2"
+        type = TYPE_SHIFTS.get("standart")
 
     time_start = datetime.strptime(
         time_start,

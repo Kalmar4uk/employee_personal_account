@@ -18,3 +18,11 @@ CHOICES_TYPE_HOLIDAY = (
     ("Ежегодный оплачиваемый", "Ежегодный оплачиваемый")
 )
 TIME_FORMAT = "%H:%M"
+TYPE_HOLIDAY = {
+    "yearly": "Ежегодный оплачиваемый",
+    "without_pay": "Без сохранения заработной платы"
+}
+TYPE_SHIFTS = {"schedule": "Сменный", "standart": "5/2"}
+COLUMN_FOR_GSMA = [26, 33]
+TIME_SHIFT_FOR_GSMA = 24
+HOLIDAY_FOR_GSMA = 23

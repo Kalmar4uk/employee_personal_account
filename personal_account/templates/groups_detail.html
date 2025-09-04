@@ -38,7 +38,7 @@
         {% if employee.work %}
             <div class="employee-card working">
                 <div class="employee-info">
-                    <h3><a href="{% url 'users:profile' employee.employee.username %}">{{ employee.employee.last_name }} {{ employee.employee.first_name|slice:":1" }}</a></h3>
+                    <h3>{{ employee.employee.last_name }} {{ employee.employee.first_name }}</h3>
                     <p>{{ employee.employee.job_title}}</p>
                 </div>
                 <div class="employee-status">
@@ -57,7 +57,7 @@
         {% else %}
             <div class="employee-card dayoff">
                 <div class="employee-info">
-                    <h3><a href="{% url 'users:profile' employee.employee.username %}">{{ employee.employee.last_name }} {{ employee.employee.first_name|slice:":1" }}</a></h3>
+                    <h3>{{ employee.employee.last_name }} {{ employee.employee.first_name }}</h3>
                     <p>{{ employee.employee.job_title}}</p>
                 </div>
                 <div class="employee-status">
