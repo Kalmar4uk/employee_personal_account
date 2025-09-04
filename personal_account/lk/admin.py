@@ -1,9 +1,10 @@
 from django.contrib import admin
 from lk.models import Holiday, WorkShifts
+from utils.functions import MyDjangoQLSearchMixin
 
 
 @admin.register(WorkShifts)
-class WorkShiftsAdmin(admin.ModelAdmin):
+class WorkShiftsAdmin(MyDjangoQLSearchMixin, admin.ModelAdmin):
     search_fields = ("employee",)
     list_display = (
         "employee",
@@ -25,7 +26,7 @@ class WorkShiftsAdmin(admin.ModelAdmin):
 
 
 @admin.register(Holiday)
-class HolidayAdmin(admin.ModelAdmin):
+class HolidayAdmin(MyDjangoQLSearchMixin, admin.ModelAdmin):
     search_fields = ("employee",)
     list_display = ("employee", "date", "status", "type")
     list_filter = ("employee", "date", "status")

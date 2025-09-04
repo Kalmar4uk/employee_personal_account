@@ -40,7 +40,6 @@ class WorkShifts(WorkShiftsAndHolidayModel):
     class Meta:
         verbose_name = "Смена"
         verbose_name_plural = "Смены"
-        ordering = ("date_start",)
 
         constraints = [
             models.UniqueConstraint(

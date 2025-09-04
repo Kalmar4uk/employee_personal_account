@@ -7,8 +7,8 @@ from lk.models import Holiday, WorkShifts
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils.exceptions import InvalidFileException
 from users.models import User
-from utils.constants import (COLUMN_FOR_GSMA, HOLIDAY_FOR_GSMA, TIME_FORMAT,
-                             TIME_SHIFT_FOR_GSMA, TYPE_HOLIDAY, TYPE_SHIFTS)
+from utils.constants import (COLUMN_FOR_LINE, TIME_SHIFT_FOR_LINE, TIME_FORMAT,
+                             HOLIDAY_FOR_LINE, TYPE_HOLIDAY, TYPE_SHIFTS)
 
 PATH_TO_FILE = f"{settings.BASE_DIR}/data_files/work_shifts.xlsx"
 
@@ -16,48 +16,95 @@ PATH_TO_FILE = f"{settings.BASE_DIR}/data_files/work_shifts.xlsx"
 class Command(BaseCommand):
     help = "Команда парсинга графика/отпуска"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser) -> None:
+        parser.add_argument(
+            "line",
+            type=str,
+            help=(
+                "Необходимо указать парсинг какой линии требуется "
+                "first, second, gsma"
+            )
+        )
         parser.add_argument(
             "type_parse",
             type=str,
-            help=("Тип парсинга: shifts - смены | holidays - отпуск | all - все"))
+            help=(
+                "Тип парсинга: shifts - смены |"
+                " holidays - отпуск | all - все"
+            )
+        )
 
-    def handle(self, *args, **kwargs):
-        type_parse = kwargs["type_parse"]
+    def handle(self, *args, **kwargs) -> None:
+        type_parse: str = kwargs["type_parse"]
+        line: str = kwargs["line"]
         try:
-            if type_parse == "shifts":
-                if parse_work_shifts():
-                    self.success()
-            elif type_parse == "holidays":
-                if parse_work_shifts():
-                    self.success()
-            elif type_parse == "all":
-                if parse_work_shifts() and parse_holidays():
-                    self.success()
+            if line == "second":
+                self.parse_line(type_parse=type_parse, type_line=line)
+            elif line == "first":
+                self.parse_line(type_parse=type_parse, type_line=line)
+            elif line == "gsma":
+                self.parse_line(type_parse=type_parse, type_line=line)
             else:
-                text = "\nНеизвестная команда!\nИспользуй shifts или holidays"
+                text = "Неизвестная команда!\nИспользуй shifts или holidays"
                 self.bad(txt=text)
         except ValueError as e:
             self.bad(txt=str(e))
 
-    def success(self):
+    def parse_line(self, type_parse: str, type_line: str) -> None:
+        if type_parse == "shifts":
+            if parse_work_shifts(type_line=type_line):
+                self.success()
+        elif type_parse == "holidays":
+            if parse_holidays(type_line=type_line):
+                self.success()
+        elif type_parse == "all":
+            if (
+                parse_work_shifts(type_line=type_line)
+                and parse_holidays(type_line=type_line)
+            ):
+                self.success()
+        else:
+            text = "Неизвестная команда!\nИспользуй shifts или holidays"
+            self.bad(txt=text)
+
+    def success(self) -> None:
         self.stdout.write(
             self.style.SUCCESS('Данные из файла загружены')
         )
 
-    def bad(self, txt):
+    def bad(self, txt: str) -> None:
         self.stdout.write(
             self.style.ERROR(txt)
         )
 
 
-def parse_work_shifts() -> bool:
+def open_wb() -> Workbook:
+    period = timezone.now().strftime('%B %Y')
+
+    try:
+        wb = load_workbook(filename=PATH_TO_FILE)
+    except FileNotFoundError as e:
+        raise ValueError(e)
+    except InvalidFileException as e:
+        return ValueError(e)
+
+    try:
+        sheet = wb[period]
+    except KeyError as e:
+        raise ValueError(e)
+
+    return sheet
+
+
+def parse_work_shifts(type_line: str) -> bool:
     try:
         sheet = open_wb()
     except ValueError as e:
         raise ValueError(f"При обработке файла возникла ошибка: {e}")
 
-    for cell in COLUMN_FOR_GSMA:
+    column_start, column_end = COLUMN_FOR_LINE.get(type_line)
+
+    for cell in range(column_start, column_end):
         for data in sheet:
             shift = data[cell].value
             if isinstance(shift, datetime):
@@ -83,7 +130,14 @@ def parse_work_shifts() -> bool:
                         f"Вероятно нужно добавить."
                     )
 
-                time = data[TIME_SHIFT_FOR_GSMA].value
+                if cell in [9, 10]:
+                    time = data[TIME_SHIFT_FOR_LINE.get(type_line)[1]].value
+                else:
+                    time = (
+                        data[TIME_SHIFT_FOR_LINE.get(type_line)].value
+                        if type_line != "first"
+                        else data[TIME_SHIFT_FOR_LINE.get(type_line)[0]].value
+                    )
                 if time == "-" and shift is not None:
                     continue
                 else:
@@ -114,18 +168,20 @@ def parse_work_shifts() -> bool:
     return True
 
 
-def parse_holidays() -> bool:
+def parse_holidays(type_line: str) -> bool:
     try:
         sheet = open_wb()
     except ValueError as e:
         raise ValueError(f"При обработке файла возникла ошибка: {e}")
 
-    for cell in COLUMN_FOR_GSMA:
+    column_start, column_end = COLUMN_FOR_LINE.get(type_line)
+
+    for cell in range(column_start, column_end):
         for data in sheet:
             data_cell = data[cell].value
             if isinstance(data_cell, datetime):
                 date = data_cell.date()
-            elif data[HOLIDAY_FOR_GSMA].value == "Отпуск":
+            elif data[HOLIDAY_FOR_LINE.get(type_line)].value == "Отпуск":
                 if data_cell is not None and data_cell != "-":
                     try:
                         last_name, first_name = data_cell.split(" ", 1)
@@ -163,24 +219,6 @@ def parse_holidays() -> bool:
                             f"\n Входные данные: {user}, {date}, {status}"
                         )
     return True
-
-
-def open_wb() -> Workbook:
-    period = timezone.now().strftime('%B %Y')
-
-    try:
-        wb = load_workbook(filename=PATH_TO_FILE)
-    except FileNotFoundError as e:
-        raise ValueError(e)
-    except InvalidFileException as e:
-        return ValueError(e)
-
-    try:
-        sheet = wb[period]
-    except KeyError as e:
-        raise ValueError(e)
-
-    return sheet
 
 
 def preparation_time(

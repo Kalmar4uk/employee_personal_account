@@ -3,6 +3,11 @@ from datetime import datetime as dt
 
 from django.utils import timezone
 from utils.constants import CURRENT_MONTH
+from djangoql.admin import DjangoQLSearchMixin
+
+
+class MyDjangoQLSearchMixin(DjangoQLSearchMixin):
+    djangoql_completion_enabled_by_default = False
 
 
 def days_current_month() -> list[dt]:

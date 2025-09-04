@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 from lk.models import WorkShifts
 from users.models import GroupJob, User
+from utils.functions import MyDjangoQLSearchMixin
 
 
 class WorkShiftsInline(admin.TabularInline):
@@ -17,7 +18,7 @@ class UserInline(admin.TabularInline):
 
 
 @admin.register(User)
-class MyUserAdmin(UserAdmin):
+class MyUserAdmin(MyDjangoQLSearchMixin, UserAdmin):
     inlines = [WorkShiftsInline]
     search_fields = ("username", "email", "first_name", "last_name")
     list_display = (
@@ -99,5 +100,5 @@ class MyUserAdmin(UserAdmin):
 
 
 @admin.register(GroupJob)
-class GroupJobAdmin(admin.ModelAdmin):
+class GroupJobAdmin(MyDjangoQLSearchMixin, admin.ModelAdmin):
     inlines = [UserInline]
