@@ -1,0 +1,24 @@
+services:
+  # Имя и описание первого контейнера; имя выбирает разработчик. 
+  # Это контейнер БД
+  db:
+    image: postgres:17.6
+    env_file: .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  backend:
+    build: ./personal_account/
+    env_file: .env
+    depends_on:
+      - db
+    volumes:
+      - static:/static
+  nginx:
+    build: ./nginx/
+    ports:
+      - 8000:80
+    volumes:
+      - static:/staticfiles/
+volumes:
+  pg_data:
+  static:

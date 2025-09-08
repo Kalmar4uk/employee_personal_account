@@ -45,7 +45,7 @@ class Command(BaseCommand):
             elif line == "gsma":
                 self.parse_line(type_parse=type_parse, type_line=line)
             else:
-                text = "Неизвестная команда!\nИспользуй shifts или holidays"
+                text = "Неизвестная команда!\nИспользуй first, second или gsma"
                 self.bad(txt=text)
         except ValueError as e:
             self.bad(txt=str(e))
@@ -64,7 +64,7 @@ class Command(BaseCommand):
             ):
                 self.success()
         else:
-            text = "Неизвестная команда!\nИспользуй shifts или holidays"
+            text = "Неизвестная команда!\nИспользуй shifts, holidays или all"
             self.bad(txt=text)
 
     def success(self) -> None:
@@ -123,7 +123,7 @@ def parse_work_shifts(type_line: str) -> bool:
                         last_name=last_name,
                         first_name=first_name
                     )
-                except Exception:
+                except user.DoesNotExist:
                     raise ValueError(
                         f"Сотрудника с именем {first_name} и "
                         f"фамилией {last_name} нет в базе.\n"
@@ -195,7 +195,7 @@ def parse_holidays(type_line: str) -> bool:
                             last_name=last_name,
                             first_name=first_name
                         )
-                    except Exception:
+                    except user.DoesNotExist:
                         raise ValueError(
                             f"Сотрудника с именем {first_name} и "
                             f"фамилией {last_name} нет в базе.\n"
