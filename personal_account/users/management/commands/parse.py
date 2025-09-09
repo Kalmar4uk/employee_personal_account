@@ -8,7 +8,7 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.utils.exceptions import InvalidFileException
 from users.models import User
 from utils.constants import (COLUMN_FOR_LINE, TIME_SHIFT_FOR_LINE, TIME_FORMAT,
-                             HOLIDAY_FOR_LINE, TYPE_HOLIDAY, TYPE_SHIFTS)
+                             HOLIDAY_FOR_LINE, TYPE_HOLIDAY, TYPE_SHIFTS, MONTHS)
 
 PATH_TO_FILE = f"{settings.BASE_DIR}/data_files/work_shifts.xlsx"
 
@@ -79,7 +79,8 @@ class Command(BaseCommand):
 
 
 def open_wb() -> Workbook:
-    period = timezone.now().strftime('%B %Y')
+    month, year = timezone.now().strftime('%B %Y').split(" ", 1)
+    period = f"{MONTHS.get(month)} {year}"
 
     try:
         wb = load_workbook(filename=PATH_TO_FILE)

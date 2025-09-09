@@ -59,3 +59,18 @@ HOLIDAY_FOR_LINE = {
     "second": HOLIDAY_FOR_SL,
     "gsma": HOLIDAY_FOR_GSMA
 }
+
+MONTHS = {
+    "January": "Январь",
+    "February": "Февраль",
+    "March": "Март",
+    "April": "Апрель",
+    "May": "Май",
+    "June": "Июнь",
+    "July": "Июль",
+    "August": "Август",
+    "September": "Сентябрь",
+    "October": "Октябрь",
+    "November": "Ноябрь",
+    "December": "Декабрь"
+}

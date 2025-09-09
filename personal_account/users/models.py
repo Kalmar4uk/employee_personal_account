@@ -18,6 +18,9 @@ class User(AbstractUser):
     )
     is_main = models.BooleanField("Босс этой качалки", default=False)
 
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
     objects = CustomUserManager()
 
     def save(self, *args, **kwargs):

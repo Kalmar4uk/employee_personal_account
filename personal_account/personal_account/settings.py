@@ -13,11 +13,25 @@ SECRET_KEY_FOR_REQUEST = os.getenv("SECRET_KEY_FOR_REQUEST")
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'kalmaro.pythonanywhere.com',
-    'www.kalmaro.pythonanywhere.com',
+    'job-lk.hopto.org',
     'localhost',
     '127.0.0.1'
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://job-lk.hopto.org/',
+    'https://www.job-lk.hopto.org/',
+]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
 
 
 INSTALLED_APPS = [
