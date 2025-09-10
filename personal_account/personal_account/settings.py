@@ -1,6 +1,8 @@
 import os
+import sentry_sdk
 from pathlib import Path
 from dotenv import load_dotenv
+from sentry_sdk.integrations.django import DjangoIntegration
 
 load_dotenv()
 
@@ -10,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-c)-q^bppy_4%hvo3qgz0d2c7tgw21=#h=a=atzt0%+=3^na(0t'
 SECRET_KEY_FOR_REQUEST = os.getenv("SECRET_KEY_FOR_REQUEST")
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'job-lk.hopto.org',
@@ -136,3 +138,11 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+sentry_sdk.init(
+    dsn=os.getenv("DSN"),
+    integrations=[DjangoIntegration()],
+    auto_session_tracking=False,
+    traces_sample_rate=0
+)

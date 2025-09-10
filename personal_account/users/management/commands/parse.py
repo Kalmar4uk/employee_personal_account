@@ -14,6 +14,7 @@ PATH_TO_FILE = f"{settings.BASE_DIR}/data_files/work_shifts.xlsx"
 
 
 class Command(BaseCommand):
+    """Команда python manage.py parse название линии тип """
     help = "Команда парсинга графика/отпуска"
 
     def add_arguments(self, parser) -> None:

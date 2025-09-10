@@ -1,4 +1,5 @@
 asgiref==3.9.1
+certifi==2025.8.3
 Django==5.2.5
 djangoql==0.18.1
 dotenv==0.9.9
@@ -8,5 +9,7 @@ openpyxl==3.1.5
 ply==3.11
 psycopg2==2.9.10
 python-dotenv==1.1.1
+sentry-sdk==2.37.1
 sqlparse==0.5.3
 tzdata==2025.2
+urllib3==2.5.0
