@@ -89,7 +89,7 @@ def groups_detail(request, id):
         if employee.is_main:
             boss = employee
         holiday = employee.holidays.filter(
-            date__lte=timezone.now(),
+            date__gte=timezone.now(),
         ).exists()
         work = employee.workshifts.filter(date_start=timezone.now())
         if holiday:
