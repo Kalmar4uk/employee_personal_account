@@ -130,6 +130,11 @@
         background-color: #e8f5e9;
         border-left: 4px solid #43a047;
     }
+
+    .day-night-shift {
+        background-color: #d1d1d1;
+        border-left: 4px solid #000000;
+    }
     
     .day-vacation {
         background-color: #d6e8fa;
@@ -186,18 +191,13 @@
     }
     
     .legend-night-shift .legend-color {
-        background-color: #e3f2fd;
-        border-left: 4px solid #1e88e5;
+        background-color: #d1d1d1;
+        border-left: 4px solid #000000;
     }
     
     .legend-vacation .legend-color {
-        background-color: #fff8e1;
-        border-left: 4px solid #ffb300;
-    }
-    
-    .legend-sick .legend-color {
-        background-color: #fbe9e7;
-        border-left: 4px solid #ff5722;
+        background-color: #d6e8fa;
+        border-left: 4px solid #1e88e5;
     }
     
     /* Текущий день */

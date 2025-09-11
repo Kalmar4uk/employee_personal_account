@@ -12,10 +12,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-c)-q^bppy_4%hvo3qgz0d2c7tgw21=#h=a=atzt0%+=3^na(0t'
 SECRET_KEY_FOR_REQUEST = os.getenv("SECRET_KEY_FOR_REQUEST")
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'job-lk.hopto.org',
+    '79.174.81.63',
     'localhost',
     '127.0.0.1'
 ]

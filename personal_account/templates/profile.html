@@ -9,11 +9,15 @@
                 <p><strong>ФИО:</strong> {{ employee.last_name }} {{ employee.first_name }}</p>
                 <p><strong>Должность:</strong> {{ employee.job_title }}</p>
                 <p><strong>Отдел:</strong>
+                    {% if group %}
                     <a href="{% url 'users:groups_detail' group.id %}" class="group-pill">
                     <span class="group-icon">👥</span>
                         {{ group.title }}
                     <span class="group-arrow">→</span>
                     </a>
+                    {% else %}
+                        Группа отсутствует
+                    {% endif %}
                 </p>
             </div>
             
@@ -40,6 +44,23 @@
             
             <div class="days-grid" id="calendar-days">
             </div>
+                <div class="calendar-legend">
+                <div class="legend-item legend-day-shift">
+                    <div class="legend-color"></div>
+                    <span>Дневная смена</span>
+                </div>
+                <div class="legend-item legend-night-shift">
+                    <div class="legend-color"></div>
+                    <span>Ночная смена</span>
+                </div>
+                <div class="legend-item legend-day-off">
+                    <div class="legend-color"></div>
+                    <span>Выходной</span>
+                </div>
+                <div class="legend-item legend-vacation">
+                    <div class="legend-color"></div>
+                    <span>Отпуск</span>
+                </div>
         </div>
     </div>
 

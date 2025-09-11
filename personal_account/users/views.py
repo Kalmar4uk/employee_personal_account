@@ -10,6 +10,7 @@ from django.utils import timezone
 from users.models import GroupJob, User
 from utils.functions import (days_current_month,
                              get_holidays_first_and_last_date)
+from django.shortcuts import get_object_or_404
 
 
 class CustomLoginView(LoginView):
@@ -26,8 +27,8 @@ def main(request):
 
 @login_required
 def profile(request, username):
-    employee = User.objects.get(username=username)
-    group = employee.group_job.get()
+    employee = get_object_or_404(User, username=username)
+    group = employee.group_job.filter().first()
 
     dates = days_current_month()
     calendar = {}
@@ -37,8 +38,14 @@ def profile(request, username):
         date_format = date.strftime("%Y-%m-%d")
         if work:
             calendar[date_format] = {
-                "type": "day-shift-day",
-                "time": f"{work.time_start} - {work.time_end}"
+                "type": (
+                    "day-night-shift"
+                    if work.night_shift
+                    else "day-shift-day"
+                ),
+                "time": (
+                    f"{work.time_start.strftime('%H:%M')} - "
+                    f"{work.time_end.strftime('%H:%M')}")
             }
         elif holiday:
             calendar[date_format] = {"type": "day-vacation", "time": "Отпуск"}
