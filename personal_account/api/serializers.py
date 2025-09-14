@@ -4,6 +4,26 @@ from lk.models import Holiday, WorkShifts
 from users.models import GroupJob, User
 
 
+class TokenSerializer(serializers.Serializer):
+    email = serializers.CharField(
+        required=True)
+    password = serializers.CharField(
+        required=True
+    )
+
+    class Meta:
+        model = User
+        fields = ("password", "email")
+
+    def validate(self, data):
+        user = User.objects.filter(email=data.get("email")).first()
+        if not user or not user.check_password(data.get("password")):
+            raise serializers.ValidationError(
+                "Введены некорректные данные!"
+            )
+        return data
+
+
 class UsersSerializer(serializers.ModelSerializer):
 
     class Meta:
