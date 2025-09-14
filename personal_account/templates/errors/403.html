@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Доступ запрещен - Личный кабинет</title>
+    <link rel="stylesheet" href="{% static 'css/errors.css' %}">
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-content">
+            <h1 class="error-code">403</h1>
+            <h2 class="error-title">Доступ запрещен</h2>
+            <p class="error-message">У вас нет прав для доступа к этой странице.</p>
+            
+            <div class="error-actions">
+                <a href="{% url 'users:login' %}" class="error-btn error-btn-secondary">Войти</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

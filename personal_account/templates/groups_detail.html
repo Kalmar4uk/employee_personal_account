@@ -43,9 +43,15 @@
                 </div>
                 <div class="employee-status">
                     {% for work in employee.work %}
-                    <span class="status-badge working">Работает сегодня</span>
-                    <p>Время работы: {{ work.time_start }} - {{ work.time_end }}</p>
-                    <p>Текущее время: 14:30</p>
+                    {% if not work.night_shift %}
+                        <span class="status-badge working">Работает сегодня</span>
+                        <p>Время работы: {{ work.time_start }} - {{ work.time_end }}</p>
+                        <p>Текущее время: 14:30</p>
+                    {% else %}
+                        <span class="status-badge working_night">Работает сегодня в ночь</span>
+                        <p>Время работы: {{ work.time_start }} - {{ work.time_end }}</p>
+                        <p>Текущее время: 14:30</p>
+                    {% endif %}
                     {% endfor %}
                 </div>
                 <div class="employee-actions">

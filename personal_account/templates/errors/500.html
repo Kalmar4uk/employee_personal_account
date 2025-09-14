@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ошибка сервера - Личный кабинет</title>
+    <link rel="stylesheet" href="{% static 'css/errors.css' %}">
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-content error-500">
+            <h1 class="error-code">500</h1>
+            <h2 class="error-title">Внутренняя ошибка сервера</h2>
+            <p class="error-message">Произошла внутренняя ошибка сервера. Мы уже работаем над устранением проблемы. Пожалуйста, попробуйте обновить страницу или вернитесь позже.</p>
+        </div>
+    </div>
+
+    <style>
+        .error-contact {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .error-contact p {
+            margin-bottom: 8px;
+            color: #7f8c8d;
+        }
+    </style>
+</body>
+</html>

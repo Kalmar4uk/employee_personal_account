@@ -2,8 +2,9 @@ from calendar import monthrange
 from datetime import datetime as dt
 
 from django.utils import timezone
-from utils.constants import CURRENT_MONTH
 from djangoql.admin import DjangoQLSearchMixin
+
+from utils.constants import CURRENT_MONTH
 
 
 class MyDjangoQLSearchMixin(DjangoQLSearchMixin):

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
+
 from lk.models import WorkShifts
 from users.models import GroupJob, User
 from utils.functions import MyDjangoQLSearchMixin

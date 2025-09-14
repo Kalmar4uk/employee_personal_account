@@ -4,13 +4,13 @@ from datetime import timedelta
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.core.serializers.json import DjangoJSONEncoder
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+
 from users.models import GroupJob, User
 from utils.functions import (days_current_month,
                              get_holidays_first_and_last_date)
-from django.shortcuts import get_object_or_404
 
 
 class CustomLoginView(LoginView):
@@ -53,6 +53,8 @@ def profile(request, username):
             calendar[date_format] = {"type": "day-off", "time": "Выходной"}
 
     first_date, last_date = get_holidays_first_and_last_date(employee=employee)
+
+    print(calendar)
 
     if first_date and last_date:
         count_days = (last_date - first_date) + timedelta(days=1)
@@ -119,7 +121,7 @@ def groups_detail(request, id):
             work_employees.append(
                 {
                     "employee": employee,
-                    "work": work
+                    "work": work,
                 }
             )
             count_work += 1

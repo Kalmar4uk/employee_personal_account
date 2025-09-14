@@ -2,12 +2,15 @@ asgiref==3.9.1
 certifi==2025.8.3
 Django==5.2.5
 djangoql==0.18.1
+djangorestframework==3.16.1
+djangorestframework_simplejwt==5.5.1
 dotenv==0.9.9
 et_xmlfile==2.0.0
 isort==6.0.1
 openpyxl==3.1.5
 ply==3.11
 psycopg2==2.9.10
+PyJWT==2.10.1
 python-dotenv==1.1.1
 sentry-sdk==2.37.1
 sqlparse==0.5.3

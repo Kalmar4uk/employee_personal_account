@@ -1,13 +1,15 @@
-from django.conf import settings
-from django.http import JsonResponse
-from django.core.serializers import serialize
-from django.http.response import HttpResponseForbidden, HttpResponse
-from lk.models import WorkShifts
-from django.shortcuts import get_object_or_404
-from django.contrib.auth import authenticate
-from utils.constants import CURRENT_MONTH
-from users.models import GroupJob
 import hashlib
+
+from django.conf import settings
+from django.contrib.auth import authenticate
+from django.core.serializers import serialize
+from django.http import JsonResponse
+from django.http.response import HttpResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404
+
+from lk.models import WorkShifts
+from users.models import GroupJob
+from utils.constants import CURRENT_MONTH
 
 
 def create_token(username):

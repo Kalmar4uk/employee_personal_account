@@ -137,6 +137,11 @@
     color: #2e7d32;
 }
 
+.status-badge.working_night {
+    background-color: #4ba1d9;
+    color: #003e75;
+}
+
 .status-badge.dayoff {
     background-color: #ffebee;
     color: #c62828;
