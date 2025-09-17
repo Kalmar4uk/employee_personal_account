@@ -1,7 +1,6 @@
 from django.utils import timezone
 from rest_framework import serializers
 
-from lk.models import Holiday, WorkShifts
 from users.models import GroupJob, User
 
 
@@ -74,20 +73,6 @@ class ListGroupsJobSerializer(serializers.ModelSerializer):
 
     def get_count_employees(self, value):
         return value.users.count()
-
-
-class WorkShiftsSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = WorkShifts
-        exclude = ["id", "employee", "type"]
-
-
-class HolidaysSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Holiday
-        exclude = ["employee", "status"]
 
 
 class CalendarSerializer(serializers.Serializer):

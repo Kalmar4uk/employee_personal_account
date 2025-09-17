@@ -9,9 +9,8 @@ from rest_framework_simplejwt.token_blacklist.models import (BlacklistedToken,
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.serializers import (CalendarSerializer, GroupJobSerializer,
-                             HolidaysSerializer, ListGroupsJobSerializer,
-                             TokenSerializer, UsersSerializer,
-                             WorkShiftsSerializer)
+                             ListGroupsJobSerializer, TokenSerializer,
+                             UsersSerializer)
 from users.models import GroupJob, User
 from utils.functions import days_current_month
 

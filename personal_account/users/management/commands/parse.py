@@ -41,34 +41,37 @@ class Command(BaseCommand):
         type_parse: str = kwargs["type_parse"]
         line: str = kwargs["line"]
         try:
-            if line == "second":
-                self.parse_line(type_parse=type_parse, type_line=line)
-            elif line == "first":
-                self.parse_line(type_parse=type_parse, type_line=line)
-            elif line == "gsma":
-                self.parse_line(type_parse=type_parse, type_line=line)
-            else:
-                text = "Неизвестная команда!\nИспользуй first, second или gsma"
-                self.bad(txt=text)
+            match line:
+                case "second" | "first" | "gsma":
+                    return self.parse_line(
+                        type_parse=type_parse,
+                        type_line=line
+                    )
+                case _:
+                    text = (
+                        "Неизвестная команда!\n"
+                        "Используй first, second или gsma"
+                    )
+                    return self.bad(txt=text)
         except ValueError as e:
-            self.bad(txt=str(e))
+            return self.bad(txt=str(e))
 
     def parse_line(self, type_parse: str, type_line: str) -> None:
-        if type_parse == "shifts":
-            if parse_work_shifts(type_line=type_line):
-                self.success()
-        elif type_parse == "holidays":
-            if parse_holidays(type_line=type_line):
-                self.success()
-        elif type_parse == "all":
-            if (
+        match type_parse:
+            case "shifts":
                 parse_work_shifts(type_line=type_line)
-                and parse_holidays(type_line=type_line)
-            ):
-                self.success()
-        else:
-            text = "Неизвестная команда!\nИспользуй shifts, holidays или all"
-            self.bad(txt=text)
+            case "holidays":
+                parse_holidays(type_line=type_line)
+            case "all":
+                parse_work_shifts(type_line=type_line)
+                parse_holidays(type_line=type_line)
+            case _:
+                text = (
+                    "Неизвестная команда!\n"
+                    "Используй shifts, holidays или all"
+                )
+                return self.bad(txt=text)
+        return self.success()
 
     def success(self) -> None:
         self.stdout.write(
@@ -88,14 +91,14 @@ def open_wb() -> Workbook:
     try:
         wb = load_workbook(filename=PATH_TO_FILE)
     except FileNotFoundError as e:
-        raise ValueError(e)
+        raise ValueError(str(e))
     except InvalidFileException as e:
-        return ValueError(e)
+        return ValueError(str(e))
 
     try:
         sheet = wb[period]
     except KeyError as e:
-        raise ValueError(e)
+        raise ValueError(str(e))
 
     return sheet
 
@@ -121,7 +124,6 @@ def parse_work_shifts(type_line: str) -> bool:
                         f"При обработке файла возникла ошибка: {e}\n"
                         f"Необходимо проверить исходные данные"
                     )
-
                 try:
                     user = User.objects.get(
                         last_name=last_name,
@@ -133,14 +135,17 @@ def parse_work_shifts(type_line: str) -> bool:
                         f"фамилией {last_name} нет в базе.\n"
                         f"Вероятно нужно добавить."
                     )
-
                 if cell in [9, 10]:
-                    time = data[TIME_SHIFT_FOR_LINE.get(type_line)[1]].value
+                    time = data[
+                        TIME_SHIFT_FOR_LINE.get(type_line)[1]
+                    ].value
                 else:
                     time = (
                         data[TIME_SHIFT_FOR_LINE.get(type_line)].value
                         if type_line != "first"
-                        else data[TIME_SHIFT_FOR_LINE.get(type_line)[0]].value
+                        else data[
+                            TIME_SHIFT_FOR_LINE.get(type_line)[0]
+                        ].value
                     )
                 if time == "-" and shift is not None:
                     continue
@@ -169,7 +174,6 @@ def parse_work_shifts(type_line: str) -> bool:
                             f"\n Входные данные: "
                             f"{prepare_time}"
                         )
-    return True
 
 
 def parse_holidays(type_line: str) -> bool:
@@ -222,7 +226,6 @@ def parse_holidays(type_line: str) -> bool:
                             f"При записи отпуска возникла ошибка {e}"
                             f"\n Входные данные: {user}, {date}, {status}"
                         )
-    return True
 
 
 def preparation_time(
@@ -259,5 +262,4 @@ def preparation_time(
         "type": type,
         "time_start": time_start,
         "time_end": time_end,
-        "type": type
     }

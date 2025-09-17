@@ -77,8 +77,6 @@ def profile(request, username):
             "calendar": json.dumps(calendar, cls=DjangoJSONEncoder)
         }
 
-    print(calendar)
-
     return render(request, "profile.html", context)
 
 
