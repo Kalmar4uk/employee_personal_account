@@ -41,15 +41,15 @@ class Command(BaseCommand):
         type_parse: str = kwargs["type_parse"]
         line: str = kwargs["line"]
         try:
-            if line == "second":
-                self.parse_line(type_parse=type_parse, type_line=line)
-            elif line == "first":
-                self.parse_line(type_parse=type_parse, type_line=line)
-            elif line == "gsma":
-                self.parse_line(type_parse=type_parse, type_line=line)
-            else:
-                text = "Неизвестная команда!\nИспользуй first, second или gsma"
-                self.bad(txt=text)
+            match line:
+                case "second" | "first" | "gsma":
+                    self.parse_line(type_parse=type_parse, type_line=line)
+                case _:
+                    text = (
+                        "Неизвестная команда!\n"
+                        "Используй first, second или gsma"
+                    )
+                    self.bad(txt=text)
         except ValueError as e:
             self.bad(txt=str(e))
 
@@ -259,5 +259,4 @@ def preparation_time(
         "type": type,
         "time_start": time_start,
         "time_end": time_end,
-        "type": type
     }
