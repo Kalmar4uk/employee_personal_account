@@ -45,7 +45,8 @@ def profile(request, username):
                 ),
                 "time": (
                     f"{work.time_start.strftime('%H:%M')} - "
-                    f"{work.time_end.strftime('%H:%M')}")
+                    f"{work.time_end.strftime('%H:%M')}"
+                )
             }
         elif holiday:
             calendar[date_format] = {"type": "day-vacation", "time": "Отпуск"}
@@ -53,8 +54,6 @@ def profile(request, username):
             calendar[date_format] = {"type": "day-off", "time": "Выходной"}
 
     first_date, last_date = get_holidays_first_and_last_date(employee=employee)
-
-    print(calendar)
 
     if first_date and last_date:
         count_days = (last_date - first_date) + timedelta(days=1)
@@ -74,6 +73,8 @@ def profile(request, username):
             "group": group,
             "calendar": json.dumps(calendar, cls=DjangoJSONEncoder)
         }
+
+    print(calendar)
 
     return render(request, "profile.html", context)
 

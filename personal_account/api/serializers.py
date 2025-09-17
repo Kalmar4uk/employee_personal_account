@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework import serializers
 
 from lk.models import Holiday, WorkShifts
@@ -39,8 +40,25 @@ class UsersSerializer(serializers.ModelSerializer):
         )
 
 
+class UsersSerializerForGroupsJob(UsersSerializer):
+    work_today = serializers.SerializerMethodField()
+
+    class Meta(UsersSerializer.Meta):
+        model = User
+        fields = UsersSerializer.Meta.fields + ("work_today",)
+
+    def get_work_today(self, obj):
+        shift = obj.workshifts.filter(date_start=timezone.now().date()).first()
+        holiday = obj.holidays.filter(date=timezone.now().date()).first()
+        if not shift and holiday:
+            return "Отпуск"
+        if not shift and not holiday:
+            return "Выходной"
+        return f"{shift.time_start} - {shift.time_end}"
+
+
 class GroupJobSerializer(serializers.ModelSerializer):
-    employees = UsersSerializer(many=True, source="users")
+    employees = UsersSerializerForGroupsJob(many=True, source="users")
 
     class Meta:
         model = GroupJob
@@ -70,3 +88,9 @@ class HolidaysSerializer(serializers.ModelSerializer):
     class Meta:
         model = Holiday
         exclude = ["employee", "status"]
+
+
+class CalendarSerializer(serializers.Serializer):
+    date = serializers.DateField()
+    type = serializers.CharField()
+    time = serializers.CharField()

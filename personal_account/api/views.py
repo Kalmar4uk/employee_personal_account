@@ -8,11 +8,12 @@ from rest_framework_simplejwt.token_blacklist.models import (BlacklistedToken,
                                                              OutstandingToken)
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from api.serializers import (GroupJobSerializer, HolidaysSerializer,
-                             ListGroupsJobSerializer, TokenSerializer,
-                             UsersSerializer, WorkShiftsSerializer)
+from api.serializers import (CalendarSerializer, GroupJobSerializer,
+                             HolidaysSerializer, ListGroupsJobSerializer,
+                             TokenSerializer, UsersSerializer,
+                             WorkShiftsSerializer)
 from users.models import GroupJob, User
-from utils.constants import CURRENT_MONTH
+from utils.functions import days_current_month
 
 
 class APIToken(APIView):
@@ -53,7 +54,6 @@ class DeleteAPIToken(APIView):
 class UserViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UsersSerializer
-    http_method_names = ["get"]
 
     @action(detail=False, url_path="me")
     def get_me(self, request):
@@ -63,31 +63,43 @@ class UserViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=True, url_path="shifts")
-    def get_shifts_user(self, request, pk):
-        user = User.objects.get(id=pk)
-        shifts = user.workshifts.filter(
-            date_start__month=CURRENT_MONTH
-        ).order_by(
-            "date_start"
-        )
-        serializer = WorkShiftsSerializer(
-            shifts,
-            context={"request": request},
-            many=True
-        )
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @action(detail=True, url_path="holidays")
-    def get_holiday_user(self, request, pk):
-        user = User.objects.get(id=pk)
-        holidays = user.holidays.filter(
-            date__month=CURRENT_MONTH
-        ).order_by(
-            "date"
-        )
-        serializer = HolidaysSerializer(
-            holidays,
+    @action(detail=True, url_path="calendar")
+    def get_calendar_user(self, request, pk):
+        user = get_object_or_404(User, id=pk)
+        dates = days_current_month()
+        calendar = []
+        for date in dates:
+            work = user.workshifts.filter(date_start=date).first()
+            holiday = user.holidays.filter(date=date).first()
+            if work:
+                calendar.append(
+                    {
+                        "date": date.date(),
+                        "type": "shifts",
+                        "time": (
+                            f"{work.time_start.strftime('%H:%M')} - "
+                            f"{work.time_end.strftime('%H:%M')}"
+                        )
+                    }
+                )
+            elif holiday:
+                calendar.append(
+                    {
+                        "date": date.date(),
+                        "type": "holiday",
+                        "time": "Отпуск"
+                    }
+                )
+            else:
+                calendar.append(
+                    {
+                        "date": date.date(),
+                        "type": "day-off",
+                        "time": "Выходной"
+                    }
+                )
+        serializer = CalendarSerializer(
+            calendar,
             context={"request": request},
             many=True
         )
