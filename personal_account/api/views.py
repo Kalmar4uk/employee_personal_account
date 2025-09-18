@@ -8,11 +8,13 @@ from rest_framework_simplejwt.token_blacklist.models import (BlacklistedToken,
                                                              OutstandingToken)
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from api.permissions import ForBotRequestPermission
 from api.serializers import (CalendarSerializer, GroupJobSerializer,
                              ListGroupsJobSerializer, TokenSerializer,
                              UsersSerializer)
 from users.models import GroupJob, User
 from utils.functions import days_current_month
+from utils.constants import CURRENT_MONTH
 
 
 class APIToken(APIView):
@@ -113,3 +115,45 @@ class GroupJobViewSet(viewsets.ModelViewSet):
         if self.action == "list":
             return ListGroupsJobSerializer
         return GroupJobSerializer
+
+
+class DataForBot(APIView):
+    permission_classes = (ForBotRequestPermission,)
+
+    def get(self, request):
+        groups = GroupJob.objects.all().prefetch_related("users")
+        try:
+            result = [
+                {
+                    "title": group.title,
+                    "employees": [
+                        {
+                            "first_name": employee.first_name,
+                            "last_name": employee.last_name,
+                            "work_shifts": [
+                                {
+                                    "date_start": work_shift.date_start,
+                                    "date_end": work_shift.date_end,
+                                    "time_start": work_shift.time_start,
+                                    "time_end": work_shift.time_end,
+                                    "night_shift": work_shift.night_shift,
+                                } for work_shift in employee.workshifts.filter(
+                                    date_start__month__gte=CURRENT_MONTH
+                                )
+                            ],
+                            "holiday": [
+                                {
+                                    "date": holiday.date
+                                } for holiday in employee.holidays.filter(
+                                    date__month=CURRENT_MONTH
+                                )
+                            ]
+                        } for employee in group.users.all().prefetch_related(
+                            "workshifts"
+                        )
+                    ]
+                } for group in groups
+            ]
+        except Exception as e:
+            return Response({"error": e}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        return Response(result, status=status.HTTP_200_OK)
