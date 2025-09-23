@@ -2,7 +2,6 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from users.models import GroupJob, User
-from lk.models import Holiday, WorkShifts
 
 
 class TokenSerializer(serializers.Serializer):
@@ -85,10 +84,3 @@ class CalendarSerializer(serializers.Serializer):
     date = serializers.DateField()
     type = serializers.CharField()
     time = serializers.CharField()
-
-
-class WorkShiftsSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = WorkShifts
-        fields = ("date_start", "date_end", "time_start", "time_end")

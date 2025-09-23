@@ -3,7 +3,7 @@ name: Main LK workflow
 on:
   push:
     branches:
-      - test_workflows
+      - main
 
 jobs:
   build_and_push_to_docker_hub:

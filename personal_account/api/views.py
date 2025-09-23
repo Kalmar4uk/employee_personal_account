@@ -11,11 +11,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from api.permissions import ForBotRequestPermission
 from api.serializers import (CalendarSerializer, GroupJobSerializer,
                              ListGroupsJobSerializer, TokenSerializer,
-                             UsersSerializer, WorkShiftsSerializer)
+                             UsersSerializer)
 from users.models import GroupJob, User
 from utils.functions import days_current_month
 from utils.constants import CURRENT_MONTH
-from lk.models import WorkShifts, Holiday
 
 
 class APIToken(APIView):
@@ -161,8 +160,3 @@ class DataForBot(APIView):
                 status=status.HTTP_422_UNPROCESSABLE_ENTITY
             )
         return Response(result, status=status.HTTP_200_OK)
-
-
-class WorkSHiftsViewSet(viewsets.ModelViewSet):
-    queryset = Holiday.objects.all()
-    serializer_class = WorkShiftsSerializer
