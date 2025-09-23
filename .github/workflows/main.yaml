@@ -55,8 +55,7 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER }}
-        key: ${{ secrets.SSH_KEY }}
-        passphrase: ${{ secrets.SSH_PASSPHRASE }}
+        password: ${{ secrets.PASSWORD }}
         source: "docker-compose.yaml"
         target: "lk"
     - name: Executing remote ssh commands to deploy
@@ -64,7 +63,7 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER }}
-        key: ${{ secrets.SSH_KEY }}
+        password: ${{ secrets.PASSWORD }}
         script: |
           cd project_lk
           sudo docker compose pull
