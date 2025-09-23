@@ -3,7 +3,7 @@ name: Main LK workflow
 on:
   push:
     branches:
-      - test_workflow
+      - test_workflows
 
 jobs:
   build_and_push_to_docker_hub:
@@ -64,3 +64,8 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER }}
         password: ${{ secrets.PASSWORD }}
+        script: |
+          cd project_lk
+          sudo docker compose pull
+          sudo docker compose down
+          sudo docker compose up -d
