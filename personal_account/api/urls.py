@@ -4,11 +4,12 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
 from api.views import (APIToken, DataForBot, DeleteAPIToken, GroupJobViewSet,
-                       UserViewSet)
+                       UserViewSet, WorkSHiftsViewSet)
 
 router_v1 = routers.DefaultRouter()
 router_v1.register("users", UserViewSet)
 router_v1.register("groupsjob", GroupJobViewSet)
+router_v1.register("workshift", WorkSHiftsViewSet)
 
 urlpatterns = [
     path("", include(router_v1.urls)),

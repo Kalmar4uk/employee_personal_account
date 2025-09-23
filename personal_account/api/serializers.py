@@ -2,6 +2,7 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from users.models import GroupJob, User
+from lk.models import Holiday, WorkShifts
 
 
 class TokenSerializer(serializers.Serializer):
@@ -66,16 +67,28 @@ class GroupJobSerializer(serializers.ModelSerializer):
 
 class ListGroupsJobSerializer(serializers.ModelSerializer):
     count_employees = serializers.SerializerMethodField()
+    is_main = serializers.SerializerMethodField()
 
     class Meta:
         model = GroupJob
-        fields = ("id", "title", "count_employees")
+        fields = ("id", "title", "count_employees", "is_main")
 
     def get_count_employees(self, value):
         return value.users.count()
+
+    def get_is_main(self, value):
+        main = value.users.filter(is_main=True).first()
+        return UsersSerializerForGroupsJob(main).data
 
 
 class CalendarSerializer(serializers.Serializer):
     date = serializers.DateField()
     type = serializers.CharField()
     time = serializers.CharField()
+
+
+class WorkShiftsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = WorkShifts
+        fields = ("date_start", "date_end", "time_start", "time_end")
