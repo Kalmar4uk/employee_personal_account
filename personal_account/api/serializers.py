@@ -84,3 +84,8 @@ class CalendarSerializer(serializers.Serializer):
     date = serializers.DateField()
     type = serializers.CharField()
     time = serializers.CharField()
+
+
+class UserCalendarSerializer(serializers.Serializer):
+    user = serializers.IntegerField()
+    calendar = CalendarSerializer(many=True)

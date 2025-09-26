@@ -8,12 +8,12 @@ from rest_framework_simplejwt.token_blacklist.models import (BlacklistedToken,
                                                              OutstandingToken)
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from api.functions import get_calendar, get_group_calendar
 from api.permissions import ForBotRequestPermission
-from api.serializers import (CalendarSerializer, GroupJobSerializer,
-                             ListGroupsJobSerializer, TokenSerializer,
+from api.serializers import (GroupJobSerializer, ListGroupsJobSerializer,
+                             TokenSerializer, UserCalendarSerializer,
                              UsersSerializer)
 from users.models import GroupJob, User
-from utils.functions import days_current_month
 from utils.constants import CURRENT_MONTH
 
 
@@ -61,48 +61,6 @@ class UserViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         serializer = UsersSerializer(
             request.user,
             context={"request": request}
-        )
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @action(detail=True, url_path="calendar")
-    def get_calendar_user(self, request, pk):
-        user = get_object_or_404(User, id=pk)
-        dates = days_current_month()
-        calendar = []
-        for date in dates:
-            work = user.workshifts.filter(date_start=date).first()
-            holiday = user.holidays.filter(date=date).first()
-            if work:
-                calendar.append(
-                    {
-                        "date": date.date(),
-                        "type": "shifts",
-                        "time": (
-                            f"{work.time_start.strftime('%H:%M')} - "
-                            f"{work.time_end.strftime('%H:%M')}"
-                        )
-                    }
-                )
-            elif holiday:
-                calendar.append(
-                    {
-                        "date": date.date(),
-                        "type": "holiday",
-                        "time": "Отпуск"
-                    }
-                )
-            else:
-                calendar.append(
-                    {
-                        "date": date.date(),
-                        "type": "day-off",
-                        "time": "Выходной"
-                    }
-                )
-        serializer = CalendarSerializer(
-            calendar,
-            context={"request": request},
-            many=True
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -160,3 +118,36 @@ class DataForBot(APIView):
                 status=status.HTTP_422_UNPROCESSABLE_ENTITY
             )
         return Response(result, status=status.HTTP_200_OK)
+
+
+class CalendarView(APIView):
+
+    def get(self, request):
+        user_id = self.request.query_params.get("user")
+        group_id = self.request.query_params.get("group")
+
+        if user_id:
+            user = get_object_or_404(User, id=user_id)
+            result = {"user": user.id, "calendar": get_calendar(user=user)}
+            serializer = UserCalendarSerializer(
+                result,
+                context={"request": request}
+            )
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        if group_id:
+            group = get_object_or_404(GroupJob, id=group_id)
+            result = get_group_calendar(group=group)
+            serializer = UserCalendarSerializer(
+                result,
+                context={"request": request},
+                many=True
+            )
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(
+            {
+                "not_found": (
+                    "Отсутствуют query параметры или переданы неизвестные"
+                )
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
