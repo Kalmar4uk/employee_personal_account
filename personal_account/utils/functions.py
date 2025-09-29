@@ -11,7 +11,7 @@ class MyDjangoQLSearchMixin(DjangoQLSearchMixin):
     djangoql_completion_enabled_by_default = False
 
 
-def days_month(month: int, year: int) -> list[dt]:
+def days_month(month: int | None = None, year: int | None = None) -> list[dt]:
     if not month and not year:
         month = timezone.now().month
         year = timezone.now().year
