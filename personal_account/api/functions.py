@@ -1,9 +1,11 @@
-from utils.functions import days_current_month
+from utils.functions import days_month
+from users.models import User, GroupJob
+from datetime import date as dt
 
 
-def get_calendar(user):
-    dates = days_current_month()
-    calendar = []
+def get_calendar(user: User, month: int, year: int) -> list[dict[str, dt]]:
+    dates = days_month(month=month, year=year)
+    calendar: list[dict[str, dt]] = []
     for date in dates:
         work = user.workshifts.filter(date_start=date).first()
         holiday = user.holidays.filter(date=date).first()
@@ -37,8 +39,15 @@ def get_calendar(user):
     return calendar
 
 
-def get_group_calendar(group):
-    result = []
+def get_group_calendar(
+        group: GroupJob, month: int, year: int
+) -> list[dict[str, dt]]:
+    result: list[dict[str, dt]] = []
     for user in group.users.all():
-        result.append({"user": user.id, "calendar": get_calendar(user=user)})
+        result.append(
+            {
+                "user": user.id,
+                "calendar": get_calendar(user=user, month=month, year=year)
+            }
+        )
     return result

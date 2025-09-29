@@ -3,8 +3,9 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
-from api.views import (APIToken, CalendarView, DataForBot, DeleteAPIToken,
+from api.views import (APIToken, CalendarView, DeleteAPIToken,
                        GroupJobViewSet, UserViewSet)
+from api.for_bot import DataForBot
 
 router_v1 = routers.DefaultRouter()
 router_v1.register("users", UserViewSet)

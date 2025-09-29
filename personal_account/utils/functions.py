@@ -11,13 +11,18 @@ class MyDjangoQLSearchMixin(DjangoQLSearchMixin):
     djangoql_completion_enabled_by_default = False
 
 
-def days_current_month() -> list[dt]:
-    current_month = timezone.now().month
-    current_year = timezone.now().year
-    _, count_day_month = monthrange(current_year, current_month)
+def days_month(month: int, year: int) -> list[dt]:
+    if not month and not year:
+        month = timezone.now().month
+        year = timezone.now().year
+    elif not year:
+        year = timezone.now().year
+    elif not month:
+        month = timezone.now().month
+    _, count_day_month = monthrange(year, month)
     result = []
     for day in range(1, count_day_month + 1):
-        result.append(dt(current_year, current_month, day))
+        result.append(dt(year, month, day))
     return result
 
 

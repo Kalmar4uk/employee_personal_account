@@ -9,12 +9,10 @@ from rest_framework_simplejwt.token_blacklist.models import (BlacklistedToken,
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.functions import get_calendar, get_group_calendar
-from api.permissions import ForBotRequestPermission
 from api.serializers import (GroupJobSerializer, ListGroupsJobSerializer,
                              TokenSerializer, UserCalendarSerializer,
                              UsersSerializer)
 from users.models import GroupJob, User
-from utils.constants import CURRENT_MONTH
 
 
 class APIToken(APIView):
@@ -23,7 +21,7 @@ class APIToken(APIView):
     def post(self, request):
         serializer = TokenSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        email = serializer.validated_data.get('email')
+        email: str = serializer.validated_data.get('email')
         user = get_object_or_404(User, email=email)
         refresh = RefreshToken.for_user(user)
         refresh.payload.update(
@@ -67,7 +65,7 @@ class UserViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 
 class GroupJobViewSet(viewsets.ModelViewSet):
     queryset = GroupJob.objects.all()
-    http_method_names = ["get"]
+    http_method_names: list[str] = ["get"]
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -75,60 +73,20 @@ class GroupJobViewSet(viewsets.ModelViewSet):
         return GroupJobSerializer
 
 
-class DataForBot(APIView):
-    permission_classes = (ForBotRequestPermission,)
-
-    def get(self, request):
-        groups = GroupJob.objects.all().prefetch_related("users")
-        try:
-            result = [
-                {
-                    "title": group.title,
-                    "employees": [
-                        {
-                            "first_name": employee.first_name,
-                            "last_name": employee.last_name,
-                            "work_shifts": [
-                                {
-                                    "date_start": work_shift.date_start,
-                                    "date_end": work_shift.date_end,
-                                    "time_start": work_shift.time_start,
-                                    "time_end": work_shift.time_end,
-                                    "night_shift": work_shift.night_shift,
-                                } for work_shift in employee.workshifts.filter(
-                                    date_start__month__gte=CURRENT_MONTH
-                                )
-                            ],
-                            "holiday": [
-                                {
-                                    "date": holiday.date
-                                } for holiday in employee.holidays.filter(
-                                    date__month=CURRENT_MONTH
-                                )
-                            ]
-                        } for employee in group.users.all().prefetch_related(
-                            "workshifts"
-                        )
-                    ]
-                } for group in groups
-            ]
-        except Exception as e:
-            return Response(
-                {"error": e},
-                status=status.HTTP_422_UNPROCESSABLE_ENTITY
-            )
-        return Response(result, status=status.HTTP_200_OK)
-
-
 class CalendarView(APIView):
 
     def get(self, request):
-        user_id = self.request.query_params.get("user")
-        group_id = self.request.query_params.get("group")
+        user_id: str = self.request.query_params.get("user")
+        group_id: str = self.request.query_params.get("group")
+        month: int = int(self.request.query_params.get("month", 0))
+        year: int = int(self.request.query_params.get("year", 0))
 
         if user_id:
             user = get_object_or_404(User, id=user_id)
-            result = {"user": user.id, "calendar": get_calendar(user=user)}
+            result: dict[str] = {
+                "user": user.id,
+                "calendar": get_calendar(user=user, month=month, year=year)
+            }
             serializer = UserCalendarSerializer(
                 result,
                 context={"request": request}
@@ -136,7 +94,7 @@ class CalendarView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         if group_id:
             group = get_object_or_404(GroupJob, id=group_id)
-            result = get_group_calendar(group=group)
+            result = get_group_calendar(group=group, month=month, year=year)
             serializer = UserCalendarSerializer(
                 result,
                 context={"request": request},
