@@ -20,7 +20,7 @@ def days_month(month: int | None = None, year: int | None = None) -> list[dt]:
     elif not month:
         month = timezone.now().month
     _, count_day_month = monthrange(year, month)
-    result = []
+    result: list[dt] = []
     for day in range(1, count_day_month + 1):
         result.append(dt(year, month, day))
     return result
