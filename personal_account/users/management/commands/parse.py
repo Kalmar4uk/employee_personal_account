@@ -247,7 +247,7 @@ def preparation_time(
     if time_start.startswith("21:00"):
         night_shift = True
 
-    elif (
+    if (
         time_end.endswith("21:00") or
         time_start.startswith("21:00")
     ):
