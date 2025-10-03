@@ -1,5 +1,7 @@
 from django.utils import timezone
 from rest_framework import serializers
+from rest_framework_simplejwt.token_blacklist.models import (BlacklistedToken,
+                                                             OutstandingToken)
 
 from users.models import GroupJob, User
 
@@ -20,6 +22,31 @@ class TokenSerializer(serializers.Serializer):
         if not user or not user.check_password(data.get("password")):
             raise serializers.ValidationError(
                 "Введены некорректные данные!"
+            )
+        return data
+
+
+class RefreshTokenSerializer(serializers.Serializer):
+    refresh_token = serializers.CharField()
+
+    class Meta:
+        fields = ("refresh_token",)
+
+    def validate_refresh_token(self, data):
+        if not (token := OutstandingToken.objects.get(token=data)):
+            raise serializers.ValidationError(
+                "Неизвестный refresh токен"
+            )
+        if self.context.get("request").user != token.user:
+            raise serializers.ValidationError(
+                "refresh токен не принадлежит пользователю"
+            )
+        if (
+            token.expires_at <= timezone.now()
+            or BlacklistedToken.objects.filter(token__token=data).exists()
+        ):
+            raise serializers.ValidationError(
+                "Срок действия refresh токена уже истек"
             )
         return data
 

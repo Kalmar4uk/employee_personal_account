@@ -10,7 +10,7 @@ from lk.models import Holiday, WorkShifts
 from users.models import User
 from utils.constants import (COLUMN_FOR_LINE, HOLIDAY_FOR_LINE, MONTHS,
                              TIME_FORMAT, TIME_SHIFT_FOR_LINE, TYPE_HOLIDAY,
-                             TYPE_SHIFTS)
+                             TYPE_SHIFTS, CHOICES_STATUS_HOLIDAY)
 
 PATH_TO_FILE = f"{settings.BASE_DIR}/data_files/work_shifts.xlsx"
 
@@ -122,7 +122,9 @@ def parse_work_shifts(type_line: str) -> bool:
                 except Exception as e:
                     raise ValueError(
                         f"При обработке файла возникла ошибка: {e}\n"
-                        f"Необходимо проверить исходные данные"
+                        f"Необходимо проверить исходные данные\n"
+                        f"Ошибка при парсинге смен.\n"
+                        f"Ячейка {data[cell]}"
                     )
                 try:
                     user = User.objects.get(
@@ -131,9 +133,10 @@ def parse_work_shifts(type_line: str) -> bool:
                     )
                 except user.DoesNotExist:
                     raise ValueError(
-                        f"Сотрудника с именем {first_name} и "
-                        f"фамилией {last_name} нет в базе.\n"
-                        f"Вероятно нужно добавить."
+                        f"Сотрудника {last_name} {first_name} нет в базе.\n"
+                        f"Вероятно нужно добавить или "
+                        f"допущена ошибка в имени/фамилии."
+                        f"Ячейка {data[cell]}"
                     )
                 if cell in [9, 10]:
                     time = data[
@@ -157,7 +160,7 @@ def parse_work_shifts(type_line: str) -> bool:
                         time_end=time_end
                     )
                     try:
-                        WorkShifts.objects.create(
+                        WorkShifts.objects.get_or_create(
                             employee=user,
                             date_start=date,
                             date_end=(
@@ -172,7 +175,7 @@ def parse_work_shifts(type_line: str) -> bool:
                         raise ValueError(
                             f"При записи смен возникла ошибка {e}"
                             f"\n Входные данные: "
-                            f"{prepare_time}"
+                            f"{prepare_time}, {user}"
                         )
 
 
@@ -196,7 +199,9 @@ def parse_holidays(type_line: str) -> bool:
                     except Exception as e:
                         raise ValueError(
                             f"При обработке файла возникла ошибка: {e}\n"
-                            f"Необходимо проверить исходные данные"
+                            f"Необходимо проверить исходные данные\n"
+                            f"Ошибка при парсинге отпуска.\n"
+                            f"Ячейка {data[cell]}"
                         )
                     try:
                         user = User.objects.get(
@@ -205,17 +210,21 @@ def parse_holidays(type_line: str) -> bool:
                         )
                     except user.DoesNotExist:
                         raise ValueError(
-                            f"Сотрудника с именем {first_name} и "
-                            f"фамилией {last_name} нет в базе.\n"
-                            f"Вероятно нужно добавить."
+                            f"Сотрудника {last_name} {first_name} нет в базе.\n"
+                            f"Вероятно нужно добавить или "
+                            f"допущена ошибка в имени/фамилии.\n"
+                            f"Ячейка {data[cell]}"
                         )
-                    if timezone.now().date() < date:
-                        status = "Запланирован"
-                    else:
-                        status = "Завершен"
-
+                    # Пока что только мешает установка статуса
+                    # Ставлю для всех Запланирован
+                    # Потом надо решить, что делать с ними
+                    # if timezone.now().date() < date:
+                    #     status = "Запланирован"
+                    # else:
+                    #     status = "Завершен"
+                    status = CHOICES_STATUS_HOLIDAY[0][0]
                     try:
-                        Holiday.objects.create(
+                        Holiday.objects.get_or_create(
                             employee=user,
                             date=date,
                             status=status,
@@ -223,8 +232,8 @@ def parse_holidays(type_line: str) -> bool:
                         )
                     except Exception as e:
                         raise ValueError(
-                            f"При записи отпуска возникла ошибка {e}"
-                            f"\n Входные данные: {user}, {date}, {status}"
+                            f"При записи отпуска возникла ошибка {e}\n"
+                            f"Входные данные: {user}, {date}, {status}"
                         )
 
 

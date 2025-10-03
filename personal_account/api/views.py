@@ -11,7 +11,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from api.functions import get_calendar, get_group_calendar
 from api.serializers import (GroupJobSerializer, ListGroupsJobSerializer,
                              TokenSerializer, UserCalendarSerializer,
-                             UsersSerializer)
+                             UsersSerializer, RefreshTokenSerializer)
 from users.models import GroupJob, User
 
 
@@ -21,17 +21,30 @@ class APIToken(APIView):
     def post(self, request):
         serializer = TokenSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        email: str = serializer.validated_data.get('email')
+        email: str = serializer.validated_data.get("email")
         user = get_object_or_404(User, email=email)
         refresh = RefreshToken.for_user(user)
-        refresh.payload.update(
+        return Response(
             {
-                "email": user.email,
-                "username": user.username,
-                "first_name": user.first_name,
-                "last_name": user.last_name
-            }
+                "access_token": str(refresh.access_token),
+                "refresh_token": str(refresh)
+            },
+            status=status.HTTP_201_CREATED
         )
+
+
+class APINewToken(APIView):
+
+    def post(self, request):
+        serializer = RefreshTokenSerializer(
+            data=request.data,
+            context={"request": request}
+        )
+        serializer.is_valid(raise_exception=True)
+        token_data: str = serializer.validated_data.get("refresh_token")
+        token = OutstandingToken.objects.get(token=token_data)
+        BlacklistedToken.objects.create(token=token)
+        refresh = RefreshToken.for_user(request.user)
         return Response(
             {
                 "access_token": str(refresh.access_token),

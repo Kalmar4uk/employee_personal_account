@@ -4,7 +4,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
 from api.views import (APIToken, CalendarView, DeleteAPIToken,
-                       GroupJobViewSet, UserViewSet)
+                       GroupJobViewSet, UserViewSet, APINewToken)
 from api.for_bot import DataForBot
 
 router_v1 = routers.DefaultRouter()
@@ -15,6 +15,7 @@ urlpatterns = [
     path("", include(router_v1.urls)),
     path("login/", APIToken.as_view(), name="token_create"),
     path("logout/", DeleteAPIToken.as_view(), name="token_delete"),
+    path("update_token/", APINewToken.as_view(), name="update_token"),
     path("data-for-bot/", DataForBot.as_view(), name="bot"),
     path("calendar/", CalendarView.as_view(), name="calendar")
 ]
