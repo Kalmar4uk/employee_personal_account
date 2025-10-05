@@ -2,20 +2,32 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
+
 from lk.models import WorkShifts
 from users.models import GroupJob, User
 from utils.functions import MyDjangoQLSearchMixin
+from utils.constants import CURRENT_MONTH
 
 
 class WorkShiftsInline(admin.TabularInline):
     model = WorkShifts
     extra = 0
 
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.filter(
+            date_start__month=CURRENT_MONTH
+        ).order_by(
+            "date_start"
+        )
+
 
 class UserInline(admin.TabularInline):
     model = User.group_job.through
+    readonly_fields = ("user",)
     can_delete = False
     extra = 0
+    verbose_name_plural = "Сотрудники группы"
 
 
 @admin.register(User)
@@ -103,3 +115,10 @@ class MyUserAdmin(MyDjangoQLSearchMixin, UserAdmin):
 @admin.register(GroupJob)
 class GroupJobAdmin(MyDjangoQLSearchMixin, admin.ModelAdmin):
     inlines = [UserInline]
+    list_display = ["title", "boss"]
+    readonly_fields = ["boss"]
+
+    def boss(self, obj):
+        return obj.users.get(is_main=True)
+
+    boss.short_description = "Руководитель"

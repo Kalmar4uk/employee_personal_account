@@ -34,9 +34,12 @@ class WorkShifts(WorkShiftsAndHolidayModel):
     type = models.CharField(
         "Тип графика",
         max_length=7,
-        choices=CHOICES_TYPE_WORK_SHIFT
+        choices=CHOICES_TYPE_WORK_SHIFT,
+        null=True,
+        blank=True
     )
     night_shift = models.BooleanField(default=False)
+    updated_at = models.DateTimeField("Дата обновления", auto_now_add=True)
 
     class Meta:
         verbose_name = "Смена"
@@ -69,13 +72,18 @@ class Holiday(models.Model):
     type = models.CharField(
         "Тип отпуска",
         max_length=50,
-        choices=CHOICES_TYPE_HOLIDAY
+        choices=CHOICES_TYPE_HOLIDAY,
+        null=True,
+        blank=True
     )
     status = models.CharField(
         "Статус",
         max_length=15,
-        choices=CHOICES_STATUS_HOLIDAY
+        choices=CHOICES_STATUS_HOLIDAY,
+        null=True,
+        blank=True
     )
+    updated_at = models.DateTimeField("Дата обновления", auto_now_add=True)
 
     class Meta:
         verbose_name = "Отпуск"
