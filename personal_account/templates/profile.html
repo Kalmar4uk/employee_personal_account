@@ -64,9 +64,8 @@
         </div>
     </div>
 
-    {% if first_date and last_date %}
         <div class="section">
-            <h2>Отпуска</h2>
+            <h2>Отпуск на 2025 год</h2>
             <table class="schedule-table">
                 <thead>
                     <tr>
@@ -75,15 +74,16 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for holiday in holidays %}
                     <tr>
-                        <td>{{ first_date|date:"d.m.Y" }} - {{ last_date|date:"d.m.Y" }}</td>
-                        <td>{{ count_days }}</td>
+                        <td>{{ holiday.first_day|date:"d.m.Y" }} - {{ holiday.last_day|date:"d.m.Y" }}</td>
+                        <td>{{ holiday.count }}</td>
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
-    {% endif %}
-</div>
+    </div>
 
 <script>
     const scheduleData = JSON.parse('{{ calendar|escapejs }}');

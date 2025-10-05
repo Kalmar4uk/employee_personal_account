@@ -56,26 +56,14 @@ def profile(request, username):
         else:
             calendar[date_format] = {"type": "day-off", "time": "Выходной"}
 
-    first_date, last_date = get_holidays_first_and_last_date(employee=employee)
+    holidays = get_holidays_first_and_last_date(employee=employee)
 
-    if first_date and last_date:
-        count_days = (last_date - first_date) + timedelta(days=1)
-
-        context = {
-            "employee": employee,
-            "group": group,
-            "first_date": first_date,
-            "last_date": last_date,
-            "count_days": count_days.days,
-            "calendar": json.dumps(calendar, cls=DjangoJSONEncoder)
-        }
-    else:
-
-        context = {
-            "employee": employee,
-            "group": group,
-            "calendar": json.dumps(calendar, cls=DjangoJSONEncoder)
-        }
+    context = {
+        "employee": employee,
+        "group": group,
+        "holidays": holidays,
+        "calendar": json.dumps(calendar, cls=DjangoJSONEncoder)
+    }
 
     return render(request, "profile.html", context)
 
