@@ -10,10 +10,8 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
-
 from users.models import GroupJob, User
-from utils.functions import (days_month,
-                             get_holidays_first_and_last_date)
+from utils.functions import days_month, get_holidays_first_and_last_date
 
 
 class CustomLoginView(LoginView):

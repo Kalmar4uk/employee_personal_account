@@ -1,47 +1,36 @@
-from django.urls import include, path, re_path
-from drf_yasg import openapi
-from drf_yasg.views import get_schema_view
-from rest_framework import permissions, routers
-
-from api.views import (APIToken, CalendarView, DeleteAPIToken,
-                       GroupJobViewSet, UserViewSet, APINewToken)
-from api.for_bot import DataForBot
+from api.views.auth import TokenView
+from api.views.data_for_bot import DataForBot
+from api.views.lk import CalendarView
+from api.views.users import GroupJobViewSet, UserViewSet
+from django.urls import include, path
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from rest_framework import routers
 
 router_v1 = routers.DefaultRouter()
 router_v1.register("users", UserViewSet)
 router_v1.register("groupsjob", GroupJobViewSet)
+router_v1.register("token", TokenView)
 
 urlpatterns = [
     path("", include(router_v1.urls)),
-    path("login/", APIToken.as_view(), name="token_create"),
-    path("logout/", DeleteAPIToken.as_view(), name="token_delete"),
-    path("update_token/", APINewToken.as_view(), name="update_token"),
-    path("data-for-bot/", DataForBot.as_view(), name="bot"),
-    path("calendar/", CalendarView.as_view(), name="calendar")
+    path(
+        "calendar/user/<int:user_id>/",
+        CalendarView.as_view({"get": "user"}),
+        name="user_calendar"
+    ),
+    path(
+        "calendar/user/<int:group_id>/",
+        CalendarView.as_view({"get": "group"}),
+        name="group_calendar"
+    ),
+    path("data-for-bot/", DataForBot.as_view(), name="bot")
 ]
 
-
-schema_view = get_schema_view(
-   openapi.Info(
-      title="LK API",
-      default_version="v1",
-      description="Документация для проекта LK",
-      contact=openapi.Contact(email="admin@lk.ru"),
-      license=openapi.License(name="BSD License"),
-   ),
-   public=True,
-   permission_classes=(permissions.AllowAny,),
-)
-
 urlpatterns += [
-   re_path(
-       r"^swagger(?P<format>\.json|\.yaml)$",
-       schema_view.without_ui(cache_timeout=0),
-       name="schema-json"
-   ),
-   re_path(
-       r"^swagger/$",
-       schema_view.with_ui("swagger", cache_timeout=0),
-       name="schema-swagger-ui"
-   ),
+    path("schema/", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "swagger/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="docs"
+    ),
 ]

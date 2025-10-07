@@ -2,11 +2,10 @@ from django.utils import timezone
 from rest_framework import serializers
 from rest_framework_simplejwt.token_blacklist.models import (BlacklistedToken,
                                                              OutstandingToken)
-
 from users.models import GroupJob, User
 
 
-class TokenSerializer(serializers.Serializer):
+class TokenCreateSerializer(serializers.Serializer):
     email = serializers.CharField(
         required=True)
     password = serializers.CharField(
@@ -26,7 +25,7 @@ class TokenSerializer(serializers.Serializer):
         return data
 
 
-class RefreshTokenSerializer(serializers.Serializer):
+class UpdateTokenSerializer(serializers.Serializer):
     refresh_token = serializers.CharField()
 
     class Meta:
@@ -49,6 +48,14 @@ class RefreshTokenSerializer(serializers.Serializer):
                 "Срок действия refresh токена уже истек"
             )
         return data
+
+
+class TokenSerializer(serializers.Serializer):
+    access_token = serializers.CharField()
+    refresh_token = serializers.CharField()
+
+    class Meta:
+        fields = ("access_token", "refresh_token")
 
 
 class UsersSerializer(serializers.ModelSerializer):

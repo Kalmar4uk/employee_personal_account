@@ -11,3 +11,9 @@ class ForBotRequestPermission(permissions.BasePermission):
         ):
             return True
         return False
+
+
+class PostRequestForTokenOrIsAuthenticated(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        return request.method == "POST"

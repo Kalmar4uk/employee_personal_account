@@ -1,9 +1,9 @@
 from calendar import monthrange
-from datetime import datetime as dt, timedelta as td
+from datetime import datetime as dt
+from datetime import timedelta as td
 
 from django.utils import timezone
 from djangoql.admin import DjangoQLSearchMixin
-
 from utils.constants import CURRENT_YEAR
 
 

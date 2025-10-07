@@ -1,6 +1,7 @@
-from utils.functions import days_month
-from users.models import User, GroupJob
 from datetime import date as dt
+
+from users.models import GroupJob, User
+from utils.functions import days_month
 
 
 def get_calendar(user: User, month: int, year: int) -> list[dict[str, dt]]:
