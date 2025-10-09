@@ -29,6 +29,7 @@ class CalendarView(viewsets.ViewSet):
                 )
             ],
             summary="Получение рабочего календаря для сотрудника",
+            description="По умолчанию отдает календарь за текущий месяц и год",
             tags=["Calendar"]
     )
     def user(self, request, user_id):
@@ -65,6 +66,7 @@ class CalendarView(viewsets.ViewSet):
                 )
             ],
             summary="Получение рабочего календаря для сотрудников группы",
+            description="По умолчанию отдает календарь за текущий месяц и год",
             tags=["Calendar"]
     )
     def group(self, request, group_id):

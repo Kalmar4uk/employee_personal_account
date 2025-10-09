@@ -3,7 +3,7 @@ from api.views.data_for_bot import DataForBot
 from api.views.lk import CalendarView
 from api.views.users import GroupJobViewSet, UserViewSet
 from django.urls import include, path
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 from rest_framework import routers
 
 router_v1 = routers.DefaultRouter()
@@ -14,12 +14,12 @@ router_v1.register("token", TokenView)
 urlpatterns = [
     path("", include(router_v1.urls)),
     path(
-        "calendar/user/<int:user_id>/",
+        "calendar/users/<int:user_id>/",
         CalendarView.as_view({"get": "user"}),
         name="user_calendar"
     ),
     path(
-        "calendar/user/<int:group_id>/",
+        "calendar/groups/<int:group_id>/",
         CalendarView.as_view({"get": "group"}),
         name="group_calendar"
     ),
@@ -33,4 +33,5 @@ urlpatterns += [
         SpectacularSwaggerView.as_view(url_name="schema"),
         name="docs"
     ),
+    path("redoc/", SpectacularRedocView.as_view(), name="docs_redoc")
 ]
