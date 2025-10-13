@@ -1,4 +1,6 @@
 from api.permissions import ForBotRequestPermission
+from drf_spectacular.utils import (OpenApiParameter, OpenApiResponse,
+                                   extend_schema)
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -9,6 +11,7 @@ from utils.constants import CURRENT_MONTH
 class DataForBot(APIView):
     permission_classes = (ForBotRequestPermission,)
 
+    @extend_schema(tags=["Bot Api"], exclude=True)
     def get(self, request):
         groups = GroupJob.objects.all().prefetch_related("users")
         try:
