@@ -23,17 +23,17 @@
                 <span class="info-label">Сервис</span>
                 <span class="info-value">{{ downtime.service }}</span>
             </div>
-            
-            <div class="info-group">
-                <span class="info-label">Начало работ</span>
-                <span class="info-value">{{ downtime.start_downtime|date:"d.m.Y H:i" }}</span>
-            </div>
 
             <div class="info-group">
                 <span class="info-label">Сотрудник ГСМАиЦП</span>
                 <span class="info-value">
                     {{ downtime.gsma_employee.get_full_name|default:downtime.gsma_employee.username }}
                 </span>
+            </div>
+            
+            <div class="info-group">
+                <span class="info-label">Начало работ</span>
+                <span class="info-value">{{ downtime.start_downtime|date:"d.m.Y H:i" }}</span>
             </div>
             
             <div class="info-group">
