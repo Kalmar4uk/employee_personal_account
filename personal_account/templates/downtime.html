@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="downtimes-container">
+    <div class="downtimes-header">
+        <h1 class="downtimes-title">Плановые работы</h1>
+        <a href="{% url 'downtimes:added_downtime' %}" class="add-btn">
+            <span>+</span>
+            Добавить downtime
+        </a>
+    </div>
+
+    <div class="downtimes-list">
+        {% for downtime in downtimes %}
+        <div class="downtime-card">
+            <div class="downtime-info">
+                <div class="downtime-service">
+                    {{ downtime.service }}
+                </div>
+                <div class="downtime-period">
+                    {{ downtime.start_downtime|date:"d.m.Y H:i" }} - {{ downtime.end_downtime|date:"d.m.Y H:i" }}
+                </div>
+                {% if downtime.gsma_employee %}
+                <div class="downtime-employee">
+                    Сотрудник ГСМАиЦП: {{ downtime.gsma_employee.get_full_name|default:downtime.gsma_employee.username }}
+                </div>
+                {% endif %}
+            </div>
+            <div class="downtime-status">
+                <a href="{% url 'downtimes:downtime_detail' downtime.id %}">
+                    <button class="profile-btn">Подробнее</button>
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <div class="empty-icon">⏰</div>
+            <div class="empty-text">Нет записей о downtimes</div>
+            <a href="{% url 'downtimes:added_downtime' %}" class="add-btn">
+                <span>+</span>
+                Добавить первый downtime
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{% static 'css/sections.css' %}">
     <link rel="stylesheet" href="{% static 'css/groups_detail.css' %}">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/downtime.css' %}"
 </head>
 <body>
     <aside class="sidebar">
@@ -21,6 +22,7 @@
         <ul class="nav-links">
             <li><a href="{% url 'users:profile' user.username %}" class="{% if view_name == 'users:profile' %} active {% endif %}">Профиль</a></li>
             <li><a href="{% url 'users:groups' %}" class="{% if view_name == 'users:groups'%} active  {% endif %}">Группы</a></li>
+            <li><a href="{% url 'downtimes:downtime' %}">Downtimes</a></li>
         </ul>
         {% endwith %}
     </aside>

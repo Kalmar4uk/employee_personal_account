@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="downtime-detail-container">
+    <div class="downtime-detail-card">
+        <div class="downtime-detail-header">
+            <div class="downtime-detail-info">
+                <h1 class="downtime-detail-title">
+                    <div class="downtime-detail-service">{{ downtime.service }}</div>
+                    <div class="downtime-detail-meta">
+                        ID: #{{ downtime.id }} • Создано: {{ downtime.created_at|date:"d.m.Y H:i" }}
+                    </div>
+                </h1>
+            </div>
+            <div class="downtime-detail-actions">
+                <a href="{% url 'downtimes:downtime' %}" class="detail-btn back-btn">Назад к списку</a>
+                <a href="{% url 'downtimes:edit_downtime' downtime.id %}" class="detail-btn edit-btn">Редактировать</a>
+            </div>
+        </div>
+
+        <div class="downtime-info-grid">
+            <div class="info-group">
+                <span class="info-label">Сервис</span>
+                <span class="info-value">{{ downtime.service }}</span>
+            </div>
+            
+            <div class="info-group">
+                <span class="info-label">Начало работ</span>
+                <span class="info-value">{{ downtime.start_downtime|date:"d.m.Y H:i" }}</span>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">Сотрудник ГСМАиЦП</span>
+                <span class="info-value">
+                    {{ downtime.gsma_employee.get_full_name|default:downtime.gsma_employee.username }}
+                </span>
+            </div>
+            
+            <div class="info-group">
+                <span class="info-label">Окончание работ</span>
+                <span class="info-value">{{ downtime.end_downtime|date:"d.m.Y H:i" }}</span>
+            </div>
+
+        </div>
+
+        {% if downtime.description %}
+        <div class="description-block">
+            <div class="description-label">Описание работ</div>
+                {{ downtime.description|linebreaks }}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="meta-card">
+            <div class="meta-grid">
+                <div class="meta-item">
+                    <span class="meta-label">Дата создания записи</span>
+                    <span class="meta-value">{{ downtime.created_at|date:"d.m.Y H:i" }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">ID записи</span>
+                    <span class="meta-value">#{{ downtime.id }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

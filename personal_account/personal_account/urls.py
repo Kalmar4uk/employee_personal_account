@@ -2,9 +2,10 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('api/', include('api.urls')),
-    path('admin/', admin.site.urls),
-    path('', include('users.urls')),
+    path("api/", include("api.urls")),
+    path("admin/", admin.site.urls),
+    path("downtime/", include("downtimes.urls")),
+    path("", include("users.urls")),
 ]
 
 handler500 = "utils.pages_error.server_error"
