@@ -22,7 +22,7 @@
         <ul class="nav-links">
             <li><a href="{% url 'users:profile' user.username %}" class="{% if view_name == 'users:profile' %} active {% endif %}">Профиль</a></li>
             <li><a href="{% url 'users:groups' %}" class="{% if view_name == 'users:groups'%} active  {% endif %}">Группы</a></li>
-            <li><a href="{% url 'downtimes:downtime' %}">Downtimes</a></li>
+            <li><a href="{% url 'downtimes:downtime' %}">Плановые работы</a></li>
         </ul>
         {% endwith %}
     </aside>
