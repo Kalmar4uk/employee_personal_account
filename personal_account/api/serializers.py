@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.token_blacklist.models import (BlacklistedToken,
                                                              OutstandingToken)
 from users.models import GroupJob, User
+from downtimes.models import Downtime
 
 
 class TokenCreateSerializer(serializers.Serializer):
@@ -112,6 +113,22 @@ class ListGroupsJobSerializer(serializers.ModelSerializer):
     def get_is_main(self, value):
         main = value.users.filter(is_main=True).first()
         return UsersSerializerForGroupsJob(main).data
+
+
+class DowntimeSerializer(serializers.ModelSerializer):
+    gsma_employee = UsersSerializer()
+
+    class Meta:
+        model = Downtime
+        fields = (
+            "id",
+            "service",
+            "gsma_employee",
+            "start_downtime",
+            "end_downtime",
+            "link_task",
+            "description"
+        )
 
 
 class CalendarSerializer(serializers.Serializer):

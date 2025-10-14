@@ -1,5 +1,5 @@
 from api.views.auth import TokenView
-from api.views.data_for_bot import DataForBot
+from api.views.data_for_bot import DataForBot, DowntimeDataForBor
 from api.views.lk import CalendarView
 from api.views.users import GroupJobViewSet, UserViewSet
 from django.urls import include, path
@@ -23,7 +23,8 @@ urlpatterns = [
         CalendarView.as_view({"get": "group"}),
         name="group_calendar"
     ),
-    path("data-for-bot/", DataForBot.as_view(), name="bot")
+    path("data-for-bot/", DataForBot.as_view(), name="bot"),
+    path("downtime-data-bot/", DowntimeDataForBor.as_view(), name="downtime_bot")
 ]
 
 urlpatterns += [

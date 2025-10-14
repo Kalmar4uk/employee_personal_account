@@ -17,8 +17,10 @@ class Downtime(models.Model):
         User,
         on_delete=models.SET_NULL,
         null=True,
+        related_name="downtimes",
         verbose_name="Сотрудник от ГСМАиЦП"
     )
+    link_task = models.URLField("Ссылка на задачу", max_length=150)
     description = models.TextField("Описание")
     created_at = models.DateTimeField(
         "Дата создания записи",

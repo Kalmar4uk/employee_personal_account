@@ -24,7 +24,6 @@ def added_downtime(request):
         for shift in shifts:
             employee = shift.employee
             if employee.group_job.filter(id=1):
-                print(downtime)
                 downtime.gsma_employee = employee
                 downtime.save()
                 return redirect(reverse("downtimes:downtime"))
@@ -37,9 +36,7 @@ def added_downtime(request):
 @login_required
 def downtimes(request):
     downtimes = Downtime.objects.filter(start_downtime__gte=timezone.now())
-
     context = {"downtimes": downtimes}
-
     return render(request, "downtime.html", context)
 
 

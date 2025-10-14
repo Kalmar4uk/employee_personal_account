@@ -43,13 +43,17 @@
 
         </div>
 
-        {% if downtime.description %}
+        <div class="link-block">
+            <div class="link-label">Ссылка на задачу</div>
+            <div class="link-content"><a href="{{ downtime.link_task }}">{{ downtime.link_task }}</a></div>
+        </div>
+
         <div class="description-block">
             <div class="description-label">Описание работ</div>
+            <div class="description-content">
                 {{ downtime.description|linebreaks }}
             </div>
         </div>
-        {% endif %}
 
         <div class="meta-card">
             <div class="meta-grid">
