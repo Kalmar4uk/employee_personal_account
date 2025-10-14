@@ -68,3 +68,10 @@ def edit_downtimes(request, id):
     }
 
     return render(request, "added_downtime.html", context)
+
+
+@login_required
+def history_downtimes(request):
+    downtimes = Downtime.objects.filter(start_downtime__lt=timezone.now())
+    context = {"downtimes": downtimes}
+    return render(request, "history_downtime.html", context)

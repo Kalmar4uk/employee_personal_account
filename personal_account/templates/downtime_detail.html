@@ -14,7 +14,9 @@
             </div>
             <div class="downtime-detail-actions">
                 <a href="{% url 'downtimes:downtime' %}" class="detail-btn back-btn">Назад к списку</a>
-                <a href="{% url 'downtimes:edit_downtime' downtime.id %}" class="detail-btn edit-btn">Редактировать</a>
+                {% if "from_history" not in request.GET %}
+                    <a href="{% url 'downtimes:edit_downtime' downtime.id %}" class="detail-btn edit-btn">Редактировать</a>
+                {% endif %}
             </div>
         </div>
 

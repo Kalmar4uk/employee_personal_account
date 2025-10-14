@@ -3,15 +3,15 @@
 {% block content %}
 <div class="downtimes-container">
     <div class="downtimes-header">
-        <h1 class="downtimes-title">Плановые работы</h1>
-        <a href="{% url 'downtimes:added_downtime' %}" class="add-btn">
-            Добавить
+        <h1 class="downtimes-title">Проведенные работы</h1>
+        <a href="{% url 'downtimes:downtime' %}" class="detail-btn back-btn">
+            Назад
         </a>
     </div>
 
     <div class="downtimes-list">
         {% for downtime in downtimes %}
-        <div class="downtime-card">
+        <div class="downtime-history-card">
             <div class="downtime-info">
                 <div class="downtime-service">
                     {{ downtime.service }}
@@ -26,21 +26,21 @@
                 {% endif %}
             </div>
             <div class="downtime-status">
-                <a href="{% url 'downtimes:downtime_detail' downtime.id %}">
+                <a href="{% url 'downtimes:downtime_detail' downtime.id %}?from_history=true">
                     <button class="profile-btn">Подробнее</button>
                 </a>
             </div>
         </div>
         {% empty %}
         <div class="empty-state">
+            <div class="empty-icon">⏰</div>
             <div class="empty-text">Нет записей о downtimes</div>
+            <a href="{% url 'downtimes:added_downtime' %}" class="add-btn">
+                <span>+</span>
+                Добавить первый downtime
+            </a>
         </div>
         {% endfor %}
-    </div>
-    <div class="button-end-container">
-        <a href="{% url 'downtimes:history_downtime' %}" class="history-btn">
-            Проведенные работы
-        </a>
     </div>
 </div>
 {% endblock %}
