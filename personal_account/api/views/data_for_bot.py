@@ -1,14 +1,14 @@
+from datetime import timedelta
+
 from api.permissions import ForBotRequestPermission
+from api.serializers import DowntimeSerializer
+from django.utils import timezone
+from downtimes.models import Downtime
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.models import GroupJob
 from utils.constants import CURRENT_MONTH
-from django.utils import timezone
-from downtimes.models import Downtime
-from datetime import timedelta
-from rest_framework.permissions import AllowAny
-from api.serializers import DowntimeSerializer
 
 
 class DataForBot(APIView):

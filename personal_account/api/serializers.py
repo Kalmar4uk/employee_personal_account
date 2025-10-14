@@ -1,9 +1,9 @@
 from django.utils import timezone
+from downtimes.models import Downtime
 from rest_framework import serializers
 from rest_framework_simplejwt.token_blacklist.models import (BlacklistedToken,
                                                              OutstandingToken)
 from users.models import GroupJob, User
-from downtimes.models import Downtime
 
 
 class TokenCreateSerializer(serializers.Serializer):

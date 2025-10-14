@@ -1,6 +1,6 @@
 from django.db import models
-from users.models import User
 from downtimes.validators import check_date
+from users.models import User
 
 
 class Downtime(models.Model):

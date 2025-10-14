@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from lk.models import WorkShifts
-from downtimes.models import Downtime
-from downtimes.forms import DowntimeForm
 from django.utils import timezone
+from downtimes.forms import DowntimeForm
+from downtimes.models import Downtime
+from lk.models import WorkShifts
 
 
 @login_required
