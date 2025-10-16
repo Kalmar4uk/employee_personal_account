@@ -8,13 +8,11 @@
                 <h3>Личная информация</h3>
                 <p><strong>ФИО:</strong> {{ employee.last_name }} {{ employee.first_name }}</p>
                 <p><strong>Должность:</strong> {{ employee.job_title }}</p>
-                <p><strong>Отдел:</strong>
+                <p><strong>Группа:</strong>
                     {% if group %}
-                    <a href="{% url 'users:groups_detail' group.id %}" class="group-pill">
-                    <span class="group-icon">👥</span>
-                        {{ group.title }}
-                    <span class="group-arrow">→</span>
-                    </a>
+                        <a href="{% url 'users:groups_detail' group.id %}">
+                            <button class="profile-btn">{{ group.title }}</button>
+                        </a>
                     {% else %}
                         Группа отсутствует
                     {% endif %}

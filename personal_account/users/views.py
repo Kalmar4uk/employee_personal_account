@@ -67,6 +67,23 @@ def profile(request, username):
 
 
 @login_required
+def employees(request):
+    employees = User.objects.filter(
+        is_active=True
+    ).values(
+        "username",
+        "first_name",
+        "last_name",
+        "job_title",
+        "group_job__title"
+    )
+
+    context = {"employees": employees}
+
+    return render(request, "employees.html", context)
+
+
+@login_required
 def groups(request):
     groups = GroupJob.objects.all().prefetch_related("users")
     context = {
