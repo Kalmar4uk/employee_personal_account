@@ -3,7 +3,11 @@
 {% block content %}
 <div class="downtimes-container">
     <div class="downtime-form-container">
-        <h1 class="form-title">Добавление Downtime</h1>
+        {% if "/edit/" in request.path %}
+            <h1 class="form-title">Редактирование Downtime</h1>
+        {% else %}
+            <h1 class="form-title">Добавление Downtime</h1>
+        {% endif %}
         
         <form method="post" class="downtime-form">
             {% csrf_token %}
@@ -54,7 +58,11 @@
             
             <div class="form-actions">
                 <a href="{% url 'downtimes:downtime' %}" class="cancel-btn">Отмена</a>
-                <button type="submit" class="submit-btn">Добавить</button>
+                {% if "/edit/" in request.path %}
+                    <button type="submit" class="submit-btn">Изменить</button>
+                {% else %}
+                    <button type="submit" class="submit-btn">Добавить</button>
+                {% endif %}
             </div>
         </form>
     </div>

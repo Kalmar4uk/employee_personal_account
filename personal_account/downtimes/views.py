@@ -8,7 +8,7 @@ from lk.models import WorkShifts
 
 
 @login_required
-def added_downtime(request):
+def create_downtime(request):
     form = DowntimeForm(request.POST or None)
 
     if form.is_valid():
@@ -30,21 +30,21 @@ def added_downtime(request):
 
     context = {"form": form}
 
-    return render(request, "added_downtime.html", context)
+    return render(request, "downtime/added_downtime.html", context)
 
 
 @login_required
 def downtimes(request):
     downtimes = Downtime.objects.filter(start_downtime__gte=timezone.now())
     context = {"downtimes": downtimes}
-    return render(request, "downtime.html", context)
+    return render(request, "downtime/downtime.html", context)
 
 
 @login_required
 def downtimes_detail(request, id):
     downtime = get_object_or_404(Downtime, id=id)
     context = {"downtime": downtime}
-    return render(request, "downtime_detail.html", context)
+    return render(request, "downtime/downtime_detail.html", context)
 
 
 @login_required
@@ -67,11 +67,11 @@ def edit_downtimes(request, id):
         "downtime": downtime
     }
 
-    return render(request, "added_downtime.html", context)
+    return render(request, "downtime/added_downtime.html", context)
 
 
 @login_required
 def history_downtimes(request):
     downtimes = Downtime.objects.filter(start_downtime__lt=timezone.now())
     context = {"downtimes": downtimes}
-    return render(request, "history_downtime.html", context)
+    return render(request, "downtime/history_downtime.html", context)

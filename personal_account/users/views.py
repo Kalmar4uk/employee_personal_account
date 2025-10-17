@@ -63,7 +63,7 @@ def profile(request, username):
         "calendar": json.dumps(calendar, cls=DjangoJSONEncoder)
     }
 
-    return render(request, "profile.html", context)
+    return render(request, "employees/profile.html", context)
 
 
 @login_required
@@ -80,7 +80,7 @@ def employees(request):
 
     context = {"employees": employees}
 
-    return render(request, "employees.html", context)
+    return render(request, "employees/employees.html", context)
 
 
 @login_required
@@ -89,7 +89,7 @@ def groups(request):
     context = {
         "groups": groups
     }
-    return render(request, "groups.html", context)
+    return render(request, "groups/groups.html", context)
 
 
 @login_required
@@ -136,4 +136,4 @@ def groups_detail(request, id):
         "count_work": count_work,
         "boss": boss
     }
-    return render(request, "groups_detail.html", context)
+    return render(request, "groups/groups_detail.html", context)

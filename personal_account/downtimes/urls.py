@@ -6,12 +6,12 @@ app_name = "downtimes"
 
 urlpatterns = [
     path("", views.downtimes, name="downtime"),
-    path("service/<int:id>/", views.downtimes_detail, name="downtime_detail"),
+    path("<int:id>/", views.downtimes_detail, name="downtime_detail"),
     path(
-        "edit-downtime/<int:id>/",
+        "<int:id>/edit/",
         views.edit_downtimes,
         name="edit_downtime"
     ),
-    path("added-downtime/", views.added_downtime, name="added_downtime"),
-    path("history-downtime", views.history_downtimes, name="history_downtime")
+    path("create/", views.create_downtime, name="added_downtime"),
+    path("history/", views.history_downtimes, name="history_downtime")
 ]
