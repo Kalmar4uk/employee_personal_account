@@ -18,15 +18,15 @@ class User(AbstractUser):
     )
     is_main = models.BooleanField("Босс этой качалки", default=False)
 
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
 
     def save(self, *args, **kwargs):
         if self.is_active is False and not self.email.startswith("Not"):
-            self.email = f"Not active - {self.email}"
-        self.username, _ = self.email.rsplit("@", 1)
+            self.username = f"Not active - {self.username}"
+        self.email = f"{self.username}@av.ru"
         super().save(*args, **kwargs)
 
     def __str__(self):

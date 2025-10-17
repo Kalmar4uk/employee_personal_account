@@ -157,11 +157,10 @@
 
         <form method="post" action="{% url 'users:login' %}" class="login-form">
             {% csrf_token %}
-            
             <div class="form-group">
-                <label for="id_username">Email</label>
+                <label for="id_username">Логин</label>
                 <input type="text" name="username" id="id_username" class="form-control" 
-                       placeholder="Введите email" required autofocus
+                       placeholder="Введите имя пользователя" required autofocus
                        value="{{ form.username.value|default:'' }}">
                 {% if form.username.errors %}
                 <ul class="errorlist">
@@ -190,6 +189,8 @@
                 <ul class="errorlist">
                     {% for error in form.non_field_errors %}
                     <li>{{ error }}</li>
+                    <br>
+                    <p>Авторизация была изменена, теперь требуется имя пользователя вместо email</p>
                     {% endfor %}
                 </ul>
             </div>

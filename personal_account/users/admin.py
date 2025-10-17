@@ -75,7 +75,7 @@ class MyUserAdmin(MyDjangoQLSearchMixin, UserAdmin):
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
     add_fieldsets = (
-        (None, {"fields": ("email", "password1", "password2")}),
+        (None, {"fields": ("username", "password1", "password2")}),
         (_("Personal info"), {
             "fields": (
                 "first_name", "last_name"
