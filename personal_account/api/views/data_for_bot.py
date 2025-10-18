@@ -60,9 +60,8 @@ class DowntimeDataForBor(APIView):
     permission_classes = (ForBotRequestPermission,)
 
     def get(self, request):
-        current_date = timezone.now() + timedelta(days=1)
         downtime = Downtime.objects.filter(
-            start_downtime__date=current_date.date()
+            start_downtime__date__gte=timezone.now().date()
         )
         serializer = DowntimeSerializer(
             downtime,

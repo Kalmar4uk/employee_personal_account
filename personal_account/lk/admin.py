@@ -23,6 +23,7 @@ class WorkShiftsAdmin(MyDjangoQLSearchMixin, admin.ModelAdmin):
         "night_shift"
     )
     raw_id_fields = ("employee",)
+    readonly_fields = ("updated_at",)
 
 
 @admin.register(Holiday)
@@ -31,3 +32,4 @@ class HolidayAdmin(MyDjangoQLSearchMixin, admin.ModelAdmin):
     list_display = ("employee", "date", "status", "type")
     list_filter = ("employee", "date", "status")
     raw_id_fields = ("employee",)
+    readonly_fields = ("updated_at",)

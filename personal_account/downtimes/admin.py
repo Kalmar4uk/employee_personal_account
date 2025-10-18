@@ -19,4 +19,5 @@ class DowntimeAdmin(admin.ModelAdmin, MyDjangoQLSearchMixin):
         "start_downtime",
         "end_downtime"
     )
+    readonly_fields = ("created_at",)
     row_id_field = ("gsma_employee",)
