@@ -10,5 +10,3 @@ ENV/
 env.bak/
 venv.bak/
 personal_account/*.sqlite3
-personal_account/data_files/*.xlsx
-personal_account/data_files/*.csv
