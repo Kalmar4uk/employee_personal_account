@@ -174,7 +174,7 @@ def parse_work_shifts(type_line: str) -> bool:
                         raise ValueError(
                             f"При записи смен возникла ошибка {e}"
                             f"\n Входные данные: "
-                            f"{prepare_time}, {user}"
+                            f"{date}, {prepare_time}, {user}"
                         )
 
 

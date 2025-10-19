@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from api.permissions import ForBotRequestPermission
 from api.serializers import DowntimeSerializer
 from django.utils import timezone
@@ -61,7 +59,7 @@ class DowntimeDataForBor(APIView):
 
     def get(self, request):
         downtime = Downtime.objects.filter(
-            start_downtime__date__gte=timezone.now().date()
+            start_downtime__gte=timezone.now()
         )
         serializer = DowntimeSerializer(
             downtime,
