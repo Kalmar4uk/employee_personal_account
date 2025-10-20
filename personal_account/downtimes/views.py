@@ -2,7 +2,6 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
-from django.db.models import Q
 from downtimes.forms import DowntimeForm
 from downtimes.models import Downtime
 from lk.models import WorkShifts
@@ -19,29 +18,27 @@ def create_downtime(request):
         date_start = start_downtime.date()
         time_start = start_downtime.time()
         if time_start < time(9, 0, 0):
-            shifts = WorkShifts.objects.filter(
+            shifts = WorkShifts.objects.get(
+                employee__group_job=1,
                 date_start=date_start-timedelta(days=1),
                 night_shift=True
             )
         elif time_start > time(21, 0, 0):
-            shifts = WorkShifts.objects.filter(
+            shifts = WorkShifts.objects.get(
+                employee__group_job=1,
                 date_start=date_start,
                 night_shift=True
             )
         else:
-            shifts = WorkShifts.objects.filter(
-                date_start=date_start-timedelta(days=1),
+            shifts = WorkShifts.objects.get(
+                employee__group_job=1,
+                date_start=date_start,
+                type="Сменный",
                 night_shift=False
             )
-        shifts.prefetch_related(
-            "employee"
-        )
-        for shift in shifts:
-            employee = shift.employee
-            if employee.group_job.filter(id=1):
-                downtime.gsma_employee = employee
-                downtime.save()
-                return redirect(reverse("downtimes:downtime"))
+        downtime.gsma_employee = shifts.employee
+        downtime.save()
+        return redirect(reverse("downtimes:downtime"))
 
     context = {"form": form}
 
