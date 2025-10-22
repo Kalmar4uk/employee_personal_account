@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from users.models import GroupJob, User
 
 
-class UserViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class UserViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UsersSerializer
 
@@ -33,6 +33,10 @@ class UserViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     @extend_schema(
             responses={
                 200: UsersSerializer,
+                404: OpenApiResponse(
+                    response=None,
+                    description="User not found"
+                ),
                 401: OpenApiResponse(
                     response=None,
                     description="No auth"
@@ -43,6 +47,20 @@ class UserViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     )
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
+
+    @extend_schema(
+            responses={
+                200: UsersSerializer,
+                401: OpenApiResponse(
+                    response=None,
+                    description="No auth"
+                ),
+            },
+            summary="Получение всех сотрудников",
+            tags=["Users"]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class GroupJobViewSet(viewsets.ModelViewSet):

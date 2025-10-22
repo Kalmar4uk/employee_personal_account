@@ -54,9 +54,10 @@ class UpdateTokenSerializer(serializers.Serializer):
 class TokenSerializer(serializers.Serializer):
     access_token = serializers.CharField()
     refresh_token = serializers.CharField()
+    token_type = serializers.CharField()
 
     class Meta:
-        fields = ("access_token", "refresh_token")
+        fields = ("access_token", "refresh_token", "token_type")
 
 
 class UsersSerializer(serializers.ModelSerializer):
@@ -70,6 +71,7 @@ class UsersSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "job_title",
+            "group_job",
             "is_main"
         )
 

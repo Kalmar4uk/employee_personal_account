@@ -1,5 +1,6 @@
 from api.serializers import (TokenCreateSerializer, TokenSerializer,
                              UpdateTokenSerializer)
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import status, viewsets
@@ -103,7 +104,8 @@ class TokenView(viewsets.ViewSet):
         refresh = RefreshToken.for_user(user)
         tokens: dict[str, str] = {
             "access_token": str(refresh.access_token),
-            "refresh_token": str(refresh)
+            "refresh_token": str(refresh),
+            "token_type": f"{settings.SIMPLE_JWT.get('AUTH_HEADER_TYPES')[0]}"
         }
         serializer = TokenSerializer(tokens, context={"request": request})
         return serializer.data
