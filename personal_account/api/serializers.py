@@ -60,15 +60,7 @@ class TokenSerializer(serializers.Serializer):
         fields = ("access_token", "refresh_token", "token_type")
 
 
-class GroupJobSerializerForUsers(serializers.ModelSerializer):
-
-    class Meta:
-        model = GroupJob
-        fields = ("id", "title")
-
-
 class UsersSerializer(serializers.ModelSerializer):
-    group_job = GroupJobSerializerForUsers(many=True)
 
     class Meta:
         model = User
