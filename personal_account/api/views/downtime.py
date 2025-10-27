@@ -20,7 +20,7 @@ class DowntimeViewSet(
     permission_classes = (BotOrStandartPermissions,)
 
     def get_queryset(self):
-        if self.action == "retreve":
+        if self.action == "retrieve":
             return Downtime.objects.all()
         return Downtime.objects.filter(start_downtime__gte=timezone.now())
 
