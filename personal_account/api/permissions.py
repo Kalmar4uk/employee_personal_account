@@ -6,7 +6,6 @@ from rest_framework.exceptions import PermissionDenied
 class BotOrStandartPermissions(permissions.BasePermission):
 
     def has_permission(self, request, view):
-        token = request.headers.get("token")
         if (
             request.user.is_authenticated
             or (

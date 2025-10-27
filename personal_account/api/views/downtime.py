@@ -106,5 +106,9 @@ class DowntimeViewSet(
     @action(detail=False, url_path="old")
     def get_old_downtime(self, request):
         queryset = Downtime.objects.filter(end_downtime__lte=timezone.now())
-        serializer = DowntimeSerializer(queryset, context={"request": request}, many=True)
+        serializer = DowntimeSerializer(
+            queryset,
+            context={"request": request},
+            many=True
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)
