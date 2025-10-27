@@ -20,6 +20,8 @@ class DowntimeViewSet(
     permission_classes = (BotOrStandartPermissions,)
 
     def get_queryset(self):
+        if self.action == "retreve":
+            return Downtime.objects.all()
         return Downtime.objects.filter(start_downtime__gte=timezone.now())
 
     def get_serializer_class(self):
