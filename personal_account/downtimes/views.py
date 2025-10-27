@@ -6,6 +6,7 @@ from downtimes.forms import DowntimeForm
 from downtimes.models import Downtime
 from lk.models import WorkShifts
 from datetime import timedelta, time
+from utils.functions import get_workshift_for_downtime
 
 
 @login_required
@@ -15,27 +16,7 @@ def create_downtime(request):
     if form.is_valid():
         downtime = form.save()
         start_downtime = form.cleaned_data.get("start_downtime")
-        date_start = start_downtime.date()
-        time_start = start_downtime.time()
-        if time_start < time(9, 0, 0):
-            shifts = WorkShifts.objects.get(
-                employee__group_job=1,
-                date_start=date_start-timedelta(days=1),
-                night_shift=True
-            )
-        elif time_start > time(21, 0, 0):
-            shifts = WorkShifts.objects.get(
-                employee__group_job=1,
-                date_start=date_start,
-                night_shift=True
-            )
-        else:
-            shifts = WorkShifts.objects.get(
-                employee__group_job=1,
-                date_start=date_start,
-                type="Сменный",
-                night_shift=False
-            )
+        shifts = get_workshift_for_downtime(start_downtime=start_downtime)
         downtime.gsma_employee = shifts.employee
         downtime.save()
         return redirect(reverse("downtimes:downtime"))

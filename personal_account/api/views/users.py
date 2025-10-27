@@ -7,7 +7,11 @@ from rest_framework.response import Response
 from users.models import GroupJob, User
 
 
-class UserViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+class UserViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet
+):
     queryset = User.objects.all()
     serializer_class = UsersSerializer
 

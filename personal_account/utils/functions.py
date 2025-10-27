@@ -1,10 +1,11 @@
 from calendar import monthrange
-from datetime import datetime as dt
-from datetime import timedelta as td
+from datetime import datetime as dt, timedelta as td, time
 
 from django.utils import timezone
 from djangoql.admin import DjangoQLSearchMixin
 from utils.constants import CURRENT_YEAR
+
+from lk.models import WorkShifts
 
 
 class MyDjangoQLSearchMixin(DjangoQLSearchMixin):
@@ -52,3 +53,32 @@ def get_holidays_first_and_last_date(
             )
             first_day, last_day = None, None
     return holidays_result
+
+
+def get_workshift_for_downtime(start_downtime: dt) -> WorkShifts:
+    date_start = start_downtime.date()
+    time_start = start_downtime.time()
+    if time_start < time(9, 0, 0):
+        shifts = WorkShifts.objects.get(
+            employee__group_job=1,
+            date_start=date_start-td(days=1),
+            night_shift=True
+        )
+    elif time_start > time(21, 0, 0):
+        shifts = WorkShifts.objects.get(
+            employee__group_job=1,
+            date_start=date_start,
+            night_shift=True
+        )
+    else:
+        shifts = WorkShifts.objects.get(
+            employee__group_job=1,
+            date_start=date_start,
+            type="Сменный",
+            night_shift=False
+        )
+    return shifts
+
+
+def check_less_current_time(data: dt) -> bool:
+    return data < timezone.now()

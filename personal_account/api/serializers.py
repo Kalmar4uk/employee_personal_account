@@ -4,6 +4,8 @@ from rest_framework import serializers
 from rest_framework_simplejwt.token_blacklist.models import (BlacklistedToken,
                                                              OutstandingToken)
 from users.models import GroupJob, User
+from lk.models import WorkShifts
+from utils.functions import get_workshift_for_downtime, check_less_current_time
 
 
 class TokenCreateSerializer(serializers.Serializer):
@@ -93,6 +95,13 @@ class UsersSerializerForGroupsJob(UsersSerializer):
         return f"{shift.time_start} - {shift.time_end}"
 
 
+class UserSerializerForDowntime(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ("id", "first_name", "last_name")
+
+
 class GroupJobSerializer(serializers.ModelSerializer):
     employees = UsersSerializerForGroupsJob(many=True, source="users")
 
@@ -117,19 +126,69 @@ class ListGroupsJobSerializer(serializers.ModelSerializer):
         return UsersSerializerForGroupsJob(main).data
 
 
-class DowntimeSerializer(serializers.ModelSerializer):
-    gsma_employee = UsersSerializer()
+class CreateAndUpdateSerializer(serializers.ModelSerializer):
+    start_downtime = serializers.DateTimeField()
+    end_downtime = serializers.DateTimeField()
 
     class Meta:
         model = Downtime
         fields = (
             "id",
             "service",
-            "gsma_employee",
             "start_downtime",
             "end_downtime",
             "link_task",
             "description"
+        )
+
+    def validate(self, data):
+        if data.get("end_downtime") < data.get("start_downtime"):
+            raise serializers.ValidationError(
+                "Дата и время старта не может быть меньше даты и времени конца"
+            )
+        return data
+
+    def validate_start_downtime(self, data):
+        if check_less_current_time(data=data):
+            raise serializers.ValidationError(
+                "Дата старта не может быть меньше текущего времени"
+            )
+        return data
+
+    def validate_end_downtime(self, data):
+        if check_less_current_time(data=data):
+            raise serializers.ValidationError(
+                "Дата конца не может быть меньше текущего времени"
+            )
+        return data
+
+    def create(self, validated_data):
+        downtime = Downtime.objects.create(**validated_data)
+        start_downtime = validated_data.get("start_downtime")
+        shifts = get_workshift_for_downtime(start_downtime=start_downtime)
+        downtime.gsma_employee = shifts.employee
+        downtime.save()
+        return downtime
+
+    def to_representation(self, instance):
+        return DowntimeSerializer(instance, context={
+            'request': self.context.get('request')
+        }).data
+
+
+class DowntimeSerializer(serializers.ModelSerializer):
+    gsma_employee = UserSerializerForDowntime()
+
+    class Meta:
+        model = Downtime
+        fields = (
+            "id",
+            "service",
+            "start_downtime",
+            "end_downtime",
+            "link_task",
+            "description",
+            "gsma_employee"
         )
 
 
