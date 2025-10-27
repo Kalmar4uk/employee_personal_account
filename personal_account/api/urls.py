@@ -1,8 +1,8 @@
 from api.views.auth import TokenView
 from api.views.data_for_bot import DataForBot
+from api.views.downtime import DowntimeViewSet
 from api.views.lk import CalendarView
 from api.views.users import GroupJobViewSet, UserViewSet
-from api.views.downtime import DowntimeViewSet
 from django.urls import include, path
 from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
                                    SpectacularSwaggerView)

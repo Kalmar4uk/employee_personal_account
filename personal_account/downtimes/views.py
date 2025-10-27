@@ -4,8 +4,6 @@ from django.urls import reverse
 from django.utils import timezone
 from downtimes.forms import DowntimeForm
 from downtimes.models import Downtime
-from lk.models import WorkShifts
-from datetime import timedelta, time
 from utils.functions import get_workshift_for_downtime
 
 

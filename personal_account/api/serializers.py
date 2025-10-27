@@ -4,8 +4,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.token_blacklist.models import (BlacklistedToken,
                                                              OutstandingToken)
 from users.models import GroupJob, User
-from lk.models import WorkShifts
-from utils.functions import get_workshift_for_downtime, check_less_current_time
+from utils.functions import check_less_current_time, get_workshift_for_downtime
 
 
 class TokenCreateSerializer(serializers.Serializer):
