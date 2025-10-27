@@ -1,5 +1,6 @@
 from api.serializers import (GroupJobSerializer, ListGroupsJobSerializer,
                              UsersSerializer, DowntimeSerializer, CreateAndUpdateSerializer)
+from api.permissions import BotOrStandartPermissions
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
@@ -18,6 +19,7 @@ class DowntimeViewSet(
 ):
     queryset = Downtime.objects.all()
     serializer_class = DowntimeSerializer
+    permission_classes = (BotOrStandartPermissions,)
 
     def get_queryset(self):
         return Downtime.objects.filter(start_downtime__gte=timezone.now())

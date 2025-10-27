@@ -1,4 +1,4 @@
-from api.permissions import ForBotRequestPermission
+from api.permissions import BotOrStandartPermissions
 from api.serializers import DowntimeSerializer
 from django.utils import timezone
 from downtimes.models import Downtime
@@ -10,7 +10,7 @@ from utils.constants import CURRENT_MONTH
 
 
 class DataForBot(APIView):
-    permission_classes = (ForBotRequestPermission,)
+    permission_classes = (BotOrStandartPermissions,)
 
     def get(self, request):
         groups = GroupJob.objects.all().prefetch_related("users")
@@ -52,18 +52,3 @@ class DataForBot(APIView):
                 status=status.HTTP_422_UNPROCESSABLE_ENTITY
             )
         return Response(result, status=status.HTTP_200_OK)
-
-
-class DowntimeDataForBor(APIView):
-    permission_classes = (ForBotRequestPermission,)
-
-    def get(self, request):
-        downtime = Downtime.objects.filter(
-            start_downtime__gte=timezone.now()
-        )
-        serializer = DowntimeSerializer(
-            downtime,
-            context={"request": request},
-            many=True
-        )
-        return Response(serializer.data, status=status.HTTP_200_OK)
