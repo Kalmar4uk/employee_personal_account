@@ -1,4 +1,4 @@
-from api.views.auth import TokenView
+from api.views.auth import TokenView, TokenViewV2
 from api.views.data_for_bot import DataForBot
 from api.views.downtime import DowntimeViewSet
 from api.views.lk import CalendarView
@@ -14,8 +14,12 @@ router_v1.register("groupsjob", GroupJobViewSet)
 router_v1.register("token", TokenView)
 router_v1.register("downtime", DowntimeViewSet)
 
+router_v2 = routers.DefaultRouter()
+router_v2.register("token", TokenViewV2)
+
 urlpatterns = [
     path("", include(router_v1.urls)),
+    path("v2/", include(router_v2.urls)),
     path(
         "calendar/users/<int:user_id>/",
         CalendarView.as_view({"get": "user"}),

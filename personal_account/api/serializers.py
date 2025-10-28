@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.utils import timezone
 from downtimes.models import Downtime
 from rest_framework import serializers
@@ -20,6 +21,29 @@ class TokenCreateSerializer(serializers.Serializer):
 
     def validate(self, data):
         user = User.objects.filter(email=data.get("email")).first()
+        if not user or not user.check_password(data.get("password")):
+            raise serializers.ValidationError(
+                "Введены некорректные данные!"
+            )
+        return data
+
+
+class TokenCreateSerializerV2(serializers.Serializer):
+    username = serializers.CharField(
+        required=True)
+    password = serializers.CharField(
+        required=True
+    )
+
+    class Meta:
+        model = User
+        fields = ("password", "email")
+
+    def validate(self, data):
+        email_or_username = data.get("username")
+        user = User.objects.filter(
+            Q(email=email_or_username) | Q(username=email_or_username)
+        ).first()
         if not user or not user.check_password(data.get("password")):
             raise serializers.ValidationError(
                 "Введены некорректные данные!"

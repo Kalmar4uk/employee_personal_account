@@ -21,7 +21,7 @@ class DowntimeViewSet(
 
     def get_queryset(self):
         if self.action == "retrieve":
-            return Downtime.objects.all()
+            return self.queryset
         return Downtime.objects.filter(start_downtime__gte=timezone.now())
 
     def get_serializer_class(self):

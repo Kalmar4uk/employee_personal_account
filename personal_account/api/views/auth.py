@@ -1,6 +1,7 @@
-from api.serializers import (TokenCreateSerializer, TokenSerializer,
-                             UpdateTokenSerializer)
+from api.serializers import (TokenCreateSerializer, TokenCreateSerializerV2,
+                             TokenSerializer, UpdateTokenSerializer)
 from django.conf import settings
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import status, viewsets
@@ -99,6 +100,52 @@ class TokenView(viewsets.ViewSet):
         for token in tokens:
             BlacklistedToken.objects.get_or_create(token=token)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def access_refresh_tokens(self, user, request):
+        refresh = RefreshToken.for_user(user)
+        tokens: dict[str, str] = {
+            "access_token": str(refresh.access_token),
+            "refresh_token": str(refresh),
+            "token_type": f"{settings.SIMPLE_JWT.get('AUTH_HEADER_TYPES')[0]}"
+        }
+        serializer = TokenSerializer(tokens, context={"request": request})
+        return serializer.data
+
+
+class TokenViewV2(viewsets.ViewSet):
+    queryset = OutstandingToken.objects.all()
+
+    @extend_schema(
+            request=TokenCreateSerializerV2,
+            responses={
+                201: TokenSerializer,
+                400: OpenApiResponse(
+                    response=None,
+                    description="Error validation personal data"
+                )
+            },
+            description=(
+                "Заменено поле email на username, "
+                "принимает как логин так и почту для авторизации"
+            ),
+            summary="Получение токенов",
+            tags=["Tokens"]
+    )
+    @action(
+        detail=False,
+        url_path="login",
+        permission_classes=[AllowAny],
+        methods=["post"]
+    )
+    def login(self, request):
+        serializer = TokenCreateSerializerV2(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email_or_username: str = serializer.validated_data.get("username")
+        user = User.objects.get(
+            Q(email=email_or_username) | Q(username=email_or_username)
+        )
+        tokens = self.access_refresh_tokens(user=user, request=request)
+        return Response(tokens, status=status.HTTP_201_CREATED)
 
     def access_refresh_tokens(self, user, request):
         refresh = RefreshToken.for_user(user)
