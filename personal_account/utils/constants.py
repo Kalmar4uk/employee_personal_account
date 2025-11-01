@@ -2,6 +2,7 @@ from django.utils import timezone
 
 CURRENT_MONTH = timezone.now().month
 CURRENT_YEAR = timezone.now().year
+CURRENT_DATE = timezone.now().date()
 
 CHOICES_TYPE_WORK_SHIFT = (
     ("Сменный", "Сменный"),

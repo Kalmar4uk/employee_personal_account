@@ -5,8 +5,9 @@ from datetime import timedelta as td
 
 from django.utils import timezone
 from djangoql.admin import DjangoQLSearchMixin
+
 from lk.models import WorkShifts
-from utils.constants import CURRENT_YEAR
+from utils.constants import CURRENT_MONTH, CURRENT_YEAR
 
 
 class MyDjangoQLSearchMixin(DjangoQLSearchMixin):
@@ -15,12 +16,12 @@ class MyDjangoQLSearchMixin(DjangoQLSearchMixin):
 
 def days_month(month: int | None = None, year: int | None = None) -> list[dt]:
     if not month and not year:
-        month = timezone.now().month
-        year = timezone.now().year
+        month = CURRENT_MONTH
+        year = CURRENT_YEAR
     elif not year:
-        year = timezone.now().year
+        year = CURRENT_YEAR
     elif not month:
-        month = timezone.now().month
+        month = CURRENT_MONTH
     _, count_day_month = monthrange(year, month)
     result: list[dt] = []
     for day in range(1, count_day_month + 1):

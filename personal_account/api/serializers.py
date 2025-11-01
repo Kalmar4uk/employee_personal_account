@@ -1,10 +1,13 @@
 from django.db.models import Q
 from django.utils import timezone
-from downtimes.models import Downtime
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from rest_framework_simplejwt.token_blacklist.models import (BlacklistedToken,
                                                              OutstandingToken)
+
+from downtimes.models import Downtime
 from users.models import GroupJob, User
+from utils.constants import CURRENT_DATE
 from utils.functions import check_less_current_time, get_workshift_for_downtime
 
 
@@ -101,6 +104,17 @@ class UsersSerializer(serializers.ModelSerializer):
         )
 
 
+class TimeWorkForUsers(serializers.Serializer):
+    time_start = serializers.TimeField(format="%H:%M", allow_null=True)
+    time_end = serializers.TimeField(format="%H:%M", allow_null=True)
+
+
+class CalendarSerializer(serializers.Serializer):
+    date = serializers.DateField()
+    type = serializers.CharField()
+    time = TimeWorkForUsers()
+
+
 class UsersSerializerForGroupsJob(UsersSerializer):
     work_today = serializers.SerializerMethodField()
 
@@ -108,17 +122,39 @@ class UsersSerializerForGroupsJob(UsersSerializer):
         model = User
         fields = UsersSerializer.Meta.fields + ("work_today",)
 
+    @extend_schema_field(CalendarSerializer)
     def get_work_today(self, obj):
-        shift = obj.workshifts.filter(date_start=timezone.now().date()).first()
-        holiday = obj.holidays.filter(date=timezone.now().date()).first()
+        shift = obj.workshifts.filter(date_start=CURRENT_DATE).first()
+        holiday = obj.holidays.filter(date=CURRENT_DATE).first()
         if not shift and holiday:
-            return "Отпуск"
+            return CalendarSerializer(
+                {
+                    "date": CURRENT_DATE,
+                    "type": "holiday",
+                    "time": None
+                }
+            ).data
         if not shift and not holiday:
-            return "Выходной"
-        return f"{shift.time_start} - {shift.time_end}"
+            return CalendarSerializer(
+                {
+                    "date": CURRENT_DATE,
+                    "type": "day-off",
+                    "time": None
+                }
+            ).data
+        return CalendarSerializer(
+            {
+                "date": CURRENT_DATE,
+                "type": "shifts",
+                "time": {
+                    "time_start": shift.time_start,
+                    "time_end": shift.time_end
+                }
+            }
+        ).data
 
 
-class UserSerializerForDowntime(serializers.ModelSerializer):
+class ShortUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
@@ -141,12 +177,14 @@ class ListGroupsJobSerializer(serializers.ModelSerializer):
         model = GroupJob
         fields = ("id", "title", "count_employees", "is_main")
 
+    @extend_schema_field(int)
     def get_count_employees(self, value):
         return value.users.count()
 
+    @extend_schema_field(ShortUserSerializer)
     def get_is_main(self, value):
         main = value.users.filter(is_main=True).first()
-        return UsersSerializerForGroupsJob(main).data
+        return ShortUserSerializer(main).data
 
 
 class CreateAndUpdateSerializer(serializers.ModelSerializer):
@@ -200,7 +238,7 @@ class CreateAndUpdateSerializer(serializers.ModelSerializer):
 
 
 class DowntimeSerializer(serializers.ModelSerializer):
-    gsma_employee = UserSerializerForDowntime()
+    gsma_employee = ShortUserSerializer()
 
     class Meta:
         model = Downtime
@@ -218,7 +256,7 @@ class DowntimeSerializer(serializers.ModelSerializer):
 class CalendarSerializer(serializers.Serializer):
     date = serializers.DateField()
     type = serializers.CharField()
-    time = serializers.CharField()
+    time = TimeWorkForUsers()
 
 
 class UserCalendarSerializer(serializers.Serializer):

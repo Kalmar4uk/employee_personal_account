@@ -1,11 +1,12 @@
-from api.permissions import BotOrStandartPermissions
-from api.serializers import CreateAndUpdateSerializer, DowntimeSerializer
 from django.utils import timezone
-from downtimes.models import Downtime
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
+from api.permissions import BotOrStandartPermissions
+from api.serializers import CreateAndUpdateSerializer, DowntimeSerializer
+from downtimes.models import Downtime
 
 
 class DowntimeViewSet(

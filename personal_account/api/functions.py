@@ -15,10 +15,10 @@ def get_calendar(user: User, month: int, year: int) -> list[dict[str, dt]]:
                 {
                     "date": date.date(),
                     "type": "shifts",
-                    "time": (
-                        f"{work.time_start.strftime('%H:%M')} - "
-                        f"{work.time_end.strftime('%H:%M')}"
-                    )
+                    "time": {
+                        "time_start": work.time_start,
+                        "time_end": work.time_end
+                    }
                 }
             )
         elif holiday:
@@ -26,7 +26,7 @@ def get_calendar(user: User, month: int, year: int) -> list[dict[str, dt]]:
                 {
                     "date": date.date(),
                     "type": "holiday",
-                    "time": "Отпуск"
+                    "time": None
                 }
             )
         else:
@@ -34,7 +34,7 @@ def get_calendar(user: User, month: int, year: int) -> list[dict[str, dt]]:
                 {
                     "date": date.date(),
                     "type": "day-off",
-                    "time": "Выходной"
+                    "time": None
                 }
             )
     return calendar

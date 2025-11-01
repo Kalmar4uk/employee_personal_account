@@ -1,10 +1,8 @@
-from api.permissions import BotOrStandartPermissions
-from api.serializers import DowntimeSerializer
-from django.utils import timezone
-from downtimes.models import Downtime
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from api.permissions import BotOrStandartPermissions
 from users.models import GroupJob
 from utils.constants import CURRENT_MONTH
 

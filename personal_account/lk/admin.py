@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from lk.models import Holiday, WorkShifts
 from utils.functions import MyDjangoQLSearchMixin
 

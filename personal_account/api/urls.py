@@ -1,12 +1,13 @@
+from django.urls import include, path
+from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
+                                   SpectacularSwaggerView)
+from rest_framework import routers
+
 from api.views.auth import TokenView, TokenViewV2
 from api.views.data_for_bot import DataForBot
 from api.views.downtime import DowntimeViewSet
 from api.views.lk import CalendarView
 from api.views.users import GroupJobViewSet, UserViewSet
-from django.urls import include, path
-from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
-                                   SpectacularSwaggerView)
-from rest_framework import routers
 
 router_v1 = routers.DefaultRouter()
 router_v1.register("users", UserViewSet)
