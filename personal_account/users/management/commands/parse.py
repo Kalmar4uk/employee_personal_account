@@ -114,10 +114,12 @@ def parse_work_shifts(type_line: str) -> bool:
 
     for cell in range(column_start, column_end):
         for data in sheet:
-            shift = data[cell].value
+            shift: str | None = data[cell].value
             if isinstance(shift, datetime):
                 date = shift.date()
             elif shift != "-" and shift is not None:
+                if shift.isspace():
+                    continue
                 try:
                     last_name, first_name = shift.split(" ", 1)
                 except Exception as e:
