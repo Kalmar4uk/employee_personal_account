@@ -70,6 +70,10 @@ class DowntimeViewSet(
                     response=None,
                     description="No auth"
                 ),
+                422: OpenApiResponse(
+                    response=None,
+                    description="Unprocessable Entity"
+                ),
             },
             summary="Создание downtime",
             tags=["Downtime"]
@@ -88,6 +92,14 @@ class DowntimeViewSet(
                     response=None,
                     description="No auth"
                 ),
+                404: OpenApiResponse(
+                    response=None,
+                    description="Not found"
+                ),
+                422: OpenApiResponse(
+                    response=None,
+                    description="Unprocessable Entity"
+                )
             },
             summary="Обновление downtime по его id",
             tags=["Downtime"]

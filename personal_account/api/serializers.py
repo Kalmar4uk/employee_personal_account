@@ -1,3 +1,4 @@
+from api.exceptions import NotShiftForCreateDowntime
 from django.db.models import Q
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema_field
@@ -223,13 +224,28 @@ class CreateAndUpdateSerializer(serializers.ModelSerializer):
             )
         return data
 
+    def _get_shifts(self, start_downtime):
+        try:
+            shifts = get_workshift_for_downtime(start_downtime=start_downtime)
+        except ValueError as e:
+            raise NotShiftForCreateDowntime(e)
+        return shifts
+
     def create(self, validated_data):
+        shifts = self._get_shifts(
+            start_downtime=validated_data.get("start_downtime")
+        )
         downtime = Downtime.objects.create(**validated_data)
-        start_downtime = validated_data.get("start_downtime")
-        shifts = get_workshift_for_downtime(start_downtime=start_downtime)
         downtime.gsma_employee = shifts.employee
         downtime.save()
         return downtime
+
+    def update(self, instance, validated_data):
+        shifts = self._get_shifts(
+            start_downtime=validated_data.get("start_downtime")
+        )
+        instance.gsma_employee = shifts.employee
+        return super().update(instance, validated_data)
 
     def to_representation(self, instance):
         return DowntimeSerializer(instance, context={

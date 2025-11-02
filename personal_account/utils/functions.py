@@ -5,6 +5,7 @@ from datetime import timedelta as td
 
 from django.utils import timezone
 from djangoql.admin import DjangoQLSearchMixin
+from rest_framework import serializers
 
 from lk.models import WorkShifts
 from utils.constants import CURRENT_MONTH, CURRENT_YEAR
@@ -60,24 +61,30 @@ def get_holidays_first_and_last_date(
 def get_workshift_for_downtime(start_downtime: dt) -> WorkShifts:
     date_start = start_downtime.date()
     time_start = start_downtime.time()
-    if time_start < time(9, 0, 0):
-        shifts = WorkShifts.objects.get(
-            employee__group_job=1,
-            date_start=date_start-td(days=1),
-            night_shift=True
-        )
-    elif time_start > time(21, 0, 0):
-        shifts = WorkShifts.objects.get(
-            employee__group_job=1,
-            date_start=date_start,
-            night_shift=True
-        )
-    else:
-        shifts = WorkShifts.objects.get(
-            employee__group_job=1,
-            date_start=date_start,
-            type="Сменный",
-            night_shift=False
+    try:
+        if time_start < time(9, 0, 0):
+            shifts = WorkShifts.objects.get(
+                employee__group_job=1,
+                date_start=date_start-td(days=1),
+                night_shift=True
+            )
+        elif time_start > time(21, 0, 0):
+            shifts = WorkShifts.objects.get(
+                employee__group_job=1,
+                date_start=date_start,
+                night_shift=True
+            )
+        else:
+            shifts = WorkShifts.objects.get(
+                employee__group_job=1,
+                date_start=date_start,
+                type="Сменный",
+                night_shift=False
+            )
+    except WorkShifts.DoesNotExist:
+        raise ValueError(
+            "Отсутствует смена во время проведения плановых работ. "
+            "Необходимо проверить смены и пересоздать плановые работы."
         )
     return shifts
 

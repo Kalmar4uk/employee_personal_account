@@ -2,7 +2,6 @@
 # В дальнейшем будет переход на api
 # Доработок/исправлений больше не будет
 import json
-from datetime import timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView

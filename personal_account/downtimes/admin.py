@@ -12,7 +12,8 @@ class DowntimeAdmin(admin.ModelAdmin, MyDjangoQLSearchMixin):
         "gsma_employee",
         "start_downtime",
         "end_downtime",
-        "description"
+        "description",
+        "created_at"
     )
     list_filter = (
         "service",

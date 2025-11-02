@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponse
 from django.urls import reverse
 from django.utils import timezone
 
@@ -13,9 +14,17 @@ def create_downtime(request):
     form = DowntimeForm(request.POST or None)
 
     if form.is_valid():
-        downtime = form.save()
         start_downtime = form.cleaned_data.get("start_downtime")
-        shifts = get_workshift_for_downtime(start_downtime=start_downtime)
+        try:
+            shifts = get_workshift_for_downtime(start_downtime=start_downtime)
+        except ValueError as e:
+            return render(
+                request,
+                "errors/400.html",
+                context={"error": e},
+                status=400
+            )
+        downtime = form.save()
         downtime.gsma_employee = shifts.employee
         downtime.save()
         return redirect(reverse("downtimes:downtime"))

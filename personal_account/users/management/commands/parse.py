@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from django.db import models
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils.exceptions import InvalidFileException
 
@@ -219,9 +218,10 @@ def parse_holidays(type_line: str) -> bool:
                             last_name=last_name,
                             first_name=first_name
                         )
-                    except user.DoesNotExist:
+                    except User.DoesNotExist:
                         raise ValueError(
-                            f"Сотрудника {last_name} {first_name} нет в базе.\n"
+                            f"Сотрудника {last_name} {first_name} "
+                            f"нет в базе.\n"
                             f"Вероятно нужно добавить или "
                             f"допущена ошибка в имени/фамилии.\n"
                             f"Ячейка {data[cell]}"
