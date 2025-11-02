@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from drf_spectacular.utils import OpenApiResponse, extend_schema
+from drf_spectacular.utils import OpenApiResponse, OpenApiParameter, extend_schema
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
@@ -125,6 +125,14 @@ class TokenViewV2(viewsets.ViewSet):
                     description="Error validation personal data"
                 )
             },
+            parameters=[
+                OpenApiParameter(
+                    name="bot",
+                    location=OpenApiParameter.QUERY,
+                    required=False,
+                    type=bool
+                )
+            ],
             description=(
                 "Заменено поле email на username, "
                 "принимает как логин так и почту для авторизации"
@@ -141,6 +149,10 @@ class TokenViewV2(viewsets.ViewSet):
     def login(self, request):
         serializer = TokenCreateSerializerV2(data=request.data)
         serializer.is_valid(raise_exception=True)
+
+        if request.query_params.get("bot"):
+            return Response(status=status.HTTP_200_OK)
+
         email_or_username: str = serializer.validated_data.get("username")
         user = User.objects.get(
             Q(email=email_or_username) | Q(username=email_or_username)
