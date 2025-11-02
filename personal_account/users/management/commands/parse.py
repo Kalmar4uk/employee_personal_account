@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+from django.db import models
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils.exceptions import InvalidFileException
 
@@ -131,7 +132,7 @@ def parse_work_shifts(type_line: str) -> bool:
                         last_name=last_name,
                         first_name=first_name
                     )
-                except user.DoesNotExist:
+                except User.DoesNotExist:
                     raise ValueError(
                         f"Сотрудника {last_name} {first_name} нет в базе.\n"
                         f"Вероятно нужно добавить или "
@@ -150,10 +151,18 @@ def parse_work_shifts(type_line: str) -> bool:
                             TIME_SHIFT_FOR_LINE.get(type_line)[0]
                         ].value
                     )
-                if time == "-" and shift is not None:
+                if (time == "-" or time is None) and shift is not None:
                     continue
                 else:
-                    time_start, time_end = time.split(" - ", 1)
+                    try:
+                        time_start, time_end = time.split(" - ", 1)
+                    except Exception as e:
+                        raise ValueError(
+                            f"При обработке файла возникла ошибка: {e}\n"
+                            f"Необходимо проверить исходные данные\n"
+                            f"Ошибка при парсинге времени.\n"
+                            f"Ячейка {data[cell]}"
+                        )
                     prepare_time = preparation_time(
                         time=time,
                         time_start=time_start,
