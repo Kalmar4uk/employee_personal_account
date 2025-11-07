@@ -5,7 +5,7 @@ from rest_framework import routers
 
 from api.views.auth import TokenView, TokenViewV2
 from api.views.data_for_bot import DataForBot
-from api.views.downtime import DowntimeViewSet
+from api.views.downtime import DowntimeViewSet, DowntimeViewSetV2
 from api.views.lk import CalendarView
 from api.views.users import GroupJobViewSet, UserViewSet
 
@@ -17,6 +17,7 @@ router_v1.register("downtime", DowntimeViewSet)
 
 router_v2 = routers.DefaultRouter()
 router_v2.register("token", TokenViewV2)
+router_v2.register("downtime", DowntimeViewSetV2)
 
 urlpatterns = [
     path("", include(router_v1.urls)),

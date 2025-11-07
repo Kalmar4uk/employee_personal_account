@@ -31,6 +31,7 @@ class Downtime(models.Model):
     class Meta:
         verbose_name = "Проведение работ на сервисе"
         verbose_name_plural = "Проведение работ на сервисе"
+        ordering = ("start_downtime",)
 
         constraints = [
             models.UniqueConstraint(

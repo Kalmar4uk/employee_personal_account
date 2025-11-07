@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -10,6 +11,7 @@ from utils.constants import CURRENT_MONTH
 class DataForBot(APIView):
     permission_classes = (BotOrStandartPermissions,)
 
+    @extend_schema(exclude=True)
     def get(self, request):
         groups = GroupJob.objects.all().prefetch_related("users")
         try:
