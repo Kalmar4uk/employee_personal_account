@@ -1,5 +1,4 @@
 from django.db import models
-
 from downtimes.validators import check_date
 from users.models import User
 

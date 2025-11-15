@@ -11,11 +11,10 @@
         <div class="group-stats">
             <div class="stat-card">
                 <span class="stat-number">{{ count_work }}</span>
-                <span class="stat-label">Работают сегодня</span>
+                <span class="stat-label">Работают</span>
             </div>
         </div>
     </div>
-
     <div class="filters section">
         <div class="search-box">
             <input type="text" placeholder="Поиск сотрудников..." id="employee-search">
@@ -23,14 +22,25 @@
         <div class="filter-options">
             <select id="status-filter">
                 <option value="all">Все статусы</option>
-                <option value="working">Работают сегодня</option>
-                <option value="dayoff">Выходной сегодня</option>
+                <option value="working">Работают</option>
+                <option value="dayoff">Выходной</option>
             </select>
             <select id="sort-by">
                 <option value="name">Сортировать по имени</option>
                 <option value="status">Сортировать по статусу</option>
             </select>
         </div>
+    </div>
+
+    <div class="filters section">
+        <form method="get" class="compact-filter">
+            <h3>Указать дату</h3>
+            <input type="date" class="form-input" name="date" value="{{ request.GET.date }}">
+            <button type="submit" class="compact-btn">Применить</button>
+            <a href="{% url 'users:groups_detail' request.resolver_match.kwargs.id %}">
+                <button class="compact-btn">Сбросить</button>
+            </a>
+        </form>
     </div>
 
     <div class="employees-list">
@@ -44,11 +54,11 @@
                 <div class="employee-status">
                     {% for work in employee.work %}
                     {% if not work.night_shift %}
-                        <span class="status-badge working">Работает сегодня</span>
+                        <span class="status-badge working">Работает</span>
                         <p>Время работы: {{ work.time_start }} - {{ work.time_end }}</p>
                         <p>Текущее время: 14:30</p>
                     {% else %}
-                        <span class="status-badge working_night">Работает сегодня в ночь</span>
+                        <span class="status-badge working_night">Работает в ночь</span>
                         <p>Время работы: {{ work.time_start }} - {{ work.time_end }}</p>
                         <p>Текущее время: 14:30</p>
                     {% endif %}
@@ -67,7 +77,7 @@
                     <p>{{ employee.employee.job_title}}</p>
                 </div>
                 <div class="employee-status">
-                    <span class="status-badge dayoff">Не работает сегодня</span>
+                    <span class="status-badge dayoff">Не работает</span>
                     <p>{% if employee.cause == "holiday" %}Причина: Отпуск{% else %}Причина: Выходной{% endif %}</p>
                 </div>
                 <div class="employee-actions">

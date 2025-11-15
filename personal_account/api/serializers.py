@@ -1,12 +1,11 @@
+from api.exceptions import NotShiftForCreateDowntime
 from django.db.models import Q
 from django.utils import timezone
+from downtimes.models import Downtime
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from rest_framework_simplejwt.token_blacklist.models import (BlacklistedToken,
                                                              OutstandingToken)
-
-from api.exceptions import NotShiftForCreateDowntime
-from downtimes.models import Downtime
 from users.models import GroupJob, User
 from utils.constants import CURRENT_DATE
 from utils.functions import check_less_current_time, get_workshift_for_downtime

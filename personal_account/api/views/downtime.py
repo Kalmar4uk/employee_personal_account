@@ -1,18 +1,17 @@
 from datetime import date
 
+from api.filters import DowntimeDatesFilter
+from api.permissions import BotOrStandartPermissions
+from api.serializers import CreateAndUpdateSerializer, DowntimeSerializer
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
+from downtimes.models import Downtime
 from drf_spectacular.utils import (OpenApiParameter, OpenApiResponse,
                                    extend_schema)
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-
-from api.filters import DowntimeDatesFilter
-from api.permissions import BotOrStandartPermissions
-from api.serializers import CreateAndUpdateSerializer, DowntimeSerializer
-from downtimes.models import Downtime
 
 
 class DowntimeViewSet(

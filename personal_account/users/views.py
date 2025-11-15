@@ -2,6 +2,7 @@
 # В дальнейшем будет переход на api
 # Доработок/исправлений больше не будет
 import json
+from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
@@ -9,9 +10,8 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
-
 from users.models import GroupJob, User
-from utils.constants import CURRENT_MONTH, MONTHS
+from utils.constants import CURRENT_MONTH, DATE_FORMAT, MONTHS
 from utils.functions import days_month, get_holidays_first_and_last_date
 
 
@@ -104,6 +104,13 @@ def groups(request):
 def groups_detail(request, id):
     group = GroupJob.objects.get(id=id)
     employees = group.users.all()
+    try:
+        date = request.GET.get("date", timezone.now())
+        if isinstance(date, str):
+            date = datetime.strptime(date, DATE_FORMAT)
+    except ValueError:
+        date = timezone.now()
+
     work_employees = []
     count_work = 0
     boss = ""
@@ -111,9 +118,9 @@ def groups_detail(request, id):
         if employee.is_main:
             boss = employee
         holiday = employee.holidays.filter(
-            date=timezone.now(),
+            date=date,
         ).exists()
-        work = employee.workshifts.filter(date_start=timezone.now())
+        work = employee.workshifts.filter(date_start=date)
         if holiday:
             work_employees.append(
                 {

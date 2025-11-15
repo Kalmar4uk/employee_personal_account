@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from downtimes.models import Downtime
 from utils.functions import MyDjangoQLSearchMixin
 

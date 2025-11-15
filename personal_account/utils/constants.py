@@ -23,6 +23,7 @@ CHOICES_TYPE_HOLIDAY = (
 )
 
 TIME_FORMAT = "%H:%M"
+DATE_FORMAT = "%Y-%m-%d"
 
 TYPE_HOLIDAY = {
     "yearly": "Ежегодный оплачиваемый",
