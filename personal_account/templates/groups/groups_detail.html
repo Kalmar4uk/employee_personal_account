@@ -37,9 +37,7 @@
             <h3>Указать дату</h3>
             <input type="date" class="form-input" name="date" value="{{ request.GET.date }}">
             <button type="submit" class="compact-btn">Применить</button>
-            <a href="{% url 'users:groups_detail' request.resolver_match.kwargs.id %}">
-                <button class="compact-btn">Сбросить</button>
-            </a>
+            <a href="{% url 'users:groups_detail' request.resolver_match.kwargs.id %}" class="compact-btn">Сбросить</a>
         </form>
     </div>
 
