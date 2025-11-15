@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from users.models import GroupJob, User
+from utils.constants import CURRENT_MONTH, MONTHS
 from utils.functions import days_month, get_holidays_first_and_last_date
 
 
@@ -31,7 +32,12 @@ def profile(request, username):
     employee = get_object_or_404(User, username=username)
     group = employee.group_job.filter().first()
 
-    dates = days_month()
+    try:
+        month = int(request.GET.get("month", CURRENT_MONTH))
+    except ValueError:
+        month = CURRENT_MONTH
+    dates = days_month(month=month)
+
     calendar = {}
     for date in dates:
         work = employee.workshifts.filter(date_start=date).first()
@@ -60,6 +66,8 @@ def profile(request, username):
         "employee": employee,
         "group": group,
         "holidays": holidays,
+        "month": MONTHS.get(month),
+        "month_for_js": month - 1,
         "calendar": json.dumps(calendar, cls=DjangoJSONEncoder)
     }
 

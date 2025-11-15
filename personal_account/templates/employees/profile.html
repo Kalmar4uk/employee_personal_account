@@ -27,21 +27,30 @@
     </div>
 
     <div class="section">
-        <h2>График работы на ноябрь 2025</h2>
+        <h2>График работы на {{ month }} 2025</h2>
+        <form method="get" class="compact-filter">
+            <select id="month" name="month" class="compact-select">
+                <option value="">Выбрать месяц</option>
+                <option value="1" {% if request.GET.month == '1' %}selected{% endif %}>Январь</option>
+                <option value="2" {% if request.GET.month == '2' %}selected{% endif %}>Февраль</option>
+                <option value="3" {% if request.GET.month == '3' %}selected{% endif %}>Март</option>
+                <option value="4" {% if request.GET.month == '4' %}selected{% endif %}>Апрель</option>
+                <option value="5" {% if request.GET.month == '5' %}selected{% endif %}>Май</option>
+                <option value="6" {% if request.GET.month == '6' %}selected{% endif %}>Июнь</option>
+                <option value="7" {% if request.GET.month == '7' %}selected{% endif %}>Июль</option>
+                <option value="8" {% if request.GET.month == '8' %}selected{% endif %}>Август</option>
+                <option value="9" {% if request.GET.month == '9' %}selected{% endif %}>Сентябрь</option>
+                <option value="10" {% if request.GET.month == '10' %}selected{% endif %}>Октябрь</option>
+                <option value="11" {% if request.GET.month == '11' %}selected{% endif %}>Ноябрь</option>
+                <option value="12" {% if request.GET.month == '12' %}selected{% endif %}>Декабрь</option>
+            </select>
+            <button type="submit" class="compact-btn">Применить</button>
+        </form>
         <div class="calendar">
             
-            <div class="weekdays">
-                <div class="weekday">Пн</div>
-                <div class="weekday">Вт</div>
-                <div class="weekday">Ср</div>
-                <div class="weekday">Чт</div>
-                <div class="weekday">Пт</div>
-                <div class="weekday">Сб</div>
-                <div class="weekday">Вс</div>
-            </div>
+            <div class="weekdays" id="week-days"></div>
             
-            <div class="days-grid" id="calendar-days">
-            </div>
+            <div class="days-grid" id="calendar-days"></div>
                 <div class="calendar-legend">
                 <div class="legend-item legend-day-shift">
                     <div class="legend-color"></div>
@@ -84,58 +93,8 @@
     </div>
 
 <script>
-    const scheduleData = JSON.parse('{{ calendar|escapejs }}');
-
-    function generateCalendar(year, month) {
-        const calendarDays = document.getElementById('calendar-days');
-        calendarDays.innerHTML = '';
-        
-        const firstDay = new Date(year, month, 1);
-        const lastDay = new Date(year, month + 1, 0);
-        const firstDayOfWeek = firstDay.getDay() === 0 ? 7 : firstDay.getDay();
-        
-        for (let i = 1; i < firstDayOfWeek; i++) {
-            const emptyDay = document.createElement('div');
-            emptyDay.className = 'day day-empty';
-            calendarDays.appendChild(emptyDay);
-        }
-        
-        for (let day = 1; day <= lastDay.getDate(); day++) {
-            const date = new Date(year, month, day);
-            const dateString = formatDate(date);
-            const dayData = scheduleData[dateString] || { type: 'day-off', time: 'Выходной' };
-            const dayElement = document.createElement('div');
-            dayElement.className = `day ${dayData.type}`;
-            
-            const today = new Date();
-            if (date.toDateString() === today.toDateString()) {
-                dayElement.classList.add('current-day');
-            }
-            
-            const dayNumber = document.createElement('div');
-            dayNumber.className = 'day-number';
-            dayNumber.textContent = day;
-            
-            const dayContent = document.createElement('div');
-            dayContent.className = 'day-content';
-            dayContent.textContent = dayData.time;
-            
-            dayElement.appendChild(dayNumber);
-            dayElement.appendChild(dayContent);
-            
-            calendarDays.appendChild(dayElement);
-        }
-    }
-    
-    function formatDate(date) {
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        generateCalendar(2025, 10);
-    });
+    window.scheduleData = JSON.parse('{{ calendar|escapejs }}');
+    window.month = '{{ month_for_js }}'
 </script>
+<script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}
