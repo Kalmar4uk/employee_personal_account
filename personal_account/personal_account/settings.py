@@ -17,6 +17,7 @@ SECRET_KEY_FOR_REQUEST = os.getenv("SECRET_KEY_FOR_REQUEST")
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    'lkav.ru',
     'job-lk.hopto.org',
     '79.174.81.63',
     'localhost',
