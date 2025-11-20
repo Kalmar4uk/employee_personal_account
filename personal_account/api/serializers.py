@@ -88,7 +88,65 @@ class TokenSerializer(serializers.Serializer):
         fields = ("access_token", "refresh_token", "token_type")
 
 
+class ShortUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ("id", "first_name", "last_name")
+
+
+class ListGroupsJobSerializer(serializers.ModelSerializer):
+    count_employees = serializers.SerializerMethodField()
+    is_main = serializers.SerializerMethodField()
+    count_work_employees = serializers.SerializerMethodField()
+
+    class Meta:
+        model = GroupJob
+        fields = (
+            "id",
+            "title",
+            "count_employees",
+            "count_work_employees",
+            "is_main"
+        )
+
+    @extend_schema_field(int)
+    def get_count_employees(self, value):
+        return value.users.count()
+
+    @extend_schema_field(ShortUserSerializer)
+    def get_is_main(self, value):
+        main = value.users.filter(is_main=True).first()
+        return ShortUserSerializer(main).data
+
+    @extend_schema_field(int)
+    def get_count_work_employees(self, value):
+        employees = value.users.all()
+        count = 0
+        for employee in employees:
+            if employee.workshifts.filter(date_start=CURRENT_DATE).exists():
+                count += 1
+        return count
+
+
 class UsersSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "email",
+            "username",
+            "first_name",
+            "last_name",
+            "job_title",
+            "group_job",
+            "is_main"
+        )
+
+
+class UsersSerializerV2(serializers.ModelSerializer):
+    group_job = ListGroupsJobSerializer(many=True)
 
     class Meta:
         model = User
@@ -154,37 +212,12 @@ class UsersSerializerForGroupsJob(UsersSerializer):
         ).data
 
 
-class ShortUserSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ("id", "first_name", "last_name")
-
-
 class GroupJobSerializer(serializers.ModelSerializer):
     employees = UsersSerializerForGroupsJob(many=True, source="users")
 
     class Meta:
         model = GroupJob
         fields = ("id", "title", "employees")
-
-
-class ListGroupsJobSerializer(serializers.ModelSerializer):
-    count_employees = serializers.SerializerMethodField()
-    is_main = serializers.SerializerMethodField()
-
-    class Meta:
-        model = GroupJob
-        fields = ("id", "title", "count_employees", "is_main")
-
-    @extend_schema_field(int)
-    def get_count_employees(self, value):
-        return value.users.count()
-
-    @extend_schema_field(ShortUserSerializer)
-    def get_is_main(self, value):
-        main = value.users.filter(is_main=True).first()
-        return ShortUserSerializer(main).data
 
 
 class CreateAndUpdateSerializer(serializers.ModelSerializer):

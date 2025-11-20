@@ -1,4 +1,4 @@
-from api.functions import get_calendar, get_group_calendar
+from api.functions import get_calendar, get_group_calendar, get_day
 from api.serializers import UserCalendarSerializer
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -26,6 +26,12 @@ class CalendarView(viewsets.ViewSet):
                     location=OpenApiParameter.QUERY,
                     required=False,
                     type=str
+                ),
+                OpenApiParameter(
+                    name="day",
+                    location=OpenApiParameter.QUERY,
+                    required=False,
+                    type=str
                 )
             ],
             summary="Получение рабочего календаря для сотрудника",
@@ -35,12 +41,19 @@ class CalendarView(viewsets.ViewSet):
     def user(self, request, user_id):
         month: int = int(self.request.query_params.get("month", 0))
         year: int = int(self.request.query_params.get("year", 0))
+        day: int = int(self.request.query_params.get("day", 0))
 
         user = get_object_or_404(User, id=user_id)
-        result: dict[str] = {
-            "user": user.id,
-            "calendar": get_calendar(user=user, month=month, year=year)
-        }
+        if day:
+            result: dict[str] = {
+                "user": user.id,
+                "calendar": get_day(user=user, month=month, year=year, day=day)
+            }
+        else:
+            result: dict[str] = {
+                "user": user.id,
+                "calendar": get_calendar(user=user, month=month, year=year)
+            }
         serializer = UserCalendarSerializer(
             result,
             context={"request": request}
@@ -63,6 +76,12 @@ class CalendarView(viewsets.ViewSet):
                     location=OpenApiParameter.QUERY,
                     required=False,
                     type=str
+                ),
+                OpenApiParameter(
+                    name="day",
+                    location=OpenApiParameter.QUERY,
+                    required=False,
+                    type=str
                 )
             ],
             summary="Получение рабочего календаря для сотрудников группы",
@@ -72,8 +91,15 @@ class CalendarView(viewsets.ViewSet):
     def group(self, request, group_id):
         month: int = int(self.request.query_params.get("month", 0))
         year: int = int(self.request.query_params.get("year", 0))
+        day: int = int(self.request.query_params.get("day", 0))
+
         group = get_object_or_404(GroupJob, id=group_id)
-        result = get_group_calendar(group=group, month=month, year=year)
+        result = get_group_calendar(
+            group=group,
+            month=month,
+            year=year,
+            day=day
+        )
         serializer = UserCalendarSerializer(
             result,
             context={"request": request},
