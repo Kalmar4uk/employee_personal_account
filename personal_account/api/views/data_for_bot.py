@@ -1,8 +1,9 @@
-from api.permissions import BotOrStandartPermissions
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from api.permissions import BotOrStandartPermissions
 from users.models import GroupJob
 from utils.constants import CURRENT_MONTH
 

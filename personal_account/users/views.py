@@ -10,9 +10,11 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+
 from users.models import GroupJob, User
-from utils.constants import CURRENT_MONTH, DATE_FORMAT, MONTHS
-from utils.functions import days_month, get_holidays_first_and_last_date
+from utils.constants import DATE_FORMAT, MONTHS
+from utils.functions import (GetCurrentDate, days_month,
+                             get_holidays_first_and_last_date)
 
 
 class CustomLoginView(LoginView):
@@ -33,9 +35,9 @@ def profile(request, username):
     group = employee.group_job.filter().first()
 
     try:
-        month = int(request.GET.get("month", CURRENT_MONTH))
+        month = int(request.GET.get("month", GetCurrentDate.current_month()))
     except ValueError:
-        month = CURRENT_MONTH
+        month = GetCurrentDate.current_month()
     dates = days_month(month=month)
 
     calendar = {}
@@ -105,7 +107,7 @@ def groups_detail(request, id):
     group = GroupJob.objects.get(id=id)
     employees = group.users.all()
     try:
-        date = request.GET.get("date", timezone.now())
+        date = request.GET.get("date", GetCurrentDate.current_date())
         if isinstance(date, str):
             date = datetime.strptime(date, DATE_FORMAT)
     except ValueError:

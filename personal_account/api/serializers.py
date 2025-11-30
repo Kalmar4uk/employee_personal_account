@@ -1,14 +1,15 @@
-from api.exceptions import NotShiftForCreateDowntime
 from django.db.models import Q
 from django.utils import timezone
-from downtimes.models import Downtime
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from rest_framework_simplejwt.token_blacklist.models import (BlacklistedToken,
                                                              OutstandingToken)
+
+from api.exceptions import NotShiftForCreateDowntime
+from downtimes.models import Downtime
 from users.models import GroupJob, User
-from utils.constants import CURRENT_DATE
-from utils.functions import check_less_current_time, get_workshift_for_downtime
+from utils.functions import (GetCurrentDate, check_less_current_time,
+                             get_workshift_for_downtime)
 
 
 class TokenCreateSerializer(serializers.Serializer):
@@ -124,7 +125,11 @@ class ListGroupsJobSerializer(serializers.ModelSerializer):
         employees = value.users.all()
         count = 0
         for employee in employees:
-            if employee.workshifts.filter(date_start=CURRENT_DATE).exists():
+            if (
+                employee.workshifts.filter(
+                    date_start=GetCurrentDate.current_date()
+                ).exists()
+            ):
                 count += 1
         return count
 
@@ -182,12 +187,13 @@ class UsersSerializerForGroupsJob(UsersSerializer):
 
     @extend_schema_field(CalendarSerializer)
     def get_work_today(self, obj):
-        shift = obj.workshifts.filter(date_start=CURRENT_DATE).first()
-        holiday = obj.holidays.filter(date=CURRENT_DATE).first()
+        current_date = GetCurrentDate.current_date()
+        shift = obj.workshifts.filter(date_start=current_date).first()
+        holiday = obj.holidays.filter(date=current_date).first()
         if not shift and holiday:
             return CalendarSerializer(
                 {
-                    "date": CURRENT_DATE,
+                    "date": current_date,
                     "type": "holiday",
                     "time": None
                 }
@@ -195,14 +201,14 @@ class UsersSerializerForGroupsJob(UsersSerializer):
         if not shift and not holiday:
             return CalendarSerializer(
                 {
-                    "date": CURRENT_DATE,
+                    "date": current_date,
                     "type": "day-off",
                     "time": None
                 }
             ).data
         return CalendarSerializer(
             {
-                "date": CURRENT_DATE,
+                "date": current_date,
                 "type": "shifts",
                 "time": {
                     "time_start": shift.time_start,

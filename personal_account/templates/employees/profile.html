@@ -94,7 +94,7 @@
 
 <script>
     window.scheduleData = JSON.parse('{{ calendar|escapejs }}');
-    window.month = '{{ month_for_js }}'
+    window.month = parseInt('{{ month_for_js }}')
 </script>
 <script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}

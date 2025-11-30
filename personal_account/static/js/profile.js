@@ -31,6 +31,7 @@ function generateCalendar(year, month) {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const firstDayOfWeek = firstDay.getDay() === 0 ? 7 : firstDay.getDay();
+
     
     for (let i = 1; i < firstDayOfWeek; i++) {
         const emptyDay = document.createElement('div');

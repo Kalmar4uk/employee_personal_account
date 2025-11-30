@@ -1,9 +1,10 @@
-from api.functions import get_calendar, get_group_calendar, get_day
-from api.serializers import UserCalendarSerializer
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status, viewsets
 from rest_framework.response import Response
+
+from api.functions import get_calendar, get_day, get_group_calendar
+from api.serializers import UserCalendarSerializer
 from users.models import GroupJob, User
 
 

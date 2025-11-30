@@ -1,9 +1,10 @@
-from api.serializers import (GroupJobSerializer, ListGroupsJobSerializer,
-                             UsersSerializer, UsersSerializerV2)
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
+from api.serializers import (GroupJobSerializer, ListGroupsJobSerializer,
+                             UsersSerializer, UsersSerializerV2)
 from users.models import GroupJob, User
 
 

@@ -1,16 +1,34 @@
 from calendar import monthrange
+from datetime import date
 from datetime import datetime as dt
 from datetime import time
 from datetime import timedelta as td
 
 from django.utils import timezone
 from djangoql.admin import DjangoQLSearchMixin
+
 from lk.models import WorkShifts
 from utils.constants import CURRENT_MONTH, CURRENT_YEAR
 
 
 class MyDjangoQLSearchMixin(DjangoQLSearchMixin):
     djangoql_completion_enabled_by_default = False
+
+
+class GetCurrentDate:
+    now_timezone: dt = timezone.now()
+
+    @classmethod
+    def current_month(cls) -> int:
+        return cls.now_timezone.month
+
+    @classmethod
+    def current_year(cls) -> int:
+        return cls.now_timezone.year
+
+    @classmethod
+    def current_date(cls) -> date:
+        return cls.now_timezone.date()
 
 
 def days_month(month: int | None = None, year: int | None = None) -> list[dt]:
