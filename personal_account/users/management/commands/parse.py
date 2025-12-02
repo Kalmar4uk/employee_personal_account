@@ -85,8 +85,8 @@ class Command(BaseCommand):
 
 
 def open_wb() -> Workbook:
-    month, year = timezone.now().strftime('%B %Y').split(" ", 1)
-    period = f"{MONTHS.get(month)} {year}"
+    month, year = timezone.now().strftime('%m %Y').split(" ", 1)
+    period = f"{MONTHS.get(int(month))} {year}"
 
     try:
         wb = load_workbook(filename=PATH_TO_FILE)

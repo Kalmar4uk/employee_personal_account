@@ -16,19 +16,18 @@ class MyDjangoQLSearchMixin(DjangoQLSearchMixin):
 
 
 class GetCurrentDate:
-    now_timezone: dt = timezone.now()
 
     @classmethod
     def current_month(cls) -> int:
-        return cls.now_timezone.month
+        return timezone.now().month
 
     @classmethod
     def current_year(cls) -> int:
-        return cls.now_timezone.year
+        return timezone.now().year
 
     @classmethod
     def current_date(cls) -> date:
-        return cls.now_timezone.date()
+        return timezone.now().date()
 
 
 def days_month(month: int | None = None, year: int | None = None) -> list[dt]:
