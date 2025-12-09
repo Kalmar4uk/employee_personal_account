@@ -38,7 +38,11 @@ def profile(request, username):
         month = int(request.GET.get("month", GetCurrentDate.current_month()))
     except ValueError:
         month = GetCurrentDate.current_month()
-    dates = days_month(month=month)
+    try:
+        year = int(request.GET.get("year", GetCurrentDate.current_year()))
+    except ValueError:
+        year = GetCurrentDate.current_year()
+    dates = days_month(month=month, year=year)
 
     calendar = {}
     for date in dates:
@@ -68,7 +72,8 @@ def profile(request, username):
         "employee": employee,
         "group": group,
         "holidays": holidays,
-        "month": MONTHS.get(month),
+        "month_data": MONTHS.get(month),
+        "year_data": year,
         "month_for_js": month - 1,
         "calendar": json.dumps(calendar, cls=DjangoJSONEncoder)
     }

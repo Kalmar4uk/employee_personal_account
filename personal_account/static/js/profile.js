@@ -22,7 +22,9 @@ function generateWeek() {
 
 // Отображение календаря
 const scheduleData = window.scheduleData;
-const monthData = window.month
+const monthData = window.month;
+const yearData = window.year;
+
 
 function generateCalendar(year, month) {
     const calendarDays = document.getElementById('calendar-days');
@@ -75,5 +77,5 @@ function formatDate(date) {
 
 document.addEventListener('DOMContentLoaded', function() {
     generateWeek();
-    generateCalendar(2025, monthData);
+    generateCalendar(yearData, monthData);
 });

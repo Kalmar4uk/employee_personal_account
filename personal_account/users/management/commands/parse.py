@@ -9,10 +9,12 @@ from openpyxl.utils.exceptions import InvalidFileException
 from lk.models import Holiday, WorkShifts
 from users.models import User
 from utils.constants import (CHOICES_STATUS_HOLIDAY, COLUMN_FOR_LINE,
-                             HOLIDAY_FOR_LINE, MONTHS, TIME_FORMAT,
-                             TIME_SHIFT_FOR_LINE, TYPE_HOLIDAY, TYPE_SHIFTS)
+                             DATE_FORMAT, HOLIDAY_FOR_LINE, MONTH_NAME, MONTHS,
+                             RMONTHS, TIME_FORMAT, TIME_SHIFT_FOR_LINE,
+                             TYPE_HOLIDAY, TYPE_SHIFTS)
 
-PATH_TO_FILE = f"{settings.BASE_DIR}/data_files/work_shifts.xlsx"
+PATH_TO_FILE_SHIFTS = f"{settings.BASE_DIR}/data_files/work_shifts.xlsx"
+PATH_TO_FILE_HOLIDAY_GSMA = f"{settings.BASE_DIR}/data_files/holiday.xlsx"
 
 
 class Command(BaseCommand):
@@ -42,7 +44,12 @@ class Command(BaseCommand):
         line: str = kwargs["line"]
         try:
             match line:
-                case "second" | "first" | "gsma":
+                case "gsma":
+                    return self.parse_line_gsma(
+                        type_parse=type_parse,
+                        type_line=line
+                    )
+                case "second" | "first":
                     return self.parse_line(
                         type_parse=type_parse,
                         type_line=line
@@ -55,6 +62,23 @@ class Command(BaseCommand):
                     return self.bad(txt=text)
         except ValueError as e:
             return self.bad(txt=str(e))
+
+    def parse_line_gsma(self, type_parse: str, type_line: str) -> None:
+        match type_parse:
+            case "shifts":
+                parse_work_shifts(type_line=type_line)
+            case "holidays":
+                parse_holidays_gsma()
+            case "all":
+                parse_work_shifts(type_line=type_line)
+                parse_holidays_gsma()
+            case _:
+                text = (
+                    "Неизвестная команда!\n"
+                    "Используй shifts, holidays или all"
+                )
+                return self.bad(txt=text)
+        return self.success()
 
     def parse_line(self, type_parse: str, type_line: str) -> None:
         match type_parse:
@@ -84,23 +108,34 @@ class Command(BaseCommand):
         )
 
 
-def open_wb() -> Workbook:
-    month, year = timezone.now().strftime('%m %Y').split(" ", 1)
-    period = f"{MONTHS.get(int(month))} {year}"
+def open_wb(holiday_gsma: bool | None = None) -> Workbook:
 
     try:
-        wb = load_workbook(filename=PATH_TO_FILE)
+        wb = definition_wb(holiday_gsma=holiday_gsma)
     except FileNotFoundError as e:
         raise ValueError(str(e))
     except InvalidFileException as e:
         return ValueError(str(e))
 
-    try:
-        sheet = wb[period]
-    except KeyError as e:
-        raise ValueError(str(e))
+    if not holiday_gsma:
+        month, year = timezone.now().strftime("%m %Y").split(" ", 1)
+        period = f"{MONTHS.get(int(month))} {year}"
+        try:
+            return wb[period]
+        except KeyError as e:
+            raise ValueError(str(e))
+    return wb.active
 
-    return sheet
+
+def definition_wb(holiday_gsma: bool | None = None) -> Workbook:
+    try:
+        if not holiday_gsma:
+            return load_workbook(filename=PATH_TO_FILE_SHIFTS)
+        return load_workbook(filename=PATH_TO_FILE_HOLIDAY_GSMA)
+    except FileNotFoundError as e:
+        raise ValueError(str(e))
+    except InvalidFileException as e:
+        raise ValueError(str(e))
 
 
 def parse_work_shifts(type_line: str) -> bool:
@@ -187,6 +222,48 @@ def parse_work_shifts(type_line: str) -> bool:
                             f"\n Входные данные: "
                             f"{date}, {prepare_time}, {user}"
                         )
+
+
+def parse_holidays_gsma() -> bool:
+    try:
+        sheet = open_wb(holiday_gsma=True)
+    except ValueError as e:
+        raise ValueError(f"При обработке файла возникла ошибка: {e}")
+
+    year = timezone.now().year + 1
+
+    dates = []
+
+    for col in sheet:
+        for cell in col:
+            if cell.value in MONTH_NAME:
+                month = RMONTHS[cell.value]
+            if cell.fill.fgColor.rgb == "FF92D050":
+                date_str = f"{year}-{month}-{cell.value}"
+                dates.append(datetime.strptime(date_str, DATE_FORMAT))
+                user_data = col[7].value
+        if dates:
+            user_data = col[7].value
+            if "/" in user_data:
+                users = user_data.split("/", 1)
+                for user in users:
+                    for_create_holiday(user, dates)
+            else:
+                for_create_holiday(user_data, dates)
+        dates.clear()
+
+
+def for_create_holiday(user: str, dates: list[datetime]):
+    last_name, first_name = user.strip().split(" ", 1)
+    employee = User.objects.get(first_name=first_name, last_name=last_name)
+    Holiday.objects.bulk_create(
+        Holiday(
+            employee=employee,
+            date=date,
+            status="status",
+            type="Ежегодный оплачиваемый"
+        ) for date in dates
+    )
 
 
 def parse_holidays(type_line: str) -> bool:

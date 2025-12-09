@@ -49,7 +49,7 @@ def get_holidays_first_and_last_date(
         employee
 ) -> dict[int, dict[str, str]]:
     holidays_all = employee.holidays.filter(
-        date__year=CURRENT_YEAR
+        date__year=CURRENT_YEAR+1
     ).order_by(
         "date"
     )
