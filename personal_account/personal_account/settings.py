@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY_DJANGO")
 SECRET_KEY_FOR_REQUEST = os.getenv("SECRET_KEY_FOR_REQUEST")
 
-DEBUG = os.getenv("DEBUG")
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'lkav.ru',
