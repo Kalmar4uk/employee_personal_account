@@ -46,13 +46,16 @@ def days_month(month: int | None = None, year: int | None = None) -> list[dt]:
 
 
 def get_holidays_first_and_last_date(
-        employee
-) -> dict[int, dict[str, str]]:
-    holidays_all = employee.holidays.filter(
-        date__year=CURRENT_YEAR+1
-    ).order_by(
-        "date"
-    )
+        employee, all=None
+) -> list[dict[str, str]]:
+    if not all:
+        holidays_all = employee.holidays.filter(
+            date__year=CURRENT_YEAR+1
+        ).order_by(
+            "date"
+        )
+    else:
+        holidays_all = employee.holidays.all().order_by("date")
     holidays_result = []
     first_day, last_day = None, None
     for holiday in holidays_all:
