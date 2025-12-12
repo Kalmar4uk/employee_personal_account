@@ -15,6 +15,11 @@
             </div>
         </div>
     </div>
+
+    <div class="filters section">
+        <a href="{% url 'lk:holiday_group' request.resolver_match.kwargs.id %}" class="compact-btn">Отпуска сотрудников</a>
+    </div>
+
     <div class="filters section">
         <div class="search-box">
             <input type="text" placeholder="Поиск сотрудников..." id="employee-search">

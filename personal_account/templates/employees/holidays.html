@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <div class="section">
-        <h2>Отпуска</h2>
+<div class="section">
+    <a href="{% url 'users:profile' request.resolver_match.kwargs.username %}" class="compact-btn">Назад в профиль</a>
+</div>
+<div class="section">
+    <h2 >Отпуска</h2>
+    {% regroup holidays by year as year_list %}
+    {% for holiday in year_list %}
+        <h2>{{ holiday.grouper }}</h2>
         <table class="schedule-table">
             <thead>
                 <tr>
@@ -11,13 +17,14 @@
                 </tr>
             </thead>
             <tbody>
-                {% for holiday in holidays %}
+                {% for period in holiday.list %}
                 <tr>
-                    <td>{{ holiday.first_day|date:"d.m.Y" }} - {{ holiday.last_day|date:"d.m.Y" }}</td>
-                    <td>{{ holiday.count }}</td>
+                    <td>{{ period.first_day|date:"d.m.Y" }} - {{ period.last_day|date:"d.m.Y" }}</td>
+                    <td>{{ period.count }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-    </div>
+    {% endfor %}
+</div>
 {% endblock %}

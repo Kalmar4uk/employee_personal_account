@@ -38,10 +38,12 @@ def profile(request, username):
         month = int(request.GET.get("month", GetCurrentDate.current_month()))
     except ValueError:
         month = GetCurrentDate.current_month()
+
     try:
         year = int(request.GET.get("year", GetCurrentDate.current_year()))
     except ValueError:
         year = GetCurrentDate.current_year()
+
     dates = days_month(month=month, year=year)
 
     calendar = {}

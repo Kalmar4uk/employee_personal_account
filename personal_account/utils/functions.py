@@ -52,10 +52,10 @@ def get_holidays_first_and_last_date(
         holidays_all = employee.holidays.filter(
             date__year=CURRENT_YEAR+1
         ).order_by(
-            "date"
+            "-date"
         )
     else:
-        holidays_all = employee.holidays.all().order_by("date")
+        holidays_all = employee.holidays.all().order_by("-date")
     holidays_result = []
     first_day, last_day = None, None
     for holiday in holidays_all:
@@ -67,6 +67,7 @@ def get_holidays_first_and_last_date(
             count = (last_day - first_day) + td(days=1)
             holidays_result.append(
                 {
+                    "year": holiday.date.year,
                     "first_day": first_day,
                     "last_day": last_day,
                     "count": count.days

@@ -78,7 +78,9 @@
 
         <div class="section">
             <h2 >Отпуск на 2026 год</h2>
-            <a href="{% url 'lk:holiday_user' %}" class="compact-btn">Посмотреть все</a>
+            <div class="section">
+                <a href="{% url 'lk:holiday_user' request.resolver_match.kwargs.username %}" class="compact-btn">Посмотреть все</a>
+            </div>
             <table class="schedule-table">
                 <thead>
                     <tr>
