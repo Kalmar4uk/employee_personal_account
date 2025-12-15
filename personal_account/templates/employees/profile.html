@@ -57,46 +57,45 @@
             
             <div class="days-grid" id="calendar-days"></div>
                 <div class="calendar-legend">
-                <div class="legend-item legend-day-shift">
-                    <div class="legend-color"></div>
-                    <span>Дневная смена</span>
-                </div>
-                <div class="legend-item legend-night-shift">
-                    <div class="legend-color"></div>
-                    <span>Ночная смена</span>
-                </div>
-                <div class="legend-item legend-day-off">
-                    <div class="legend-color"></div>
-                    <span>Выходной</span>
-                </div>
-                <div class="legend-item legend-vacation">
-                    <div class="legend-color"></div>
-                    <span>Отпуск</span>
+                    <div class="legend-item legend-day-shift">
+                        <div class="legend-color"></div>
+                        <span>Дневная смена</span>
+                    </div>
+                    <div class="legend-item legend-night-shift">
+                        <div class="legend-color"></div>
+                        <span>Ночная смена</span>
+                    </div>
+                    <div class="legend-item legend-day-off">
+                        <div class="legend-color"></div>
+                        <span>Выходной</span>
+                    </div>
+                    <div class="legend-item legend-vacation">
+                        <div class="legend-color"></div>
+                        <span>Отпуск</span>
+                    </div>
                 </div>
         </div>
     </div>
-
+    <div class="section">
+        <h2 >Отпуск на 2026 год</h2>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>Период</th>
+                    <th>Дней</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for holiday in holidays %}
+                <tr>
+                    <td>{{ holiday.first_day|date:"d.m.Y" }} - {{ holiday.last_day|date:"d.m.Y" }}</td>
+                    <td>{{ holiday.count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         <div class="section">
-            <h2 >Отпуск на 2026 год</h2>
-            <div class="section">
-                <a href="{% url 'lk:holiday_user' request.resolver_match.kwargs.username %}" class="compact-btn">Посмотреть все</a>
-            </div>
-            <table class="schedule-table">
-                <thead>
-                    <tr>
-                        <th>Период</th>
-                        <th>Дней</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for holiday in holidays %}
-                    <tr>
-                        <td>{{ holiday.first_day|date:"d.m.Y" }} - {{ holiday.last_day|date:"d.m.Y" }}</td>
-                        <td>{{ holiday.count }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <a href="{% url 'lk:holiday_user' request.resolver_match.kwargs.username %}" class="compact-btn">Посмотреть все</a>
         </div>
     </div>
 
