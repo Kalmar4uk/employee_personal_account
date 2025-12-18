@@ -18,6 +18,7 @@ class User(AbstractUser):
         related_name="users"
     )
     is_main = models.BooleanField("Босс этой качалки", default=False)
+    birthday = models.DateField("Дата рождения", null=True, blank=True)
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []

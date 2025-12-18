@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 
 from downtimes.validators import check_date
@@ -23,6 +24,13 @@ class Downtime(models.Model):
     )
     link_task = models.URLField("Ссылка на задачу", max_length=150)
     description = models.TextField("Описание")
+    author = models.OneToOneField(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="downtimes_author",
+        verbose_name="Автор"
+    )
     created_at = models.DateTimeField(
         "Дата создания записи",
         auto_now_add=True
@@ -47,3 +55,30 @@ class Downtime(models.Model):
 
     def __str__(self):
         return f"Проведение работ на сервисе {self.service}"
+
+
+class ReminderDowntime(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    downtime = models.OneToOneField(
+        Downtime,
+        verbose_name="Плановая работа",
+        on_delete=models.CASCADE
+    )
+    first_reminder = models.DateTimeField("Первое уведомление")
+    second_reminder = models.DateTimeField(
+        "Второе уведомление",
+        null=True,
+        blank=True
+    )
+    success_reminder = models.BooleanField(
+        "Уведомления отправлены",
+        default=False
+    )
+    created_at = models.DateTimeField("Создано от", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Напоминание по проведению работ"
+        verbose_name_plural = "Напоминания по проведению работ"
+
+    def __str__(self):
+        return f"Уведомления по плановой работе {self.downtime}"
