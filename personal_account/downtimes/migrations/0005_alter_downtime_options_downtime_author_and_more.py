@@ -18,11 +18,6 @@ class Migration(migrations.Migration):
             name='downtime',
             options={'ordering': ('start_downtime',), 'verbose_name': 'Проведение работ на сервисе', 'verbose_name_plural': 'Проведение работ на сервисе'},
         ),
-        migrations.AddField(
-            model_name='downtime',
-            name='author',
-            field=models.OneToOneField(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='downtimes_author', to=settings.AUTH_USER_MODEL, verbose_name='Автор'),
-        ),
         migrations.CreateModel(
             name='ReminderDowntime',
             fields=[
