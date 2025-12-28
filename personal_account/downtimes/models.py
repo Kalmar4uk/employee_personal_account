@@ -1,4 +1,5 @@
 import uuid
+
 from django.db import models
 
 from downtimes.validators import check_date
@@ -24,7 +25,7 @@ class Downtime(models.Model):
     )
     link_task = models.URLField("Ссылка на задачу", max_length=150)
     description = models.TextField("Описание")
-    author = models.OneToOneField(
+    author = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
@@ -39,7 +40,7 @@ class Downtime(models.Model):
     class Meta:
         verbose_name = "Проведение работ на сервисе"
         verbose_name_plural = "Проведение работ на сервисе"
-        ordering = ("start_downtime",)
+        ordering = ("-start_downtime",)
 
         constraints = [
             models.UniqueConstraint(
@@ -62,7 +63,8 @@ class ReminderDowntime(models.Model):
     downtime = models.OneToOneField(
         Downtime,
         verbose_name="Плановая работа",
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="reminder_downtime"
     )
     first_reminder = models.DateTimeField("Первое уведомление")
     second_reminder = models.DateTimeField(

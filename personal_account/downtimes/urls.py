@@ -12,6 +12,11 @@ urlpatterns = [
         views.edit_downtimes,
         name="edit_downtime"
     ),
+    path(
+        "<int:id>/reminder/<uuid:reminder_id>/",
+        views.edit_reminder_downtimes,
+        name="edit_reminder"
+    ),
     path("create/", views.create_downtime, name="added_downtime"),
-    path("history/", views.history_downtimes, name="history_downtime")
+    path("history/", views.history_downtimes, name="history_downtime"),
 ]

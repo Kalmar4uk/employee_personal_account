@@ -110,3 +110,17 @@ def get_workshift_for_downtime(start_downtime: dt) -> WorkShifts:
 
 def check_less_current_time(data: dt) -> bool:
     return data < timezone.now()
+
+
+def check_time_downtime_and_first_reminder(
+        time_start_dowmtime: dt,
+        time_end_downtime: dt,
+        time_first_reminder: dt
+) -> bool:
+    if (
+        time_start_dowmtime > time_first_reminder < time_end_downtime
+    ) and (
+        time_first_reminder > timezone.now()
+    ):
+        return True
+    return False

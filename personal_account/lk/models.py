@@ -5,7 +5,7 @@ from utils.constants import (CHOICES_STATUS_HOLIDAY, CHOICES_TYPE_HOLIDAY,
                              CHOICES_TYPE_WORK_SHIFT)
 
 
-class WorkShiftsAndHolidayModel(models.Model):
+class AbstractWorkShifts(models.Model):
     date_start = models.DateField(
         "Дата начала",
         null=True,
@@ -23,7 +23,7 @@ class WorkShiftsAndHolidayModel(models.Model):
         abstract = True
 
 
-class WorkShifts(WorkShiftsAndHolidayModel):
+class WorkShifts(AbstractWorkShifts):
     employee = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -44,6 +44,7 @@ class WorkShifts(WorkShiftsAndHolidayModel):
     class Meta:
         verbose_name = "Смена"
         verbose_name_plural = "Смены"
+        ordering = ("-date_start",)
 
         constraints = [
             models.UniqueConstraint(
@@ -88,7 +89,7 @@ class Holiday(models.Model):
     class Meta:
         verbose_name = "Отпуск"
         verbose_name_plural = "Отпуска"
-        ordering = ("date",)
+        ordering = ("-date",)
 
         constraints = [
             models.UniqueConstraint(

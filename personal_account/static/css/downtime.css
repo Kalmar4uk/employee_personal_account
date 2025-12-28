@@ -61,7 +61,6 @@
     text-decoration: none;
 }
 
-/* Список downtimes */
 .downtimes-list {
     display: flex;
     flex-direction: column;
