@@ -1,9 +1,5 @@
 from calendar import monthrange
-from datetime import date
-from datetime import datetime as dt
-from datetime import time
-from datetime import timedelta as td
-
+from datetime import datetime as dt, timedelta as td, date, time
 from django.utils import timezone
 from djangoql.admin import DjangoQLSearchMixin
 
@@ -50,7 +46,7 @@ def get_holidays_first_and_last_date(
 ) -> list[dict[str, str]]:
     if not all:
         holidays_all = employee.holidays.filter(
-            date__year=CURRENT_YEAR+1
+            date__year=CURRENT_YEAR
         ).order_by(
             "-date"
         )
@@ -113,14 +109,14 @@ def check_less_current_time(data: dt) -> bool:
 
 
 def check_time_downtime_and_first_reminder(
-        time_start_dowmtime: dt,
-        time_end_downtime: dt,
-        time_first_reminder: dt
+        start_dowmtime: dt,
+        end_downtime: dt,
+        first_reminder: dt
 ) -> bool:
     if (
-        time_start_dowmtime > time_first_reminder < time_end_downtime
+        start_dowmtime > first_reminder < end_downtime
     ) and (
-        time_first_reminder > timezone.now()
+        first_reminder > timezone.now()
     ):
         return True
     return False

@@ -66,7 +66,7 @@ def profile(request, username):
         elif holiday:
             calendar[date_format] = {"type": "day-vacation", "time": "Отпуск"}
         else:
-            calendar[date_format] = {"type": "day-off", "time": "Выходной"}
+            calendar[date_format] = {"type": "day-off", "time": ""}
 
     holidays = get_holidays_first_and_last_date(employee=employee)
 

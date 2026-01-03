@@ -27,6 +27,7 @@ def create_downtime(request):
                 context={"error": e},
                 status=400
             )
+
         downtime = form.save(commit=False)
         downtime.gsma_employee = shifts.employee
         downtime.author = request.user
@@ -42,18 +43,19 @@ def create_downtime(request):
                 return render(
                     request,
                     "errors/incorrect_reminder.html",
-                    context={"downtime": downtime},
-                    status=200
+                    context={"downtime": downtime}
                 )
 
             ReminderDowntime.objects.create(
                 downtime=downtime,
-                first_reminder=start_reminder_downtime
+                first_reminder=start_reminder_downtime,
+                second_reminder=(downtime.start_downtime - timedelta(hours=1))
             )
         else:
             ReminderDowntime.objects.create(
                 downtime=downtime,
-                first_reminder=(downtime.start_downtime - timedelta(hours=5))
+                first_reminder=(downtime.start_downtime - timedelta(hours=5)),
+                second_reminder=(downtime.start_downtime - timedelta(hours=1))
             )
 
         return redirect(reverse("downtimes:downtime"))

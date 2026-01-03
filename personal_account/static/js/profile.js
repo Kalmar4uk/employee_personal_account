@@ -44,7 +44,7 @@ function generateCalendar(year, month) {
     for (let day = 1; day <= lastDay.getDate(); day++) {
         const date = new Date(year, month, day);
         const dateString = formatDate(date);
-        const dayData = scheduleData[dateString] || { type: 'day-off', time: 'Выходной' };
+        const dayData = scheduleData[dateString];
         const dayElement = document.createElement('div');
         dayElement.className = `day ${dayData.type}`;
         
@@ -60,6 +60,7 @@ function generateCalendar(year, month) {
         const dayContent = document.createElement('div');
         dayContent.className = 'day-content';
         dayContent.textContent = dayData.time;
+        console.log(dayData)
         
         dayElement.appendChild(dayNumber);
         dayElement.appendChild(dayContent);
