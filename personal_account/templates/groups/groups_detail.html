@@ -1,104 +1,102 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<section class="content">
-    <div class="group-header section">
-        <div class="group-info">
-            <h1>{{ group.title }}</h1>
-            <p><strong>Руководитель:</strong> {{ boss.last_name }} {{ boss.first_name }}</p>
-            <p><strong>Количество сотрудников:</strong> {{ group.users.count }}</p>
-        </div>
-        <div class="group-stats">
-            <div class="stat-card">
-                <span class="stat-number">{{ count_work }}</span>
-                <span class="stat-label">Работают</span>
-            </div>
+<div class="group-header section">
+    <div class="group-info">
+        <h1>{{ group.title }}</h1>
+        <p><strong>Руководитель:</strong> {{ boss.last_name }} {{ boss.first_name }}</p>
+        <p><strong>Количество сотрудников:</strong> {{ group.users.count }}</p>
+    </div>
+    <div class="group-stats">
+        <div class="stat-card">
+            <span class="stat-number">{{ count_work }}</span>
+            <span class="stat-label">Работают</span>
         </div>
     </div>
+</div>
 
+<div class="section">
+    <a href="{% url 'lk:holiday_group' request.resolver_match.kwargs.id %}" class="compact-btn">Отпуска сотрудников</a>
+</div>
+
+<div class="filters section">
+    <div class="search-box">
+        <input type="text" placeholder="Поиск сотрудников..." id="employee-search">
+    </div>
+    <div class="filter-options">
+        <select id="sort-by">
+            <option value="name">Сортировать по имени</option>
+            <option value="status">Сортировать по статусу</option>
+        </select>
+    </div>
+    <div>
+        <form method="get" class="compact-filter">
+            <input type="date" class="form-input" name="date" value="{{ request.GET.date }}">
+            <button type="submit" class="compact-btn">Применить</button>
+            <a href="{% url 'users:groups_detail' request.resolver_match.kwargs.id %}" class="compact-btn">Сбросить</a>
+        </form>
+    </div>
+</div>
+
+<div class="employees-list">
     <div class="section">
-        <a href="{% url 'lk:holiday_group' request.resolver_match.kwargs.id %}" class="compact-btn">Отпуска сотрудников</a>
-    </div>
-
-    <div class="filters section">
-        <div class="search-box">
-            <input type="text" placeholder="Поиск сотрудников..." id="employee-search">
-        </div>
-        <div class="filter-options">
-            <select id="sort-by">
-                <option value="name">Сортировать по имени</option>
-                <option value="status">Сортировать по статусу</option>
-            </select>
-        </div>
-        <div>
-            <form method="get" class="compact-filter">
-                <input type="date" class="form-input" name="date" value="{{ request.GET.date }}">
-                <button type="submit" class="compact-btn">Применить</button>
-                <a href="{% url 'users:groups_detail' request.resolver_match.kwargs.id %}" class="compact-btn">Сбросить</a>
-            </form>
-        </div>
-    </div>
-
-    <div class="employees-list">
-        <div class="section">
-            <div class="employees-list">
-                <h2>Работают</h2>
-                {% for employee in work_employees %}
-                    {% if employee.work %}
-                        <div class="employee-card working">
-                            <div class="employee-info">
-                                <h3>{{ employee.employee.last_name }} {{ employee.employee.first_name }}</h3>
-                                <p>{{ employee.employee.job_title}}</p>
-                            </div>
-                            <div class="employee-status">
-                                {% for work in employee.work %}
-                                    {% if not work.night_shift %}
-                                        <span class="status-badge working">Работает</span>
-                                        <p>Время работы: {{ work.time_start }} - {{ work.time_end }}</p>
-                                        <p>Текущее время: 14:30</p>
-                                    {% else %}
-                                        <span class="status-badge working_night">Работает в ночь</span>
-                                        <p>Время работы: {{ work.time_start }} - {{ work.time_end }}</p>
-                                        <p>Текущее время: 14:30</p>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                            <div class="employee-actions">
-                                <a href="{% url 'users:profile' employee.employee.username %}">
-                                    <button class="profile-btn">Профиль</button>
-                                </a>
-                            </div>
+        <div class="employees-list">
+            <h2>Работают</h2>
+            {% for employee in work_employees %}
+                {% if employee.work %}
+                    <div class="employee-card working">
+                        <div class="employee-info">
+                            <h3>{{ employee.employee.last_name }} {{ employee.employee.first_name }}</h3>
+                            <p>{{ employee.employee.job_title}}</p>
                         </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-        </div>
-        <div class="section">
-            <div class="employees-list">
-                <h2>Не работают</h2>
-                {% for employee in work_employees %}
-                    {% if not employee.work %}
-                        <div class="employee-card dayoff">
-                            <div class="employee-info">
-                                <h3>{{ employee.employee.last_name }} {{ employee.employee.first_name }}</h3>
-                                <p>{{ employee.employee.job_title}}</p>
-                            </div>
-                            <div class="employee-status">
-                                <span class="status-badge dayoff">Не работает</span>
-                                <p>{% if employee.cause == "holiday" %}Причина: Отпуск{% else %}Причина: Выходной{% endif %}</p>
-                            </div>
-                            <div class="employee-actions">
-                                <a href="{% url 'users:profile' employee.employee.username %}">
-                                    <button class="profile-btn">Профиль</button>
-                                </a>
-                            </div>
+                        <div class="employee-status">
+                            {% for work in employee.work %}
+                                {% if not work.night_shift %}
+                                    <span class="status-badge working">Работает</span>
+                                    <p>Время работы: {{ work.time_start }} - {{ work.time_end }}</p>
+                                    <p>Текущее время: 14:30</p>
+                                {% else %}
+                                    <span class="status-badge working_night">Работает в ночь</span>
+                                    <p>Время работы: {{ work.time_start }} - {{ work.time_end }}</p>
+                                    <p>Текущее время: 14:30</p>
+                                {% endif %}
+                            {% endfor %}
                         </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
+                        <div class="employee-actions">
+                            <a href="{% url 'users:profile' employee.employee.username %}">
+                                <button class="profile-btn">Профиль</button>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
-</section>
+    </div>
+    <div class="section">
+        <div class="employees-list">
+            <h2>Не работают</h2>
+            {% for employee in work_employees %}
+                {% if not employee.work %}
+                    <div class="employee-card dayoff">
+                        <div class="employee-info">
+                            <h3>{{ employee.employee.last_name }} {{ employee.employee.first_name }}</h3>
+                            <p>{{ employee.employee.job_title}}</p>
+                        </div>
+                        <div class="employee-status">
+                            <span class="status-badge dayoff">Не работает</span>
+                            <p>{% if employee.cause == "holiday" %}Причина: Отпуск{% else %}Причина: Выходной{% endif %}</p>
+                        </div>
+                        <div class="employee-actions">
+                            <a href="{% url 'users:profile' employee.employee.username %}">
+                                <button class="profile-btn">Профиль</button>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
 <script src="{% static 'js/groups_detail.js' %}"></script>
 {% endblock %}
