@@ -64,7 +64,7 @@ def profile(request, username):
                 )
             }
         elif holiday:
-            calendar[date_format] = {"type": "day-vacation", "time": "Отпуск"}
+            calendar[date_format] = {"type": "day-vacation", "time": ""}
         else:
             calendar[date_format] = {"type": "day-off", "time": ""}
 
