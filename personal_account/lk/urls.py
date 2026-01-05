@@ -13,5 +13,7 @@ urlpatterns = [
     path(
         "holidays/group/<int:id>/",
         views.holidays_employees_in_group,
-        name="holiday_group")
+        name="holiday_group"
+    ),
+    path("download", views.download, name="download")
 ]

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <div class="upload-container">
+        <div class="upload-card">
+            <h2 class="upload-title">Загрузка данных</h2>
+            <form method="post" enctype="multipart/form-data" class="upload-form">
+                {% csrf_token %}
+                
+                <!-- Выбор типа данных -->
+                <div class="form-group">
+                    <label for="dataType" class="form-label">
+                        Тип данных
+                    </label>
+                    <div class="select-wrapper">
+                        <select name="data_type" id="dataType" class="form-select" required>
+                            <option value="">Выберите тип данных</option>
+                            <option value="shifts">Смены</option>
+                            <option value="holidays">Отпуска</option>
+                            <option value="all">Все</option>
+                        </select>
+                    </div>
+                    <div class="form-hint">Выберите, что вы хотите загрузить</div>
+                </div>
+                
+                <!-- Выбор группы -->
+                <div class="form-group">
+                    <label for="groupType" class="form-label">
+                        Группа
+                    </label>
+                    <div class="select-wrapper">
+                        <select name="group_type" id="groupType" class="form-select" required>
+                            <option value="">Выберите группу</option>
+                            <option value="first">Первая линия</option>
+                            <option value="second">Вторая линия</option>
+                            <option value="gsma">ГСМАиЦП</option>
+                            <option value="all">Всех</option>
+                        </select>
+                    </div>
+                    <div class="form-hint">Выберите, для какой группы загружаются данные</div>
+                </div>
+                
+                <!-- Поле для файла -->
+                <div class="form-group">
+                    <label class="form-label">
+                        Файл данных
+                    </label>
+                    
+                    <div class="file-label">
+                        <div class="file-input-wrapper">
+                            <svg class="file-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                            <span class="file-text">Выберите файл</span>
+                            <input type="file" name="file" id="fileInput" class="file-input" accept=".xlsx,.xls,.csv" required>
+                        </div>
+                        <div class="file-hint">Нажмите для выбора файла</div>
+                    </div>
+                    
+                    <div class="file-info" id="fileInfo" style="display: none;">
+                        <div class="file-name">
+                            <svg class="file-info-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                            <span id="fileName">Название файла</span>
+                        </div>
+                        <div class="file-size" id="fileSize"></div>
+                    </div>
+                </div>
+                
+                <!-- Кнопки формы -->
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">
+                        Отправить
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Информация о поддерживаемых форматах -->
+        <div class="upload-info">
+            <h3 class="info-title">
+                <svg class="info-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                Информация о загрузке
+            </h3>
+            <div class="info-content">
+                <p><strong>Поддерживаемые форматы:</strong> .xlsx, .xls</p>
+                <p><strong>Максимальный размер файла:</strong> 10 MB</p>
+            </div>
+        </div>
+    </div>
+
+<script src="{% static 'js/download_files.js' %}"></script>
+{% endblock %}

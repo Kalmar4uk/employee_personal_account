@@ -4,6 +4,8 @@ from django.shortcuts import get_object_or_404, render
 from users.models import User
 from utils.functions import get_holidays_first_and_last_date
 
+from openpyxl import Workbook as wb
+
 
 @login_required
 def holidays_employee(request, username):
@@ -35,3 +37,9 @@ def holidays_employees_in_group(request, id):
         "groups/groups_holidays.html",
         context={"holidays": result}
     )
+
+
+@login_required
+def download(request):
+    print(request.POST)
+    return render(request, "download_files/download.html")

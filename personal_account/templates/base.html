@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
     <link rel="stylesheet" href="{% static 'css/downtime.css' %}">
     <link rel="stylesheet" href="{% static 'css/errors.css' %}">
+    <link rel="stylesheet" href="{% static 'css/download_files.css' %}">
 </head>
 <body>
     <aside class="sidebar">
@@ -26,6 +27,7 @@
             <li><a href="{% url 'users:groups' %}" class="{% if view_name == 'users:groups'%} active  {% endif %}">Группы</a></li>
             <li><a href="{% url 'users:employees' %}" class="{% if view_name == 'users:employees' %} active {% endif %}">Сотрудники</a></li>
             <li><a href="{% url 'downtimes:downtime' %}" class="{% if view_name == 'downtimes:downtime' %} active {% endif %}">Плановые работы</a></li>
+            <li><a href="{% url 'lk:download' %}" class="{% if view_name == 'lk:download' %} active {% endif %}">Прогрузка графика</a></li>
         </ul>
         {% endwith %}
     </aside>
