@@ -1,10 +1,13 @@
-from utils.parse.parse import open_wb
 from datetime import datetime
-from django.utils import timezone
-from utils.constants import COLUMN_FOR_LINE, MONTH_NAME, RMONTHS, DATE_FORMAT, HOLIDAY_FOR_LINE, CHOICES_STATUS_HOLIDAY, TYPE_HOLIDAY
 
-from users.models import User
+from django.utils import timezone
+
 from lk.models import Holiday
+from users.models import User
+from utils.constants import (CHOICES_STATUS_HOLIDAY, COLUMN_FOR_LINE,
+                             DATE_FORMAT, HOLIDAY_FOR_LINE, MONTH_NAME,
+                             RMONTHS, TYPE_HOLIDAY)
+from utils.parse.parse import open_wb
 
 
 def parse_holidays_gsma(file: any) -> bool:

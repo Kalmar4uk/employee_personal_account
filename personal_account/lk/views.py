@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render
 
 from users.models import User
 from utils.functions import get_holidays_first_and_last_date
-from utils.parse import workshifts, holiday
+from utils.parse import holiday, workshifts
 
 
 @login_required

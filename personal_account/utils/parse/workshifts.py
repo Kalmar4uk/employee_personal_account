@@ -1,9 +1,9 @@
-from utils.parse.parse import open_wb, preparation_time
 from datetime import datetime, timedelta
-from utils.constants import COLUMN_FOR_LINE, TIME_SHIFT_FOR_LINE
 
-from users.models import User
 from lk.models import WorkShifts
+from users.models import User
+from utils.constants import COLUMN_FOR_LINE, TIME_SHIFT_FOR_LINE
+from utils.parse.parse import open_wb, preparation_time
 
 
 def parse_work_shifts(type_line: str, file: any) -> bool:

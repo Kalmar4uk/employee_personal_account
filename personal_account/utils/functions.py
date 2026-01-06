@@ -1,5 +1,9 @@
 from calendar import monthrange
-from datetime import datetime as dt, timedelta as td, date, time
+from datetime import date
+from datetime import datetime as dt
+from datetime import time
+from datetime import timedelta as td
+
 from django.utils import timezone
 from djangoql.admin import DjangoQLSearchMixin
 
