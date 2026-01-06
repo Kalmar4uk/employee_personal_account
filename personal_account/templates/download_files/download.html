@@ -7,7 +7,6 @@
             <form method="post" enctype="multipart/form-data" class="upload-form">
                 {% csrf_token %}
                 
-                <!-- Выбор типа данных -->
                 <div class="form-group">
                     <label for="dataType" class="form-label">
                         Тип данных
@@ -17,13 +16,11 @@
                             <option value="">Выберите тип данных</option>
                             <option value="shifts">Смены</option>
                             <option value="holidays">Отпуска</option>
-                            <option value="all">Все</option>
                         </select>
                     </div>
                     <div class="form-hint">Выберите, что вы хотите загрузить</div>
                 </div>
                 
-                <!-- Выбор группы -->
                 <div class="form-group">
                     <label for="groupType" class="form-label">
                         Группа
@@ -40,7 +37,6 @@
                     <div class="form-hint">Выберите, для какой группы загружаются данные</div>
                 </div>
                 
-                <!-- Поле для файла -->
                 <div class="form-group">
                     <label class="form-label">
                         Файл данных
@@ -70,7 +66,6 @@
                     </div>
                 </div>
                 
-                <!-- Кнопки формы -->
                 <div class="form-actions">
                     <button type="submit" class="submit-btn">
                         Отправить
@@ -78,8 +73,7 @@
                 </div>
             </form>
         </div>
-        
-        <!-- Информация о поддерживаемых форматах -->
+
         <div class="upload-info">
             <h3 class="info-title">
                 <svg class="info-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

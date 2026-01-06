@@ -14,7 +14,8 @@ class WorkShiftsAdmin(MyDjangoQLSearchMixin, admin.ModelAdmin):
         "time_start",
         "time_end",
         "night_shift",
-        "type"
+        "type",
+        "updated_at"
     )
     list_filter = (
         "employee",
