@@ -13,22 +13,6 @@ document.getElementById('employee-search').addEventListener('input', function(e)
     });
 });
 
-// Фильтрация по статусу
-document.getElementById('status-filter').addEventListener('change', function(e) {
-    const status = e.target.value;
-    const employeeCards = document.querySelectorAll('.employee-card');
-    
-    employeeCards.forEach(card => {
-        if (status === 'all') {
-            card.style.display = 'flex';
-        } else if (card.classList.contains(status)) {
-            card.style.display = 'flex';
-        } else {
-            card.style.display = 'none';
-        }
-    });
-});
-
 // Сортировка сотрудников
 document.getElementById('sort-by').addEventListener('change', function(e) {
     const sortBy = e.target.value;
