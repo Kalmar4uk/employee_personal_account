@@ -60,7 +60,6 @@ function generateCalendar(year, month) {
         const dayContent = document.createElement('div');
         dayContent.className = 'day-content';
         dayContent.textContent = dayData.time;
-        console.log(dayData)
         
         dayElement.appendChild(dayNumber);
         dayElement.appendChild(dayContent);

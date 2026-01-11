@@ -19,11 +19,20 @@
 <body>
     <aside class="sidebar">
         <div class="logo">
-            <h2>Кабинет сотрудника</h2>
+            <a href="{% url 'users:profile' user.username %}" class="{% if view_name == 'users:profile' %} active {% endif %}">{{ user.last_name }} {{ user.first_name }}</a>
+            <form action="{% url 'users:logout' %}" method="post" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn" title="Выйти" aria-label="Выйти из системы">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                </button>
+            </form>
         </div>
         {% with request.resolver_match.view_name as view_name %}
         <ul class="nav-links">
-            <li><a href="{% url 'users:profile' user.username %}" class="{% if view_name == 'users:profile' %} active {% endif %}">Профиль</a></li>
             <li><a href="{% url 'users:groups' %}" class="{% if view_name == 'users:groups'%} active  {% endif %}">Группы</a></li>
             <li><a href="{% url 'users:employees' %}" class="{% if view_name == 'users:employees' %} active {% endif %}">Сотрудники</a></li>
             <li><a href="{% url 'downtimes:downtime' %}" class="{% if view_name == 'downtimes:downtime' %} active {% endif %}">Плановые работы</a></li>
@@ -33,7 +42,6 @@
     </aside>
 
     <main class="main-content">
-        {% include "header.html" %}
         <section class="content" id="content">
             {% block content %}{% endblock %}
         </section>

@@ -13,38 +13,6 @@ document.getElementById('employee-search').addEventListener('input', function(e)
     });
 });
 
-// Сортировка сотрудников
-document.getElementById('sort-by').addEventListener('change', function(e) {
-    const sortBy = e.target.value;
-    const employeesList = document.querySelector('.employees-list');
-    const employeeCards = Array.from(document.querySelectorAll('.employee-card'));
-    
-    if (sortBy === 'name') {
-        employeeCards.sort((a, b) => {
-            const nameA = a.querySelector('h3').textContent;
-            const nameB = b.querySelector('h3').textContent;
-            return nameA.localeCompare(nameB);
-        });
-    } else if (sortBy === 'status') {
-        employeeCards.sort((a, b) => {
-            // Сначала работающие, затем на выходном
-            if (a.classList.contains('working') && b.classList.contains('dayoff')) {
-                return -1;
-            } else if (a.classList.contains('dayoff') && b.classList.contains('working')) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
-    }
-    
-    // Очищаем контейнер и добавляем отсортированные карточки
-    employeesList.innerHTML = '';
-    employeeCards.forEach(card => {
-        employeesList.appendChild(card);
-    });
-});
-
 // Обновление времени для работающих сотрудников
 function updateWorkingTime() {
     const now = new Date();

@@ -23,12 +23,6 @@
     <div class="search-box">
         <input type="text" placeholder="Поиск сотрудников..." id="employee-search">
     </div>
-    <div class="filter-options">
-        <select id="sort-by">
-            <option value="name">Сортировать по имени</option>
-            <option value="status">Сортировать по статусу</option>
-        </select>
-    </div>
     <div>
         <form method="get" class="compact-filter">
             <input type="date" class="form-input" name="date" value="{{ request.GET.date }}">

@@ -11,7 +11,7 @@
                 <p><strong>Группа:</strong>
                     {% if group %}
                         <a href="{% url 'users:groups_detail' group.id %}">
-                            <button class="profile-btn">{{ group.title }}</button>
+                            <button class="group-profile-btn">{{ group.title }}</button>
                         </a>
                     {% else %}
                         Группа отсутствует
@@ -79,7 +79,7 @@
     </div>
     <div class="section">
         <h2 >Отпуск на 2026 год</h2>
-        <div class="section">
+        <div class="holiday_block">
             <table class="schedule-table">
                 <thead>
                     <tr>
