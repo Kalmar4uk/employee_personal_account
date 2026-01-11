@@ -19,7 +19,7 @@
 <body>
     <aside class="sidebar">
         <div class="logo">
-            <a href="{% url 'users:profile' user.username %}" class="{% if view_name == 'users:profile' %} active {% endif %}">{{ user.last_name }} {{ user.first_name }}</a>
+            <a href="{% url 'users:profile' user.username %}">{{ user.last_name }} {{ user.first_name }}</a>
             <form action="{% url 'users:logout' %}" method="post" class="logout-form">
                 {% csrf_token %}
                 <button type="submit" class="logout-btn" title="Выйти" aria-label="Выйти из системы">
@@ -33,7 +33,7 @@
         </div>
         {% with request.resolver_match.view_name as view_name %}
         <ul class="nav-links">
-            <li><a href="{% url 'users:groups' %}" class="{% if view_name == 'users:groups'%} active  {% endif %}">Группы</a></li>
+            <li><a href="{% url 'users:groups' %}" class="{% if view_name == 'users:groups' or view_name == 'users:groups_detail' %} active  {% endif %}">Группы</a></li>
             <li><a href="{% url 'users:employees' %}" class="{% if view_name == 'users:employees' %} active {% endif %}">Сотрудники</a></li>
             <li><a href="{% url 'downtimes:downtime' %}" class="{% if view_name == 'downtimes:downtime' %} active {% endif %}">Плановые работы</a></li>
             <li><a href="{% url 'lk:download' %}" class="{% if view_name == 'lk:download' %} active {% endif %}">Прогрузка графика</a></li>
