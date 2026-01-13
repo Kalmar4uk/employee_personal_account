@@ -5,6 +5,11 @@
     <div class="downtimes-header">
         <h1 class="downtimes-title">Сотрудники</h2>
     </div>
+    <div class="filters section">
+        <div class="search-box">
+            <input type="text" placeholder="Поиск сотрудников..." id="employee-search">
+        </div>
+    </div>
     <div class="employees-list">
         {% for employee in employees %}
             <div class="employee-card working">
@@ -22,4 +27,5 @@
         {% endfor %}
     </div>
 </section>
+<script src="{% static 'js/groups_detail.js' %}"></script>
 {% endblock %}

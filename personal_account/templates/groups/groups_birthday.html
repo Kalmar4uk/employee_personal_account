@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="section">
+    <a href="{% url 'users:groups_detail' request.resolver_match.kwargs.id %}" class="compact-btn">Назад</a>
+</div>
+<div class="section">
+        <h2>Даты рождения сотрудников</h2>
+        <div class="holiday_block">
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>Сотрудник</th>
+                        <th>Дата</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for birthday in employees %}
+                    <tr>
+                        <td>{{ birthday.last_name }} {{ birthday.first_name }}</td>
+                        {% if birthday.birthday %}<td>{{ birthday.birthday|date:"d.m.Y" }}</td>{% else %}<td>-</td>{% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

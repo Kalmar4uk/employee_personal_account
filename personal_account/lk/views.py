@@ -60,3 +60,18 @@ def download(request):
             )
         return render(request, "download_files/download.html")
     return render(request, "download_files/download.html")
+
+
+@login_required
+def birthday_employee_group(request, id):
+    employees = User.objects.filter(
+        group_job=id
+    ).order_by(
+        "-birthday"
+    ).values(
+        "first_name", "last_name", "birthday"
+    )
+
+    context = {"employees": employees}
+
+    return render(request, "groups/groups_birthday.html", context)

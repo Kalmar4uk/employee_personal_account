@@ -15,8 +15,9 @@
     </div>
 </div>
 
-<div class="section">
+<div class="holidays-birthday section">
     <a href="{% url 'lk:holiday_group' request.resolver_match.kwargs.id %}" class="compact-btn">Отпуска сотрудников</a>
+    <a href="{% url 'lk:birthday_group' request.resolver_match.kwargs.id %}" class="compact-btn">Даты рождения сотрудников</a>
 </div>
 
 <div class="filters section">

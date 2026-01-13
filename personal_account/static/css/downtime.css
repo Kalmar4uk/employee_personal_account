@@ -296,6 +296,10 @@
     .form-actions {
         flex-direction: column;
     }
+
+    .form-input {
+        width: 100%;
+    }
     
     .submit-btn,
     .cancel-btn {

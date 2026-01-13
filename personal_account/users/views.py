@@ -87,6 +87,8 @@ def profile(request, username):
 def employees(request):
     employees = User.objects.filter(
         is_active=True
+    ).exclude(
+        username="admin"
     ).values(
         "username",
         "first_name",
