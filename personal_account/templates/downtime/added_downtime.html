@@ -62,12 +62,12 @@
             </div>
             
             <div class="form-actions">
-                <a href="{% url 'downtimes:downtime' %}" class="cancel-btn">Отмена</a>
                 {% if "/edit/" in request.path %}
                     <button type="submit" class="submit-btn">Изменить</button>
                 {% else %}
                     <button type="submit" class="submit-btn">Добавить</button>
                 {% endif %}
+                <a href="{% url 'downtimes:downtime' %}" class="cancel-btn">Отмена</a>
             </div>
         </form>
     </div>

@@ -2,29 +2,29 @@
 {% load static %}
 {% block content %}
 <section class="content">
-    <div class="downtimes-header">
-        <h1 class="downtimes-title">Сотрудники</h2>
-    </div>
-    <div class="filters section">
-        <div class="search-box">
-            <input type="text" placeholder="Поиск сотрудников..." id="employee-search">
-        </div>
-    </div>
-    <div class="employees-list">
-        {% for employee in employees %}
-            <div class="employee-card working">
-                <div class="employee-info">
-                    <h3>{{ employee.last_name }} {{ employee.first_name }}</h3>
-                    <p>{{ employee.job_title}}</p>
-                    <p>{{ employee.group_job__title }}</p>
-                </div>
-                <div class="employee-actions">
-                    <a href="{% url 'users:profile' employee.username %}">
-                        <button class="profile-btn">Профиль</button>
-                    </a>
-                </div>
+    <div class="section">
+        <h2>Сотрудники</h2>
+        <div class="filters section">
+            <div class="search-box">
+                <input type="text" placeholder="Поиск сотрудников..." id="employee-search">
             </div>
-        {% endfor %}
+        </div>
+        <div class="employees-list">
+            {% for employee in employees %}
+                <div class="employee-card working">
+                    <div class="employee-info">
+                        <h3>{{ employee.last_name }} {{ employee.first_name }}</h3>
+                        <p>{{ employee.job_title}}</p>
+                        <p>{{ employee.group_job__title }}</p>
+                    </div>
+                    <div class="employee-actions">
+                        <a href="{% url 'users:profile' employee.username %}">
+                            <button class="profile-btn">Профиль</button>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 </section>
 <script src="{% static 'js/groups_detail.js' %}"></script>

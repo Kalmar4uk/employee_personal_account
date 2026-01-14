@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<div class="downtimes-container">
+<div class="section">
     <div class="downtimes-header">
         <h1 class="downtimes-title">Плановые работы</h1>
         <a href="{% url 'downtimes:added_downtime' %}" class="add-btn">
@@ -38,7 +38,7 @@
         {% endfor %}
     </div>
     <div class="button-end-container">
-        <a href="{% url 'downtimes:history_downtime' %}" class="history-btn">
+        <a href="{% url 'downtimes:history_downtime' %}" class="add-btn">
             Проведенные работы
         </a>
     </div>

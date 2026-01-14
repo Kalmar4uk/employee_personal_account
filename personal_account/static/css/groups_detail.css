@@ -99,6 +99,11 @@
     flex-wrap: wrap;
 }
 
+.employee-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
 .employee-avatar img {
     width: 60px;
     height: 60px;

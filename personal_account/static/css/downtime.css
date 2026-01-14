@@ -91,7 +91,7 @@
     border-left: 4px solid #ca0707;
 }
 
-.downtime-card:hover {
+.downtime-card:hover, .downtime-history-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
