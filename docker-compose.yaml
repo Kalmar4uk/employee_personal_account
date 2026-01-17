@@ -4,6 +4,18 @@ services:
     env_file: .env
     volumes:
       - pg_data:/var/lib/postgresql/data
+  redis:
+    image: redis:7.2-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: >
+      redis-server
+      --appendonly yes
+      --appendfsync everysec
+      --maxmemory 256mb 
+      --maxmemory-policy allkeys-lru
   backend:
     image: kalmmar4uk/lk_project
     env_file: .env
@@ -11,6 +23,7 @@ services:
       - 8000:8000
     depends_on:
       - db
+      - redis
     volumes:
       - static:/static/
   nginx:
@@ -22,3 +35,4 @@ services:
 volumes:
   pg_data:
   static:
+  redis_data:
