@@ -73,7 +73,7 @@ class ReminderDowntime(models.Model):
         blank=True
     )
     success_reminder = models.BooleanField(
-        "Уведомления отправлены",
+        "Уведомления отправлено в Redis",
         default=False
     )
     created_at = models.DateTimeField("Создано от", auto_now_add=True)
