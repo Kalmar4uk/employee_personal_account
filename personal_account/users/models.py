@@ -15,7 +15,8 @@ class User(AbstractUser):
     group_job = models.ManyToManyField(
         "GroupJob",
         verbose_name="Группа сотрудника",
-        related_name="users"
+        related_name="users",
+        blank=True
     )
     is_main = models.BooleanField("Босс этой качалки", default=False)
     birthday = models.DateField("Дата рождения", null=True, blank=True)

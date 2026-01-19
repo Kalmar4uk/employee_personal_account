@@ -32,6 +32,12 @@ TYPE_HOLIDAY = {
 
 TYPE_SHIFTS = {"schedule": "Сменный", "standart": "5/2"}
 
+LINE_JOB = {
+    "gsma": 1,
+    "first": 2,
+    "second": 3
+}
+
 COLUMN_FOR_GSMA = [26, 33]
 TIME_SHIFT_FOR_GSMA = 24
 HOLIDAY_FOR_GSMA = 23

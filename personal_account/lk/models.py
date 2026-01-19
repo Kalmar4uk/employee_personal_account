@@ -39,7 +39,8 @@ class WorkShifts(AbstractWorkShifts):
         blank=True
     )
     night_shift = models.BooleanField(default=False)
-    updated_at = models.DateTimeField("Дата обновления", auto_now_add=True)
+    created_at = models.DateTimeField("Дата создания", auto_now_add=True)
+    updated_at = models.DateTimeField("Дата обновления", auto_now=True)
 
     class Meta:
         verbose_name = "Смена"
@@ -48,7 +49,7 @@ class WorkShifts(AbstractWorkShifts):
 
         constraints = [
             models.UniqueConstraint(
-                fields=["date_start", "date_end", "employee"],
+                fields=["date_start", "employee"],
                 name='unique_shifts'
             )
         ]

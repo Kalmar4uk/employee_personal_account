@@ -6,9 +6,11 @@ from datetime import timedelta as td
 
 from django.utils import timezone
 from djangoql.admin import DjangoQLSearchMixin
+from django.shortcuts import get_object_or_404
 
+from users.models import User
 from lk.models import WorkShifts
-from utils.constants import CURRENT_MONTH, CURRENT_YEAR
+from utils.constants import CURRENT_MONTH, CURRENT_YEAR, TIME_FORMAT
 
 
 class MyDjangoQLSearchMixin(DjangoQLSearchMixin):
@@ -124,3 +126,24 @@ def check_time_downtime_and_first_reminder(
     ):
         return True
     return False
+
+
+def create_default_workshifts_employee(employee_username: str):
+    employee = get_object_or_404(User, username=employee_username)
+    days = days_month()
+
+    result_for_save = []
+
+    for day in days:
+        if day.weekday() not in [5, 6]:
+            result_for_save.append(
+                WorkShifts(
+                    employee=employee,
+                    date_start=day,
+                    date_end=day,
+                    time_start=dt.strptime("09:00", TIME_FORMAT).time(),
+                    time_end=dt.strptime("18:00", TIME_FORMAT).time(),
+                )
+            )
+
+    WorkShifts.objects.bulk_create(result_for_save)
