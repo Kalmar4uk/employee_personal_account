@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
-from django.utils import timezone
 
 from lk.models import WorkShifts
 from users.models import User
-from utils.constants import CURRENT_MONTH, COLUMN_FOR_LINE, TIME_SHIFT_FOR_LINE, LINE_JOB
+from utils.constants import (COLUMN_FOR_LINE, CURRENT_MONTH, LINE_JOB,
+                             TIME_SHIFT_FOR_LINE)
 from utils.parse.parse import open_wb, preparation_time
 
 
@@ -47,7 +47,8 @@ def parse_work_shifts(type_line: str, file: any) -> bool:
                         )
                     except User.DoesNotExist:
                         raise ValueError(
-                            f"Сотрудника {last_name} {first_name} нет в базе.\n"
+                            f"Сотрудника {last_name} {first_name} "
+                            f"нет в базе.\n"
                             f"Вероятно нужно добавить или "
                             f"допущена ошибка в имени/фамилии."
                             f"Ячейка {data[cell]}"

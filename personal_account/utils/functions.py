@@ -4,12 +4,12 @@ from datetime import datetime as dt
 from datetime import time
 from datetime import timedelta as td
 
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from djangoql.admin import DjangoQLSearchMixin
-from django.shortcuts import get_object_or_404
 
-from users.models import User
 from lk.models import WorkShifts
+from users.models import User
 from utils.constants import CURRENT_MONTH, CURRENT_YEAR, TIME_FORMAT
 
 
