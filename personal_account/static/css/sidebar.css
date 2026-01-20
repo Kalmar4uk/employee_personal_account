@@ -18,14 +18,6 @@
     margin-bottom: 20px;
 }
 
-.logo h2 {
-    font-weight: 500;
-    font-size: 22px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .logo a {
     display: block;
     color: white;
@@ -57,6 +49,87 @@
 .nav-links a:hover,
 .nav-links a.active {
     background-color: #34495e;
+}
+
+/* Стили для выпадающего списка */
+.dropdown-container {
+    position: relative;
+}
+
+/* Скрываем чекбокс */
+.dropdown-checkbox {
+    display: none;
+}
+
+.dropdown-toggle {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    padding: 15px 20px !important;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    margin: 0;
+}
+
+.dropdown-toggle:hover,
+.dropdown-checkbox:checked ~ .dropdown-toggle {
+    background-color: #34495e;
+}
+
+.dropdown-toggle.active {
+    background-color: #34495e;
+}
+
+.dropdown-arrow {
+    transition: transform 0.3s ease;
+}
+
+.dropdown-checkbox:checked ~ .dropdown-toggle .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #34495e;
+    border-radius: 0 0 4px 4px;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 100;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-checkbox:checked ~ .dropdown-menu {
+    max-height: 200px;
+    opacity: 1;
+    visibility: visible;
+}
+
+.dropdown-menu li {
+    margin: 0;
+}
+
+.dropdown-menu a {
+    padding: 12px 20px 12px 30px !important;
+    background-color: #34495e;
+    border-left: 3px solid transparent;
+    display: block;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu a.active {
+    background-color: #3d566e !important;
+    border-left-color: #3498db;
 }
 
 /* Главный контейнер */
@@ -101,6 +174,23 @@
     /* Сдвигаем контент при открытом меню на мобильных */
     .sidebar.active ~ .main-content {
         transform: translateX(280px);
+    }
+    
+    /* Для выпадающего списка на мобильных */
+    .dropdown-menu {
+        position: static;
+        max-height: 0;
+        transition: max-height 0.3s ease;
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    .dropdown-checkbox:checked ~ .dropdown-menu {
+        max-height: 200px;
+    }
+    
+    .dropdown-menu a {
+        padding-left: 40px !important;
+        font-size: 14px;
     }
     
     /* Кнопка меню */
@@ -224,5 +314,10 @@
         transform: none !important;
         filter: none !important;
         pointer-events: auto !important;
+    }
+    
+    /* Для выпадающего списка на десктопе */
+    .dropdown-menu {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 }

@@ -20,5 +20,6 @@ urlpatterns = [
         views.birthday_employee_group,
         name="birthday_group"
     ),
-    path("download", views.download, name="download")
+    path("download/", views.download, name="download"),
+    path("generate/", views.generate_default_workshifts, name="generate")
 ]

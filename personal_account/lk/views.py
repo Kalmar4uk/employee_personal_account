@@ -2,7 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 
 from users.models import User
-from utils.functions import get_holidays_first_and_last_date
+from utils.functions import (create_default_workshifts_employee,
+                             get_holidays_first_and_last_date)
 from utils.parse import holiday, workshifts
 
 
@@ -40,7 +41,7 @@ def holidays_employees_in_group(request, id):
 
 @login_required
 def download(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         file = request.FILES.get("file")
         type_line = request.POST.get("group_type")
         try:
@@ -75,3 +76,15 @@ def birthday_employee_group(request, id):
     context = {"employees": employees}
 
     return render(request, "groups/groups_birthday.html", context)
+
+
+@login_required
+def generate_default_workshifts(request):
+    users = User.objects.filter(is_active=True).order_by("last_name", "first_name")
+    context = {"users": users}
+    if request.method == "POST":
+        username = request.POST.get("username")
+        user = get_object_or_404(User, username=username)
+        create_default_workshifts_employee(employee=user)
+
+    return render(request, "generate_shifts/generate.html", context)

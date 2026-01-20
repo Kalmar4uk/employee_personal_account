@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <div class="generate-container">
+        <div class="generate-card">
+            <h2 class="generate-title">
+                Генерация смен
+            </h2>
+            
+            <form method="post" class="generate-form">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="employeeSelect" class="form-label">
+                        Выберите сотрудника
+                    </label>
+                    
+                    <div class="select-wrapper">
+                        <div class="select-input-wrapper">
+                            <input 
+                                type="text" 
+                                id="employeeSearch" 
+                                class="select-input" 
+                                placeholder="Выбрать сотрудника..."
+                                autocomplete="off"
+                                readonly
+                            >
+                            <svg class="select-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        
+                        <div class="select-dropdown" id="employeeDropdown">
+                            <div class="dropdown-search">
+                                <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <input 
+                                    type="text" 
+                                    id="dropdownSearch" 
+                                    class="dropdown-search-input" 
+                                    placeholder="Поиск по фамилии или имени..."
+                                    autocomplete="off"
+                                >
+                            </div>
+                            
+                            <div class="dropdown-list-container">
+                                <ul class="dropdown-list" id="employeeList">
+                                    {% for user in users %}
+                                    <li class="dropdown-item" data-username="{{ user.username }}">
+                                        <div class="employee-name">{{ user.last_name }} {{ user.first_name }}</div>
+                                    </li>
+                                    {% empty %}
+                                    <li class="dropdown-empty">Нет активных сотрудников</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            
+                            <div class="dropdown-footer">
+                                <div class="employee-count" id="employeeCount">
+                                    Всего сотрудников: {{ users|length }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" name="username" id="selectedUsername" required>
+                    
+                    <div class="form-hint">Нажмите на поле, чтобы открыть список всех сотрудников</div>
+                    <div class="validation-message" id="employeeError" style="display: none;">
+                        Пожалуйста, выберите сотрудника из списка
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn" id="generateBtn" disabled>
+                        Сгенерировать смены
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="generate-info">
+            <h3 class="info-title">
+                <svg class="info-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                Информация о генерации
+            </h3>
+            <div class="info-content">
+                <p><strong>Что делает генерация:</strong></p>
+                <ul class="info-list">
+                    <li>Создает стандартные смены для выбранного сотрудника</li>
+                    <li>Создает записи на текущий месяц</li>
+                </ul>
+                <p><strong>Примечание:</strong></p>
+                <ul class="info-list">
+                    <li>Если у сотрудника уже есть смены, они будут обновлены</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{% static 'js/generate_shifts.js' %}"></script>
+{% endblock %}

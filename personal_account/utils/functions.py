@@ -128,8 +128,12 @@ def check_time_downtime_and_first_reminder(
     return False
 
 
-def create_default_workshifts_employee(employee_username: str):
-    employee = get_object_or_404(User, username=employee_username)
+def create_default_workshifts_employee(employee: User):
+    WorkShifts.objects.filter(
+        employee=employee,
+        date_start__month=CURRENT_MONTH
+    ).delete()
+
     days = days_month()
 
     result_for_save = []

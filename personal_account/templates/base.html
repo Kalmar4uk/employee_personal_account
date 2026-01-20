@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{% static 'css/downtime.css' %}">
     <link rel="stylesheet" href="{% static 'css/errors.css' %}">
     <link rel="stylesheet" href="{% static 'css/download_files.css' %}">
+    <link rel="stylesheet" href="{% static 'css/generate.css' %}">
 </head>
 <body>
     <aside class="sidebar">
@@ -36,7 +37,21 @@
             <li><a href="{% url 'users:groups' %}" class="{% if view_name == 'users:groups' or view_name == 'users:groups_detail' %} active  {% endif %}">Группы</a></li>
             <li><a href="{% url 'users:employees' %}" class="{% if view_name == 'users:employees' %} active {% endif %}">Сотрудники</a></li>
             <li><a href="{% url 'downtimes:downtime' %}" class="{% if view_name == 'downtimes:downtime' %} active {% endif %}">Плановые работы</a></li>
-            <li><a href="{% url 'lk:download' %}" class="{% if view_name == 'lk:download' %} active {% endif %}">Прогрузка графика</a></li>
+            
+            <!-- Выпадающий список для Прогрузка графика с использованием чекбокса -->
+            <li class="dropdown-container">
+                <input type="checkbox" id="schedule-dropdown" class="dropdown-checkbox">
+                <label for="schedule-dropdown" class="dropdown-toggle {% if view_name == 'lk:download' or view_name == 'lk:generate' %} active {% endif %}">
+                    <span>Прогрузка графика</span>
+                    <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </label>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'lk:download' %}" class="{% if view_name == 'lk:download' %} active {% endif %}">Прогрузка из файла</a></li>
+                    <li><a href="{% url 'lk:generate' %}" class="{% if view_name == 'lk:generate' %} active {% endif %}">Генерация смен</a></li>
+                </ul>
+            </li>
         </ul>
         {% endwith %}
     </aside>
