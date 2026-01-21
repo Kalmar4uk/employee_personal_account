@@ -3,7 +3,6 @@
     width: 250px;
     background-color: #2c3e50;
     color: white;
-    padding: 20px 0;
     display: flex;
     flex-direction: column;
 }
@@ -154,11 +153,13 @@
         position: fixed;
         left: 0;
         top: 0;
+        padding: 20px 0;
         height: 100vh;
         z-index: 1001;
         transform: translateX(-100%);
         width: 280px;
         transition: transform 0.3s ease;
+        overflow-y: auto;
     }
     
     .sidebar.active {
@@ -169,6 +170,7 @@
         padding: 15px;
         width: 100%;
         transition: transform 0.3s ease;
+        margin-left: 0;
     }
     
     /* Сдвигаем контент при открытом меню на мобильных */
@@ -182,6 +184,7 @@
         max-height: 0;
         transition: max-height 0.3s ease;
         background-color: rgba(255, 255, 255, 0.05);
+        width: 100%;
     }
     
     .dropdown-checkbox:checked ~ .dropdown-menu {
@@ -260,6 +263,7 @@
     @media (max-width: 480px) {
         .sidebar {
             width: 250px;
+            padding: 20px 0;
         }
         
         .sidebar.active ~ .main-content {
@@ -277,12 +281,17 @@
 
 /* ============ ДЕСКТОПНАЯ ВЕРСИЯ (от 769px) ============ */
 @media (min-width: 769px) {
-    /* Сбрасываем все мобильные стили для сайдбара */
+    /* Фиксируем сайдбар на десктопе */
     .sidebar {
-        position: static !important;
+        position: fixed !important;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        height: 100vh;
+        overflow-y: auto;
         transform: none !important;
-        height: auto;
         flex-shrink: 0;
+        z-index: 100;
     }
     
     /* Скрываем мобильные элементы */
@@ -296,13 +305,15 @@
     
     /* Восстанавливаем нормальную верстку */
     .app-container {
-        display: flex;
+        display: block;
     }
     
     .main-content {
-        flex: 1;
+        margin-left: 250px;
         padding: 20px 30px;
         transform: none !important;
+        min-height: 100vh;
+        width: calc(100% - 250px);
     }
     
     /* Убираем все эффекты от мобильного меню */
@@ -319,5 +330,54 @@
     /* Для выпадающего списка на десктопе */
     .dropdown-menu {
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #34495e;
+        border-radius: 0 0 4px 4px;
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 101;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .dropdown-checkbox:checked ~ .dropdown-menu {
+        max-height: 200px;
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    /* Улучшаем стили для фиксированного сайдбара */
+    .logo {
+        padding: 20px 20px;
+        margin-bottom: 20px;
+    }
+    
+    .nav-links {
+        padding-bottom: 20px;
+    }
+    
+    /* Плавный скролл для сайдбара */
+    .sidebar::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .sidebar::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 3px;
+    }
+    
+    .sidebar::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5);
     }
 }
