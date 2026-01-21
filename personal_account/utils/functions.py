@@ -4,13 +4,13 @@ from datetime import datetime as dt
 from datetime import time
 from datetime import timedelta as td
 
-from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from djangoql.admin import DjangoQLSearchMixin
 
 from lk.models import WorkShifts
 from users.models import User
-from utils.constants import CURRENT_MONTH, CURRENT_YEAR, TIME_FORMAT
+from utils.constants import (CURRENT_MONTH, CURRENT_YEAR, TIME_FORMAT,
+                             TYPE_SHIFTS)
 
 
 class MyDjangoQLSearchMixin(DjangoQLSearchMixin):
@@ -147,6 +147,7 @@ def create_default_workshifts_employee(employee: User):
                     date_end=day,
                     time_start=dt.strptime("09:00", TIME_FORMAT).time(),
                     time_end=dt.strptime("18:00", TIME_FORMAT).time(),
+                    type=TYPE_SHIFTS.get("standart")
                 )
             )
 

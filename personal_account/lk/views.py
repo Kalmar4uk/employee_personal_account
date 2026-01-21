@@ -80,7 +80,9 @@ def birthday_employee_group(request, id):
 
 @login_required
 def generate_default_workshifts(request):
-    users = User.objects.filter(is_active=True).order_by("last_name", "first_name")
+    users = User.objects.filter(
+        is_active=True
+    ).order_by("last_name", "first_name")
     context = {"users": users}
     if request.method == "POST":
         username = request.POST.get("username")
