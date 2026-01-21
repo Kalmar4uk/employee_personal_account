@@ -8,15 +8,15 @@
                 <h3>Личная информация</h3>
                 <p><strong>ФИО:</strong> {{ employee.last_name }} {{ employee.first_name }}</p>
                 <p><strong>Должность:</strong> {{ employee.job_title }}</p>
-                <p><strong>Группа:</strong>
-                    {% if group %}
-                        <a href="{% url 'users:groups_detail' group.id %}">
-                            <button class="group-profile-btn">{{ group.title }}</button>
-                        </a>
-                    {% else %}
-                        Группа отсутствует
-                    {% endif %}
-                </p>
+                {% if group %}
+                    <p>
+                        <strong>Группа:
+                            <a href="{% url 'users:groups_detail' group.id %}">
+                                <button class="group-profile-btn">{{ group.title }}</button>
+                            </a>
+                        </strong>
+                    </p>
+                {% endif %}
             </div>
             
             <div class="info-block">

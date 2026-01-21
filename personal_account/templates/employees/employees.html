@@ -15,7 +15,7 @@
                     <div class="employee-info">
                         <h3>{{ employee.last_name }} {{ employee.first_name }}</h3>
                         <p>{{ employee.job_title}}</p>
-                        <p>{{ employee.group_job__title }}</p>
+                        {% if employee.group_job__title %}<p>{{ employee.group_job__title }}</p>{% endif %}
                     </div>
                     <div class="employee-actions">
                         <a href="{% url 'users:profile' employee.username %}">

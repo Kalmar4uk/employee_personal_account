@@ -2,6 +2,22 @@
 {% load static %}
 {% block content %}
 <div class="downtime-detail-container">
+    <div class="section-btn-back">
+        {% if "from_history" not in request.GET %}
+            <a href="{% url 'downtimes:downtime' %}" class="back-chevron-btn">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </a>
+        {% else %}
+            <a href="{% url 'downtimes:history_downtime' %}" class="back-chevron-btn">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </a>
+        {% endif %}
+        </a>
+    </div>
     <div class="downtime-detail-card">
         <div class="downtime-detail-header">
             <div class="downtime-detail-info">
@@ -11,9 +27,6 @@
                         ID: #{{ downtime.id }} • Добавил: {{ downtime.author }} • Создано: {{ downtime.created_at|date:"d.m.Y H:i" }}
                     </div>
                 </h1>
-            </div>
-            <div class="downtime-detail-actions">
-                <a href="{% url 'downtimes:downtime' %}" class="detail-btn back-btn">Назад к списку</a>
             </div>
         </div>
 
