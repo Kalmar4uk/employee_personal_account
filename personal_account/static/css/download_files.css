@@ -8,7 +8,7 @@
 /* Карточка формы */
 .upload-card {
     background-color: white;
-    border-radius: 12px;
+    border-radius: 50px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     padding: 30px;
     margin-bottom: 30px;
@@ -182,7 +182,7 @@
 /* Блок с информацией */
 .upload-info {
     background-color: #f8f9fa;
-    border-radius: 10px;
+    border-radius: 30px;
     padding: 20px;
     border-left: 4px solid #2c3e50;
 }
@@ -382,7 +382,7 @@
 /* Обновленные стили для информационного блока */
 .upload-info {
     background-color: #f8f9fa;
-    border-radius: 10px;
+    border-radius: 50px;
     padding: 25px;
     border-left: 4px solid #3498db;
     margin-top: 20px;
