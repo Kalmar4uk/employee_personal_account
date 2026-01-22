@@ -117,7 +117,9 @@ def groups(request):
 @login_required
 def groups_detail(request, id):
     group = GroupJob.objects.get(id=id)
-    employees = group.users.all().order_by("last_name", "first_name")
+    employees = group.users.filter(
+        is_active=True
+    ).order_by("last_name", "first_name")
     try:
         date = request.GET.get("date", GetCurrentDate.current_date())
         if isinstance(date, str):

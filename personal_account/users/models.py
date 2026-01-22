@@ -27,9 +27,12 @@ class User(AbstractUser):
     objects = CustomUserManager()
 
     def save(self, *args, **kwargs):
-        if self.is_active is False and not self.email.startswith("Not"):
-            self.username = f"Not active - {self.username}"
+
+        if self.is_active is False and not self.username.startswith("not"):
+            self.username = f"not_active_{self.username}"
+
         self.email = f"{self.username}@av.ru"
+
         super().save(*args, **kwargs)
 
     def __str__(self):
