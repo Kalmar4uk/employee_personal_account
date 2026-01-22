@@ -16,9 +16,10 @@
 
 .holiday_block {
     background-color: white;
-    border-radius: 8px;
+    border-radius: 30px;
+    margin: 15px;
     margin-bottom: 25px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 7px 8px 6px rgba(0, 0, 0, 0.05);
 }
 
 .info-blocks {
@@ -30,7 +31,7 @@
 .info-block {
     background-color: #f8f9fa;
     border-radius: 50px;
-    padding: 20px;
+    padding: 20px 25px;
     min-width: 100px;
 }
 
@@ -228,13 +229,15 @@
 
 .schedule-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    overflow: hidden;
+    border-radius: 30px;
+    border-spacing: 0;
     margin-top: 10px;
-    border: 3px solid #e3e4e6
 }
 
 .schedule-table th, .schedule-table td {
-    padding: 12px 15px;
+    padding: 12px 25px;
     text-align: left;
     border-bottom: 1px solid #eaeaea;
 }
