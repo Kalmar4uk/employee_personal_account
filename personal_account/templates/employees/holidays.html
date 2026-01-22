@@ -8,8 +8,6 @@
     </svg>
     </a>
 </div>
-<div class="section">
-    <h2 >Отпуска</h2>
     {% regroup holidays by year as year_list %}
     {% for holiday in year_list %}
     <div class="section">
@@ -34,5 +32,4 @@
         </div>
     </div>
     {% endfor %}
-</div>
 {% endblock %}
