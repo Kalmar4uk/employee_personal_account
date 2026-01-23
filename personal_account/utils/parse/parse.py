@@ -38,7 +38,7 @@ def definition_wb(file: any, holiday_gsma: bool | None = None) -> Workbook:
 
 
 def preparation_time(
-        time, time_start, time_end
+        time_start, time_end
 ) -> dict[str, str | datetime]:
 
     night_shift = False

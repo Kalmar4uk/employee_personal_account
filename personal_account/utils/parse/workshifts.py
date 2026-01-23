@@ -42,8 +42,8 @@ def parse_work_shifts(type_line: str, file: any) -> bool:
                         )
                     try:
                         user = User.objects.get(
-                            last_name=last_name,
-                            first_name=first_name
+                            last_name=last_name.strip(),
+                            first_name=first_name.strip()
                         )
                     except User.DoesNotExist:
                         raise ValueError(
@@ -69,7 +69,8 @@ def parse_work_shifts(type_line: str, file: any) -> bool:
                         continue
                     else:
                         try:
-                            time_start, time_end = time.split(" - ", 1)
+                            time_start, time_end = time.strip().split("-", 1)
+                            print(time.strip())
                         except Exception as e:
                             raise ValueError(
                                 f"При обработке файла возникла ошибка: {e}\n"
@@ -78,9 +79,8 @@ def parse_work_shifts(type_line: str, file: any) -> bool:
                                 f"Ячейка {data[cell]}"
                             )
                         prepare_time = preparation_time(
-                            time=time,
-                            time_start=time_start,
-                            time_end=time_end
+                            time_start=time_start.strip(),
+                            time_end=time_end.strip()
                         )
                         result_for_save.append(
                             WorkShifts(
