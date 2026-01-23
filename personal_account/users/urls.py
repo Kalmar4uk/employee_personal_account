@@ -12,5 +12,6 @@ urlpatterns = [
     path("groups/<int:id>", views.groups_detail, name="groups_detail"),
     path("groups/", views.groups, name="groups"),
     path("auth/login/", views.CustomLoginView.as_view(), name="login"),
-    path("auth/logout/", LogoutView.as_view(), name="logout")
+    path("auth/logout/", LogoutView.as_view(), name="logout"),
+    path("auth/set_password/", views.set_password, name="set_password")
 ]

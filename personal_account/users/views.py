@@ -1,6 +1,3 @@
-# Пока что используется
-# В дальнейшем будет переход на api
-# Доработок/исправлений больше не будет
 import json
 from datetime import datetime
 
@@ -21,6 +18,19 @@ class CustomLoginView(LoginView):
     def get_success_url(self):
         username = self.request.user.username
         return reverse("users:profile", kwargs={"username": username})
+
+
+def set_password(request):
+    if request.POST:
+        username = request.POST.get("username")
+        new_password = request.POST.get("password")
+        user = get_object_or_404(User, username=username)
+        if user.check_password(new_password):
+            pass
+        user.set_password(new_password)
+        user.save()
+        return redirect(reverse("users:login"))
+    return render(request, "registration/set_password.html")
 
 
 @login_required
