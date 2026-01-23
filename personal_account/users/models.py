@@ -31,7 +31,7 @@ class User(AbstractUser):
         if self.is_active is False and not self.username.startswith("not"):
             self.username = f"not_active_{self.username}"
 
-        self.email = f"{self.username}@av.ru"
+        self.email = f"{self.username}@lk.ru"
 
         super().save(*args, **kwargs)
 
