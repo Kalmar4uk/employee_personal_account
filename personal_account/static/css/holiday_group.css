@@ -106,3 +106,10 @@
     border-bottom: 2px solid #f0f7ff;
 }
 
+.holiday_block_groups {
+    background-color: white;
+    border-radius: 30px;
+    margin: 15px;
+    margin-bottom: 25px;
+    box-shadow: 7px 8px 6px rgba(0, 0, 0, 0.05);
+}

@@ -79,7 +79,7 @@
                 </div>
             </div>
         </div>
-    <div class="link-block">
+    <div class="btn-block">
         {% if "from_history" not in request.GET %}
             <a href="{% url 'downtimes:edit_downtime' downtime.id %}" class="detail-btn edit-btn">Редактировать</a>
             <a href="{% url 'downtimes:edit_reminder' downtime.id reminder_downtime %}" class="detail-btn edit-btn">Изменить время напоминания</a>
