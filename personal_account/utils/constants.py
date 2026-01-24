@@ -100,3 +100,5 @@ RMONTHS = {
 }
 
 MONTH_NAME = [value for value in MONTHS.values()]
+
+NAME_CHANNEL_REDIS = "planned_downtime"

@@ -121,6 +121,8 @@ else:
         }
     }
 
+REDIS_URL = os.getenv("REDIS")
+
 AUTH_USER_MODEL = 'users.User'
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -187,6 +189,8 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
 }
+
+
 
 
 sentry_sdk.init(
