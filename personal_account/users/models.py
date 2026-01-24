@@ -41,10 +41,35 @@ class User(AbstractUser):
 
 class GroupJob(models.Model):
     title = models.CharField("Название", max_length=100, unique=True)
+    department_job = models.ForeignKey(
+        "DepartmentJob",
+        null=True,
+        on_delete=models.SET_NULL,
+        verbose_name="Отдел",
+        related_name="group_job"
+    )
 
     class Meta:
         verbose_name = "Рабочая группа"
         verbose_name_plural = "Рабочие группы"
+
+    def __str__(self):
+        return self.title
+
+
+class DepartmentJob(models.Model):
+    title = models.CharField("Название", max_length=250, unique=True)
+    supervisor = models.ForeignKey(
+        User,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="departments_job",
+        verbose_name="Руководитель"
+    )
+
+    class Meta:
+        verbose_name = "Отдел"
+        verbose_name_plural = "Отделы"
 
     def __str__(self):
         return self.title
