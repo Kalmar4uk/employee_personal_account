@@ -2,9 +2,8 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-import sentry_sdk
 from dotenv import load_dotenv
-from sentry_sdk.integrations.django import DjangoIntegration
+from hawk_python_sdk import Hawk
 
 load_dotenv()
 
@@ -15,6 +14,8 @@ SECRET_KEY = os.getenv("SECRET_KEY_DJANGO")
 SECRET_KEY_FOR_REQUEST = os.getenv("SECRET_KEY_FOR_REQUEST")
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
+
+HAWK = Hawk(os.getenv("DSN"))
 
 ALLOWED_HOSTS = [
     'lkav.ru',
@@ -121,6 +122,8 @@ else:
         }
     }
 
+REDIS_URL = os.getenv("REDIS")
+
 AUTH_USER_MODEL = 'users.User'
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -187,11 +190,3 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
 }
-
-
-sentry_sdk.init(
-    dsn=os.getenv("DSN"),
-    integrations=[DjangoIntegration()],
-    auto_session_tracking=False,
-    traces_sample_rate=0
-)

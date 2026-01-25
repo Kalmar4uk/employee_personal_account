@@ -7,6 +7,7 @@ from django.utils import timezone
 
 from downtimes.forms import DowntimeForm, ReminderDowntimeForm
 from downtimes.models import Downtime, ReminderDowntime
+from downtimes.push_downtime import created_send_downtime
 from utils.functions import (check_time_downtime_and_first_reminder,
                              get_workshift_for_downtime)
 
@@ -57,6 +58,8 @@ def create_downtime(request):
                 first_reminder=(downtime.start_downtime - timedelta(hours=5)),
                 second_reminder=(downtime.start_downtime - timedelta(hours=1))
             )
+
+        created_send_downtime(downtine=downtime)
 
         return redirect(reverse("downtimes:downtime"))
 

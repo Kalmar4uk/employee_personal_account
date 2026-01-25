@@ -12,6 +12,7 @@ from users.models import GroupJob, User
 from utils.constants import DATE_FORMAT, MONTHS
 from utils.functions import (GetCurrentDate, days_month,
                              get_holidays_first_and_last_date)
+from django.conf import settings
 
 
 class CustomLoginView(LoginView):
