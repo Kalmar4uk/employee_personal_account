@@ -2,7 +2,6 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-import sentry_sdk
 from dotenv import load_dotenv
 from hawk_python_sdk import Hawk
 
@@ -15,6 +14,8 @@ SECRET_KEY = os.getenv("SECRET_KEY_DJANGO")
 SECRET_KEY_FOR_REQUEST = os.getenv("SECRET_KEY_FOR_REQUEST")
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
+
+HAWK = Hawk(os.getenv("DSN"))
 
 ALLOWED_HOSTS = [
     'lkav.ru',
@@ -189,6 +190,3 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
 }
-
-
-hawk = Hawk(os.getenv("DSN"))
