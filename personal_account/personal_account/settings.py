@@ -4,7 +4,7 @@ from pathlib import Path
 
 import sentry_sdk
 from dotenv import load_dotenv
-from sentry_sdk.integrations.django import DjangoIntegration
+from hawk_python_sdk import Hawk
 
 load_dotenv()
 
@@ -191,11 +191,4 @@ SIMPLE_JWT = {
 }
 
 
-
-
-sentry_sdk.init(
-    dsn=os.getenv("DSN"),
-    integrations=[DjangoIntegration()],
-    auto_session_tracking=False,
-    traces_sample_rate=0
-)
+hawk = Hawk(os.getenv("DSN"))
