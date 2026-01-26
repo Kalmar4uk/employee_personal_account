@@ -1,18 +1,31 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<div class="section">
-    <h2>Отдел технической поддержки</h2>
-
-    <div class="info-blocks">
-        {% for group in groups %}
-        <div class="info-block group-card">
-            <h2>{{ group.title }}</h2>
-            <a href="{% url 'users:groups_detail' group.id %}">
-                <button class="view-schedule-btn">Открыть</button>
-            </a>
+{% for department in departments %}
+    <div class="section">
+        <div class="group-header section">
+            <div class="group-info">
+                <h1>{{ department.title }}</h1>
+                {% if department.supervisor %}
+                <p>
+                    <strong>Руководитель: </strong>
+                    <a href="{% url 'users:profile' department.supervisor.username %}">
+                        <button class="profile-boss-btn">{{ department.supervisor.last_name }} {{ department.supervisor.first_name }}</button>
+                    </a>
+                </p>
+                {% endif %}
+            </div>
         </div>
-        {% endfor %}
+        <div class="info-blocks">
+            {% for group in department.group_job.all %}
+            <div class="info-block group-card">
+                <h2>{{ group.title }}</h2>
+                <a href="{% url 'users:groups_detail' group.id %}">
+                    <button class="view-schedule-btn">Открыть</button>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-</div>
+{% endfor %}
 {% endblock %}

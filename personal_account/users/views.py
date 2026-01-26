@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from users.forms import MySetPassword
-from users.models import GroupJob, User
+from users.models import GroupJob, User, DepartmentJob
 from utils.constants import DATE_FORMAT, MONTHS
 from utils.functions import (GetCurrentDate, days_month,
                              get_holidays_first_and_last_date)
@@ -124,9 +124,9 @@ def employees(request):
 
 @login_required
 def groups(request):
-    groups = GroupJob.objects.all().prefetch_related("users")
+    departments = DepartmentJob.objects.all().prefetch_related("group_job")
     context = {
-        "groups": groups
+        "departments": departments
     }
     return render(request, "groups/groups.html", context)
 

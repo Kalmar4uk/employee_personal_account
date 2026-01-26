@@ -62,6 +62,7 @@ class DepartmentJob(models.Model):
     supervisor = models.ForeignKey(
         User,
         null=True,
+        blank=True,
         on_delete=models.SET_NULL,
         related_name="departments_job",
         verbose_name="Руководитель"

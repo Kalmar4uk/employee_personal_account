@@ -4,7 +4,14 @@
 <div class="group-header section">
     <div class="group-info">
         <h1>{{ group.title }}</h1>
-        <p><strong>Руководитель:</strong> {{ boss.last_name }} {{ boss.first_name }}</p>
+        {% if boss %}
+        <p>
+            <strong>Руководитель:</strong>
+            <a href="{% url 'users:profile' boss.username %}">
+                <button class="profile-boss-btn">{{ boss.last_name }} {{ boss.first_name }}</button>
+            </a>
+        </p>
+        {% endif %}
         <p><strong>Количество сотрудников:</strong> {{ group.users.count }}</p>
     </div>
     <div class="group-stats">
