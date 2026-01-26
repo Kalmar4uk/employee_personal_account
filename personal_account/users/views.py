@@ -7,6 +7,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.core.paginator import Paginator
 
 from users.forms import MySetPassword
 from users.models import GroupJob, User, DepartmentJob
@@ -117,7 +118,11 @@ def employees(request):
         "group_job__title"
     )
 
-    context = {"employees": employees}
+    paginator = Paginator(employees, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {"page_obj": page_obj}
 
     return render(request, "employees/employees.html", context)
 

@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="employees-list">
-            {% for employee in employees %}
+            {% for employee in page_obj %}
                 <div class="employee-card working">
                     <div class="employee-info">
                         <h3>{{ employee.last_name }} {{ employee.first_name }}</h3>
@@ -25,6 +25,47 @@
                 </div>
             {% endfor %}
         </div>
+        {% if page_obj.has_other_pages %}
+        <div class="pagination">
+            <nav>
+                <ul>
+                {% if page_obj.has_previous %}
+                    <li>
+                    <a href="?page=1" title="Первая страница">Первая</a>
+                    </li>
+                {% endif %}
+                
+                {% if page_obj.number|add:"-3" > 1 %}
+                    <li><span class="page-dots">...</span></li>
+                {% endif %}
+                
+                {% for i in page_obj.paginator.page_range %}
+                    {% if page_obj.number == i %}
+                    <li>
+                        <span>{{ i }}</span>
+                    </li>
+                    {% elif i > page_obj.number|add:"-4" and i < page_obj.number|add:"4" %}
+                    <li>
+                        <a href="?page={{ i }}">{{ i }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.number|add:"3" < page_obj.paginator.num_pages %}
+                    <li><span class="page-dots">...</span></li>
+                {% endif %}
+                
+                {% if page_obj.has_next %}
+                    <li>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" title="Последняя страница">
+                        Последняя
+                    </a>
+                    </li>
+                {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
     </div>
 </section>
 <script src="{% static 'js/groups_detail.js' %}"></script>
