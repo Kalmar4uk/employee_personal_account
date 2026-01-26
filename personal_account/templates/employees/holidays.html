@@ -8,28 +8,36 @@
     </svg>
     </a>
 </div>
-    {% regroup holidays by year as year_list %}
-    {% for holiday in year_list %}
-    <div class="section">
-        <h2>{{ holiday.grouper }}</h2>
-        <div class="holiday_block">
-            <table class="schedule-table">
-                <thead>
-                    <tr>
-                        <th>Период</th>
-                        <th>Дней</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for period in holiday.list %}
-                    <tr>
-                        <td>{{ period.first_day|date:"d.m.Y" }} - {{ period.last_day|date:"d.m.Y" }}</td>
-                        <td>{{ period.count }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    {% if holidays %}
+        {% regroup holidays by year as year_list %}
+        {% for holiday in year_list %}
+        <div class="section">
+            <h2>{{ holiday.grouper }}</h2>
+            <div class="holiday_block">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Период</th>
+                            <th>Дней</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for period in holiday.list %}
+                        <tr>
+                            <td>{{ period.first_day|date:"d.m.Y" }} - {{ period.last_day|date:"d.m.Y" }}</td>
+                            <td>{{ period.count }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
         </div>
-    </div>
-    {% endfor %}
+    {% else %}
+        <div class="section">
+            <div class="empty-state">
+                <div class="empty-text">Нет данных о запланированных отпусках</div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
