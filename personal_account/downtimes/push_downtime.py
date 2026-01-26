@@ -1,8 +1,10 @@
 import json
+
 import redis
-from utils.constants import NAME_CHANNEL_REDIS
 from django.conf import settings
+
 from downtimes.models import Downtime
+from utils.constants import NAME_CHANNEL_REDIS
 
 try:
     redis_connect = redis.Redis.from_url(settings.REDIS_URL)
@@ -31,6 +33,11 @@ def created_send_downtime(downtine: Downtime):
             )
         }
 
-        redis_connect.publish(NAME_CHANNEL_REDIS, json.dumps(message))
+        message_pub = redis_connect.publish(
+            NAME_CHANNEL_REDIS, json.dumps(message)
+        )
+        if message_pub:
+            downtine.reminder_downtime.success_reminder = True
+            downtine.save()
     except Exception:
         settings.HAWK.send()

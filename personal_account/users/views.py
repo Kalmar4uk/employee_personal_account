@@ -8,11 +8,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 
+from users.forms import MySetPassword
 from users.models import GroupJob, User
 from utils.constants import DATE_FORMAT, MONTHS
 from utils.functions import (GetCurrentDate, days_month,
                              get_holidays_first_and_last_date)
-from django.conf import settings
 
 
 class CustomLoginView(LoginView):
@@ -22,16 +22,22 @@ class CustomLoginView(LoginView):
 
 
 def set_password(request):
-    if request.POST:
-        username = request.POST.get("username")
-        new_password = request.POST.get("password")
+    form = MySetPassword(request.POST or None)
+
+    if form.is_valid():
+        username = form.cleaned_data.get("username")
+        new_password = form.cleaned_data.get("password")
         user = get_object_or_404(User, username=username)
         if user.check_password(new_password):
-            pass
+            return redirect(reverse("users:login"))
         user.set_password(new_password)
         user.save()
         return redirect(reverse("users:login"))
-    return render(request, "registration/set_password.html")
+    return render(
+        request,
+        "registration/set_password.html",
+        context={"form": form}
+    )
 
 
 @login_required
