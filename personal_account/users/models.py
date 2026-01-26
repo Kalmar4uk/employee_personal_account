@@ -52,6 +52,7 @@ class GroupJob(models.Model):
     class Meta:
         verbose_name = "Рабочая группа"
         verbose_name_plural = "Рабочие группы"
+        ordering = ("id",)
 
     def __str__(self):
         return self.title

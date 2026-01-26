@@ -40,7 +40,7 @@
     </div>
 </div>
 
-<div class="employees-list">
+{% if count_work %}
     <div class="section">
         <div class="employees-list">
             <h2>Работают</h2>
@@ -74,7 +74,9 @@
             {% endfor %}
         </div>
     </div>
-    </div>
+{% endif %}
+
+{% if count_not_works %}
     <div class="section">
         <div class="employees-list">
             <h2>Не работают</h2>
@@ -99,6 +101,6 @@
             {% endfor %}
         </div>
     </div>
-</div>
+{% endif %}
 <script src="{% static 'js/groups_detail.js' %}"></script>
 {% endblock %}

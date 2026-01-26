@@ -178,10 +178,14 @@ def groups_detail(request, id):
                 }
             )
             count_work += 1
+
+    count_not_work = employees.count() - count_work
+
     context = {
         "group": group,
         "work_employees": work_employees,
         "count_work": count_work,
+        "count_not_works": count_not_work,
         "boss": boss
     }
     return render(request, "groups/groups_detail.html", context)
