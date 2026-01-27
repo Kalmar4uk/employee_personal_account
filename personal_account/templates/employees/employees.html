@@ -29,14 +29,19 @@
         <div class="pagination">
             <nav>
                 <ul>
+
                 {% if page_obj.has_previous %}
                     <li>
-                    <a href="?page=1" title="Первая страница">Первая</a>
+                        <a href="?page={{ page_obj.previous_page_number }}" class="pagination-arrow" title="Предыдущая страница">
+                            ←
+                        </a>
                     </li>
-                {% endif %}
-                
-                {% if page_obj.number > 2 %}
-                    <li><span class="page-dots">...</span></li>
+                {% else %}
+                    <li>
+                        <a href="#" class="pagination-arrow" title="Предыдущая страница" disabled>
+                            ←
+                        </a>
+                    </li>
                 {% endif %}
                 
                 {% for i in page_obj.paginator.page_range %}
@@ -50,16 +55,18 @@
                     </li>
                     {% endif %}
                 {% endfor %}
-                
-                {% if page_obj.number < page_obj.paginator.num_pages|add:"-1" %}
-                    <li><span class="page-dots">...</span></li>
-                {% endif %}
-                
+
                 {% if page_obj.has_next %}
                     <li>
-                    <a href="?page={{ page_obj.paginator.num_pages }}" title="Последняя страница">
-                        Последняя
-                    </a>
+                        <a href="?page={{ page_obj.next_page_number }}" class="pagination-arrow" title="Следующая страница">
+                            →
+                        </a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="#" class="pagination-arrow" title="Следующая страница" disabled>
+                            →
+                        </a>
                     </li>
                 {% endif %}
                 </ul>
