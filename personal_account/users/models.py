@@ -33,6 +33,15 @@ class User(AbstractUser):
 
         self.email = f"{self.username}@lk.ru"
 
+        if self.id:
+            self.personnel_number = self.id
+        else:
+            self.personnel_number = (
+                User.objects.aggregate(
+                    models.Max("id")
+                    )["id__max"] + 1
+            )
+
         super().save(*args, **kwargs)
 
     def __str__(self):

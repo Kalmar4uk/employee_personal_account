@@ -39,8 +39,10 @@ class MyUserAdmin(MyDjangoQLSearchMixin, UserAdmin):
     inlines = [WorkShiftsInline]
     search_fields = ("username", "email", "first_name", "last_name")
     list_display = (
+        "id",
         "username",
         "email",
+        "personnel_number",
         "first_name",
         "last_name",
         "filter_job_group",
@@ -94,7 +96,6 @@ class MyUserAdmin(MyDjangoQLSearchMixin, UserAdmin):
             _("Сотрудник"),
             {
                 "fields": (
-                    "personnel_number",
                     "job_title",
                     "group_job"
                 )
