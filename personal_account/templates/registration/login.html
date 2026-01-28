@@ -1,234 +1,71 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход в личный кабинет</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: #f5f5f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: #333;
-        }
-        
-        .login-container {
-            background-color: white;
-            border-radius: 50px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            padding: 30px;
-        }
-        
-        .login-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .login-header h1 {
-            color: #2c3e50;
-            font-weight: 500;
-            margin-bottom: 10px;
-        }
-        
-        .login-header p {
-            color: #7f8c8d;
-            font-size: 14px;
-        }
-        
-        .login-form {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #2c3e50;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 30px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-        
-        .form-control:focus {
-            border-color: #3498db;
-            outline: none;
-        }
-        
-        .errorlist {
-            list-style: none;
-            color: #e74c3c;
-            font-size: 13px;
-            margin-top: 5px;
-        }
-        
-        .btn {
-            padding: 12px 15px;
-            border: none;
-            border-radius: 30px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .btn-primary {
-            background-color: #3498db;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background-color: #2980b9;
-        }
-        
-        .login-footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #7f8c8d;
-        }
-        
-        .messages {
-            margin-bottom: 20px;
-        }
-        
-        .alert {
-            padding: 10px 15px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-        }
-        
-        .alert-error {
-            background-color: #ffebee;
-            color: #c62828;
-            border: 1px solid #ef9a9a;
-        }
-        
-        .alert-success {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            border: 1px solid #a5d6a7;
-        }
+{% extends "registration/base_registration.html" %}
+{% block title %}Вход в личный кабинет{% endblock %}
+{% block content %}
+<div class="login-container">
+    <div class="login-header">
+        <h1>Личный кабинет</h1>
+        <p>Введите ваши учетные данные для входа</p>
+    </div>
 
-        .compact-btn {
-            padding: 10px 20px;
-            background-color: #2c3e50;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: inherit;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-        .set_password {
-            padding: 10px;
-        }
-        
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 20px;
-                margin: 0 15px;
-            }
-            .compact-btn {
-                flex-direction: column;
-                align-items: stretch;
-                flex-grow: 1;
-                text-align: center;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="login-container">
-        <div class="login-header">
-            <h1>Личный кабинет</h1>
-            <p>Введите ваши учетные данные для входа</p>
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
         </div>
+        {% endfor %}
+    </div>
+    {% endif %}
 
-        {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                {{ message }}
-            </div>
-            {% endfor %}
+    <form method="post" action="{% url 'users:login' %}" class="login-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_username">Логин</label>
+            <input type="text" name="username" id="id_username" class="form-control" 
+                    placeholder="Введите имя пользователя" required autofocus
+                    value="{{ form.username.value|default:'' }}">
+            {% if form.username.errors %}
+            <ul class="errorlist">
+                {% for error in form.username.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_password">Пароль</label>
+            <input type="password" name="password" id="id_password" class="form-control" 
+                    placeholder="Введите пароль" required>
+            {% if form.password.errors %}
+            <ul class="errorlist">
+                {% for error in form.password.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        
+        {% if form.non_field_errors %}
+        <div class="form-group">
+            <ul class="errorlist">
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                <br>
+                <p>Авторизация была изменена, теперь требуется имя пользователя вместо email</p>
+                {% endfor %}
+            </ul>
         </div>
         {% endif %}
-
-        <form method="post" action="{% url 'users:login' %}" class="login-form">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="id_username">Логин</label>
-                <input type="text" name="username" id="id_username" class="form-control" 
-                       placeholder="Введите имя пользователя" required autofocus
-                       value="{{ form.username.value|default:'' }}">
-                {% if form.username.errors %}
-                <ul class="errorlist">
-                    {% for error in form.username.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <label for="id_password">Пароль</label>
-                <input type="password" name="password" id="id_password" class="form-control" 
-                       placeholder="Введите пароль" required>
-                {% if form.password.errors %}
-                <ul class="errorlist">
-                    {% for error in form.password.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            </div>
-            
-            {% if form.non_field_errors %}
-            <div class="form-group">
-                <ul class="errorlist">
-                    {% for error in form.non_field_errors %}
-                    <li>{{ error }}</li>
-                    <br>
-                    <p>Авторизация была изменена, теперь требуется имя пользователя вместо email</p>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
-            
-            <input type="hidden" name="next" value="{{ next }}">
-            
-            <button type="submit" class="btn btn-primary">Войти</button>
-            <a href="{% url 'users:set_password' %}" class="set_password">Сбросить пароль</a>
-        </form>
         
-        <div class="login-footer">
-            <p>© 2026 LK.</p>
-        </div>
+        <input type="hidden" name="next" value="{{ next }}">
+        
+        <button type="submit" class="btn btn-primary">Войти</button>
+        <a href="{% url 'users:set_password' %}" class="set_password">Сбросить пароль</a>
+    </form>
+    
+    <div class="login-footer">
+        <p>© LK 2026</p>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
