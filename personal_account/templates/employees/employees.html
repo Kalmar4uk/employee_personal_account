@@ -25,54 +25,7 @@
                 </div>
             {% endfor %}
         </div>
-        {% if page_obj.has_other_pages %}
-        <div class="pagination">
-            <nav>
-                <ul>
-
-                {% if page_obj.has_previous %}
-                    <li>
-                        <a href="?page={{ page_obj.previous_page_number }}" class="pagination-arrow" title="Предыдущая страница">
-                            ←
-                        </a>
-                    </li>
-                {% else %}
-                    <li>
-                        <a href="#" class="pagination-arrow" title="Предыдущая страница" disabled>
-                            ←
-                        </a>
-                    </li>
-                {% endif %}
-                
-                {% for i in page_obj.paginator.page_range %}
-                    {% if page_obj.number == i %}
-                    <li>
-                        <span>{{ i }}</span>
-                    </li>
-                    {% elif i >= page_obj.number|add:"-1" and i <= page_obj.number|add:"1" %}
-                    <li>
-                        <a href="?page={{ i }}">{{ i }}</a>
-                    </li>
-                    {% endif %}
-                {% endfor %}
-
-                {% if page_obj.has_next %}
-                    <li>
-                        <a href="?page={{ page_obj.next_page_number }}" class="pagination-arrow" title="Следующая страница">
-                            →
-                        </a>
-                    </li>
-                {% else %}
-                    <li>
-                        <a href="#" class="pagination-arrow" title="Следующая страница" disabled>
-                            →
-                        </a>
-                    </li>
-                {% endif %}
-                </ul>
-            </nav>
-        </div>
-        {% endif %}
+        {% include "pagination.html" %}
     </div>
 </section>
 <script src="{% static 'js/groups_detail.js' %}"></script>

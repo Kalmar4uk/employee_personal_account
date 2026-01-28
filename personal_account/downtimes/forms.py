@@ -35,6 +35,9 @@ class DowntimeForm(forms.ModelForm):
             "end_downtime": forms.DateTimeInput(
                 format='%Y-%m-%d %H:%M',
                 attrs={'type': 'datetime-local'}
+            ),
+            "description": forms.Textarea(
+                attrs={"row": 5, "col": 20}
             )
         }
 

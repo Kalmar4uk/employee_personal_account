@@ -10,7 +10,7 @@
     </div>
 
     <div class="downtimes-list">
-        {% for downtime in downtimes %}
+        {% for downtime in page_obj %}
         <div class="downtime-card">
             <div class="downtime-info">
                 <div class="downtime-service">
@@ -37,10 +37,11 @@
         </div>
         {% endfor %}
     </div>
-    <div class="button-end-container">
-        <a href="{% url 'downtimes:history_downtime' %}" class="add-btn">
-            Проведенные работы
-        </a>
-    </div>
+    {% include "pagination.html" %}
+</div>
+<div class="button-end-container">
+    <a href="{% url 'downtimes:history_downtime' %}" class="add-btn">
+        Проведенные работы
+    </a>
 </div>
 {% endblock %}

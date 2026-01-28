@@ -159,7 +159,7 @@
     flex-direction: column;
 }
 
-.form-group {
+.form-group-downtime {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -243,9 +243,9 @@
     padding: 0;
 }
 
-.form-group.has-error .form-input,
-.form-group.has-error .form-select,
-.form-group.has-error .form-textarea {
+.form-group-downtime.has-error .form-input,
+.form-group-downtime.has-error .form-select,
+.form-group-downtime.has-error .form-textarea {
     border-color: #e74c3c;
 }
 

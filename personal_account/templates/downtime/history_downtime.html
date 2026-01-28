@@ -9,10 +9,12 @@
     </a>
 </div>
 <div class="section">
-    <h2>Проведенные работы</h2>
+    <div class="downtimes-header">
+        <h1 class="downtimes-title">Проведенные работы</h1>
+    </div>
 
     <div class="downtimes-list">
-        {% for downtime in downtimes %}
+        {% for downtime in page_obj %}
         <div class="downtime-history-card">
             <div class="downtime-info">
                 <div class="downtime-service">
@@ -33,16 +35,8 @@
                 </a>
             </div>
         </div>
-        {% empty %}
-        <div class="empty-state">
-            <div class="empty-icon">⏰</div>
-            <div class="empty-text">Нет записей о downtimes</div>
-            <a href="{% url 'downtimes:added_downtime' %}" class="add-btn">
-                <span>+</span>
-                Добавить первый downtime
-            </a>
-        </div>
         {% endfor %}
     </div>
+    {% include "pagination.html" %}
 </div>
 {% endblock %}

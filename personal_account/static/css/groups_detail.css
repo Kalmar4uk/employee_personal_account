@@ -241,7 +241,7 @@
 /* Стили для сворачиваемых секций сотрудников */
 .section details {
     background-color: white;
-    border-radius: 12px;
+    border-radius: 30px;
     border: 1px solid #e0e6ed;
     margin-bottom: 15px;
     overflow: hidden;
@@ -389,4 +389,10 @@
 .control-btn:hover {
     background-color: #3498db;
     color: white;
+}
+
+@media (max-width: 768px) {
+    .control-btn {
+        width: 100%;
+    }
 }

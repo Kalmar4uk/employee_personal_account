@@ -24,7 +24,7 @@ class Downtime(models.Model):
         verbose_name="Сотрудник от ГСМАиЦП"
     )
     link_task = models.URLField("Ссылка на задачу", max_length=150)
-    description = models.TextField("Описание")
+    description = models.CharField("Описание", max_length=500)
     author = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,

@@ -2,8 +2,8 @@
 {% load static %}
 {% block content %}
 {% for department in departments %}
-    <div class="section">
-        <div class="group-header section">
+    <div class="section-department">
+        <div class="group-header">
             <div class="group-info">
                 <h1>{{ department.title }}</h1>
                 {% if department.supervisor %}
@@ -16,16 +16,21 @@
                 {% endif %}
             </div>
         </div>
-        <div class="info-blocks">
-            {% for group in department.group_job.all %}
-            <div class="info-block group-card">
-                <h2>{{ group.title }}</h2>
-                <a href="{% url 'users:groups_detail' group.id %}">
-                    <button class="view-schedule-btn">Открыть</button>
-                </a>
-            </div>
-            {% endfor %}
-        </div>
+        {% if department.group_job.all.count %}
+            <details>
+                <summary>Группы</summary>
+                <div class="info-blocks">
+                    {% for group in department.group_job.all %}
+                    <div class="info-block group-card">
+                        <h2>{{ group.title }}</h2>
+                        <a href="{% url 'users:groups_detail' group.id %}">
+                            <button class="view-schedule-btn">Открыть</button>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </details>
+        {% endif %}
     </div>
 {% endfor %}
 {% endblock %}
