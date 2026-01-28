@@ -9,10 +9,9 @@
 .section-department details {
     background-color: white;
     border-radius: 30px;
-    border: 1px solid #e0e6ed;
     margin: 10px 0px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 7px 8px 6px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
 }
 
@@ -36,7 +35,7 @@
     cursor: pointer;
     list-style: none;
     position: relative;
-    background-color: #f8f9fa;
+    background-color: white;
     transition: background-color 0.3s ease;
     user-select: none;
 }
@@ -67,7 +66,6 @@
 /* Контент внутри details */
 .section-department details > div {
     padding: 20px;
-    border-top: 1px solid #f0f0f0;
     animation: slideDown 0.3s ease;
 }
 
