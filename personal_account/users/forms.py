@@ -10,6 +10,6 @@ class MySetPassword(forms.Form):
 
     def clean_username(self):
         data = self.cleaned_data["username"]
-        if not User.objects.filter(username=data).exists():
+        if not User.objects.filter(username=data).exists() or data == "admin":
             raise ValidationError("Неверно введен логин")
         return data

@@ -6,7 +6,7 @@ app_name = "lk"
 
 urlpatterns = [
     path(
-        "holidays/<slug:username>/",
+        "holidays/<int:id>/",
         views.holidays_employee,
         name="holiday_user"
     ),

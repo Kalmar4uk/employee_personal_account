@@ -1,19 +1,11 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Страница не найдена - Личный кабинет</title>
-    <link rel="stylesheet" href="{% static 'css/errors.css' %}">
-</head>
-<body>
-    <div class="error-container">
-        <div class="error-content error-404">
-            <h1 class="error-code">404</h1>
-            <h2 class="error-title">Страница не найдена</h2>
-            <p class="error-message">Запрашиваемая страница не существует или была перемещена.</p>
-        </div>
+{% block content %}
+<div class="error-container">
+    <div class="error-content error-404">
+        <h1 class="error-code">404</h1>
+        <h2 class="error-title">Страница не найдена</h2>
+        <p class="error-message">Запрашиваемая страница не существует или была перемещена.</p>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

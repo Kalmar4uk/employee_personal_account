@@ -7,7 +7,7 @@
         {% if boss %}
         <p>
             <strong>Руководитель:</strong>
-            <a href="{% url 'users:profile' boss.username %}">
+            <a href="{% url 'users:profile' boss.id %}">
                 <button class="profile-boss-btn">{{ boss.last_name }} {{ boss.first_name }}</button>
             </a>
         </p>
@@ -65,7 +65,7 @@
                             {% endfor %}
                         </div>
                         <div class="employee-actions">
-                            <a href="{% url 'users:profile' employee.employee.username %}">
+                            <a href="{% url 'users:profile' employee.employee.id %}">
                                 <button class="profile-btn">Профиль</button>
                             </a>
                         </div>
@@ -92,7 +92,7 @@
                             <p>{% if employee.cause == "holiday" %}Причина: Отпуск{% else %}Причина: Выходной{% endif %}</p>
                         </div>
                         <div class="employee-actions">
-                            <a href="{% url 'users:profile' employee.employee.username %}">
+                            <a href="{% url 'users:profile' employee.employee.id %}">
                                 <button class="profile-btn">Профиль</button>
                             </a>
                         </div>

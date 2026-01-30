@@ -1,22 +1,12 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{% static 'favicon.ico' %}" type="image">
-    <title>Личный кабинет сотрудника</title>
-    <link rel="stylesheet" href="{% static 'css/errors.css' %}">
-    <link rel="stylesheet" href="{% static 'css/downtime.css' %}">
-</head>
-<body>
-    <div class="error-container">
-        <div class="error-content error-404">
-            <h2 class="error-title">Плановая работа сохранена со стандартными значениями напоминания</h2>
-            <p class="error-message">Время напоминания можно изменить в карточке плановой работы</p>
-            <a href="{% url 'downtimes:downtime_detail' downtime.id %}" class="detail-btn edit-btn">Изменить плановую работу</a>
-            <a href="{% url 'downtimes:downtime' %}" class="detail-btn edit-btn">Плановые работы</a>
-        </div>
+{% block content %}
+<div class="error-container">
+    <div class="error-content error-404">
+        <h2 class="error-title">Плановая работа сохранена со стандартными значениями напоминания</h2>
+        <p class="error-message">Время напоминания можно изменить в карточке плановой работы</p>
+        <a href="{% url 'downtimes:downtime_detail' downtime.id %}" class="detail-btn edit-btn">Изменить плановую работу</a>
+        <a href="{% url 'downtimes:downtime' %}" class="detail-btn edit-btn">Плановые работы</a>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

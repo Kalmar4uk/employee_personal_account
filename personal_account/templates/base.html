@@ -18,11 +18,12 @@
     <link rel="stylesheet" href="{% static 'css/generate.css' %}">
     <link rel="stylesheet" href="{% static 'css/pagination.css' %}">
     <link rel="stylesheet" href="{% static 'css/departments.css' %}">
+    <link rel="stylesheet" href="{% static 'css/errors.css' %}">
 </head>
 <body>
     <aside class="sidebar">
         <div class="logo">
-            <a href="{% url 'users:profile' user.username %}">{{ user.last_name }} {{ user.first_name }}</a>
+            <a href="{% url 'users:profile' user.id %}">{{ user.last_name }} {{ user.first_name }}</a>
             <form action="{% url 'users:logout' %}" method="post" class="logout-form">
                 {% csrf_token %}
                 <button type="submit" class="logout-btn" title="Выйти" aria-label="Выйти из системы">

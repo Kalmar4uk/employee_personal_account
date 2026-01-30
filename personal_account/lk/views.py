@@ -8,8 +8,8 @@ from utils.parse import holiday, workshifts
 
 
 @login_required
-def holidays_employee(request, username):
-    user = get_object_or_404(User, username=username)
+def holidays_employee(request, id):
+    user = get_object_or_404(User, id=id)
     holidays = get_holidays_first_and_last_date(user, all=True)
 
     return render(

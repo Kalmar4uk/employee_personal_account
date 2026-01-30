@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.core.paginator import Paginator
+from django.http import Http404
 
 from users.forms import MySetPassword
 from users.models import GroupJob, User, DepartmentJob
@@ -18,8 +19,8 @@ from utils.functions import (GetCurrentDate, days_month,
 
 class CustomLoginView(LoginView):
     def get_success_url(self):
-        username = self.request.user.username
-        return reverse("users:profile", kwargs={"username": username})
+        id = self.request.user.id
+        return reverse("users:profile", kwargs={"id": id})
 
 
 def set_password(request):
@@ -43,13 +44,13 @@ def set_password(request):
 
 @login_required
 def main(request):
-    username = request.user.username
-    return redirect(reverse("users:profile", kwargs={"username": username}))
+    id = request.user.id
+    return redirect(reverse("users:profile", kwargs={"id": id}))
 
 
 @login_required
-def profile(request, username):
-    employee = get_object_or_404(User, username=username)
+def profile(request, id):
+    employee = get_object_or_404(User, id=id, is_active=True)
     group = employee.group_job.filter().first()
 
     try:
@@ -111,6 +112,7 @@ def employees(request):
         "last_name",
         "first_name"
     ).values(
+        "id",
         "username",
         "first_name",
         "last_name",
@@ -138,7 +140,7 @@ def groups(request):
 
 @login_required
 def groups_detail(request, id):
-    group = GroupJob.objects.get(id=id)
+    group = get_object_or_404(GroupJob, id=id)
     employees = group.users.filter(
         is_active=True
     ).order_by("last_name", "first_name")

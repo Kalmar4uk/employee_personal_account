@@ -9,7 +9,7 @@
                 {% if department.supervisor %}
                 <p>
                     <strong>Руководитель: </strong>
-                    <a href="{% url 'users:profile' department.supervisor.username %}">
+                    <a href="{% url 'users:profile' department.supervisor.id %}">
                         <button class="profile-boss-btn">{{ department.supervisor.last_name }} {{ department.supervisor.first_name }}</button>
                     </a>
                 </p>

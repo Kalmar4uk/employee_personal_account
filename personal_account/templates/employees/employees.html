@@ -18,7 +18,7 @@
                         {% if employee.group_job__title %}<p>{{ employee.group_job__title }}</p>{% endif %}
                     </div>
                     <div class="employee-actions">
-                        <a href="{% url 'users:profile' employee.username %}">
+                        <a href="{% url 'users:profile' employee.id %}">
                             <button class="profile-btn">Профиль</button>
                         </a>
                     </div>
