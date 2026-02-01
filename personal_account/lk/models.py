@@ -1,7 +1,7 @@
 from django.db import models
 
 from users.models import User
-from utils.constants import (CHOICES_STATUS_HOLIDAY, CHOICES_TYPE_HOLIDAY)
+from utils.constants import CHOICES_STATUS_HOLIDAY, CHOICES_TYPE_HOLIDAY
 
 
 class AbstractWorkShifts(models.Model):

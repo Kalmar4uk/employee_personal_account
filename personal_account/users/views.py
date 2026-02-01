@@ -3,14 +3,14 @@ from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
+from django.core.paginator import Paginator
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
-from django.core.paginator import Paginator
 
 from users.forms import MySetPassword
-from users.models import GroupJob, User, DepartmentJob
+from users.models import DepartmentJob, GroupJob, User
 from utils.constants import DATE_FORMAT, MONTHS
 from utils.functions import (GetCurrentDate, days_month,
                              get_holidays_first_and_last_date)

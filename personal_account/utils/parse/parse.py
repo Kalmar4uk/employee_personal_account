@@ -4,7 +4,7 @@ from django.utils import timezone
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils.exceptions import InvalidFileException
 
-from utils.constants import MONTHS, TIME_FORMAT, TYPE_SHIFTS
+from utils.constants import MONTHS, TIME_FORMAT
 
 
 def open_wb(file: any, holiday_gsma: bool | None = None) -> Workbook:

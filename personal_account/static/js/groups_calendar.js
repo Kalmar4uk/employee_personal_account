@@ -116,15 +116,8 @@ function createWeekBlock(weekDays, weekIndex) {
     const weekBlock = document.createElement('div');
     weekBlock.className = 'week-block';
     
-    // Заголовок недели
-    const weekHeader = document.createElement('div');
-    weekHeader.className = 'week-header';
-    
     const firstDate = weekDays[0];
     const lastDate = weekDays[6];
-    
-    weekHeader.textContent = `Неделя ${weekIndex + 1}: ${formatDateDisplay(firstDate)} - ${formatDateDisplay(lastDate)}`;
-    weekBlock.appendChild(weekHeader);
     
     // Таблица недели
     const table = createWeekTable(weekDays);
