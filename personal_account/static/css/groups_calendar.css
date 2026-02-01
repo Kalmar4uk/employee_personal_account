@@ -181,22 +181,17 @@
 /* Цвета для разных типов смен */
 .shift-day {
     border-left-color: #43a047;
+    background-color: #e8f5e9;
 }
 
 .shift-night {
-    border-left-color: #2196f3;
+    border-left-color: #000000;
+    background-color: #d1d1d1;
 }
 
 .shift-vacation {
-    border-left-color: #ff9800;
-}
-
-.shift-sick {
-    border-left-color: #9c27b0;
-}
-
-.shift-off {
-    border-left-color: #e53935;
+    border-left-color: #1e88e5;
+    background-color: #d6e8fa;
 }
 
 /* ОСНОВНАЯ ОПТИМИЗАЦИЯ - УМЕНЬШАЕМ ТАБЛИЦУ ДЛЯ ПОЛНОЙ НЕДЕЛИ */

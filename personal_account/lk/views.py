@@ -19,7 +19,7 @@ def holidays_employee(request, id):
 
 @login_required
 def holidays_employees_in_group(request, id):
-    employees = User.objects.filter(group_job=id)
+    employees = User.objects.filter(group_job=id, is_active=True)
     result = []
 
     for employee in employees:

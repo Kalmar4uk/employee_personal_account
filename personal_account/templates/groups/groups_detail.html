@@ -9,7 +9,7 @@
             <strong>Руководитель:</strong> {{ boss.last_name }} {{ boss.first_name }}
         </p>
         {% endif %}
-        <p><strong>Количество сотрудников:</strong> {{ group.users.count }}</p>
+        <p><strong>Количество сотрудников:</strong> {{ employees.count }}</p>
         <p>
             <strong>График смен на месяц:</strong>
             <a href="{% url 'users:group_shifts' request.resolver_match.kwargs.id %}">

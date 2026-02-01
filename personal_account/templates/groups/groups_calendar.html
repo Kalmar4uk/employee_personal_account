@@ -37,6 +37,21 @@
             <a href="{% url 'users:group_shifts' request.resolver_match.kwargs.id %}" class="compact-btn">Сбросить</a>
         </form>
     </div>
+
+    <div class="calendar-legend">
+        <div class="legend-item legend-day-shift">
+            <div class="legend-color"></div>
+            <span>Дневная смена</span>
+        </div>
+        <div class="legend-item legend-night-shift">
+            <div class="legend-color"></div>
+            <span>Ночная смена</span>
+        </div>
+        <div class="legend-item legend-vacation">
+            <div class="legend-color"></div>
+            <span>Отпуск</span>
+        </div>
+    </div>
     
     <!-- Контейнер для недель -->
     <div class="weeks-container" id="weeks-container">

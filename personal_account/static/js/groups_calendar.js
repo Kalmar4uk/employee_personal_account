@@ -184,7 +184,7 @@ function createDayCell(day, dateString) {
     
     if (day.getMonth() !== currentMonth) {
         // Дни другого месяца - прочерк
-        cell.innerHTML = '<div class="empty-day">-</div>';
+        cell.innerHTML = '<div class="empty-day"></div>';
     } else {
         // Получаем всех сотрудников, работающих в этот день
         const employeesInDay = getEmployeesForDay(dateString);
@@ -210,7 +210,7 @@ function createDayCell(day, dateString) {
             cell.appendChild(dayEmployees);
         } else {
             // Нет сотрудников в этот день - прочерк
-            cell.innerHTML = '<div class="empty-day">-</div>';
+            cell.innerHTML = '<div class="empty-day"></div>';
         }
     }
     
@@ -228,18 +228,21 @@ function getEmployeesForDay(dateString) {
 function createEmployeeCard(employee, dateString) {
     const schedule = employee.schedule[dateString];
     
-    // Определяем тип смены по времени
+    // Определяем тип смены
     const shiftType = getShiftTypeFromTime(schedule.type_shift);
     
     const card = document.createElement('div');
     card.className = `employee-card-calendar shift-${shiftType}`;
-    card.title = `${employee.name} - ${employee.position}\n${schedule.time}`;
+    card.title = `${employee.name} - ${schedule.type_shift}\n${schedule.time}`;
     
     // Время смены
-    const timeElement = document.createElement('div');
-    timeElement.className = 'employee-time';
-    timeElement.textContent = schedule.time;
-    
+    if (schedule.time) {
+        const timeElement = document.createElement('div');
+        timeElement.className = 'employee-time';
+        timeElement.textContent = schedule.time;
+        card.appendChild(timeElement);
+    };
+
     // Информация о сотруднике
     const infoElement = document.createElement('div');
     infoElement.className = 'employee-info-calendar';
@@ -270,8 +273,7 @@ function createEmployeeCard(employee, dateString) {
     
     infoElement.appendChild(initialsElement);
     infoElement.appendChild(detailsElement);
-    
-    card.appendChild(timeElement);
+
     card.appendChild(infoElement);
     
     return card;
@@ -283,7 +285,7 @@ function getShiftTypeFromTime(type_shift) {
     
     if (type_shift.includes('Ночное дежурство')) {
         return 'night';
-    } else if (type_shift.toLowerCase().includes('Отпуск')) {
+    } else if (type_shift.includes('Отпуск')) {
         return 'vacation';
     } else {
         return 'day';

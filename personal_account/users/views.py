@@ -11,7 +11,7 @@ from django.utils import timezone
 
 from users.forms import MySetPassword
 from users.models import DepartmentJob, GroupJob, User
-from utils.constants import DATE_FORMAT, MONTHS
+from utils.constants import DATE_FORMAT, MONTHS, CURRENT_DATE
 from utils.functions import (GetCurrentDate, days_month,
                              get_holidays_first_and_last_date)
 
@@ -143,6 +143,7 @@ def groups_detail(request, id):
     employees = group.users.filter(
         is_active=True
     ).order_by("last_name", "first_name")
+
     try:
         date = request.GET.get("date", GetCurrentDate.current_date())
         if isinstance(date, str):
@@ -189,6 +190,7 @@ def groups_detail(request, id):
 
     context = {
         "group": group,
+        "employees": employees,
         "work_employees": work_employees,
         "count_work": count_work,
         "count_not_works": count_not_work,
@@ -223,7 +225,10 @@ def group_calendar(request, id):
                 work = employee.workshifts.filter(date_start=date).first()
                 holiday = employee.holidays.filter(date=date).first()
                 date_format = date.strftime("%Y-%m-%d")
+                not_active = not employee.is_active
                 if work:
+                    if not_active and work.date_start > CURRENT_DATE:
+                        continue
                     schedule[date_format] = {
                         "time": (
                             f"{work.time_start.strftime('%H:%M')} - "
@@ -232,6 +237,8 @@ def group_calendar(request, id):
                         "type_shift": work.type
                     }
                 elif holiday:
+                    if not_active and holiday.date > CURRENT_DATE:
+                        continue
                     schedule[date_format] = {
                         "time": "",
                         "type_shift": "Отпуск"
