@@ -4,11 +4,6 @@ CURRENT_MONTH = timezone.now().month
 CURRENT_YEAR = timezone.now().year
 CURRENT_DATE = timezone.now().date()
 
-CHOICES_TYPE_WORK_SHIFT = (
-    ("Сменный", "Сменный"),
-    ("5/2", "5/2")
-)
-
 CHOICES_STATUS_HOLIDAY = (
     ("Запланирован", "Запланирован"),
     ("Завершен", "Завершен"),
@@ -41,15 +36,18 @@ LINE_JOB = {
 COLUMN_FOR_GSMA = [26, 33]
 TIME_SHIFT_FOR_GSMA = 24
 HOLIDAY_FOR_GSMA = 23
+TYPE_SHIFT_FOR_GSMA = 23
 
 COLUMN_FOR_FL = [4, 11]
 TIME_SHIFT_DAY_FOR_FL = 2
 TIME_SHIFT_FOR_NIGHT_FL = 3
 HOLIDAY_FOR_FL = 1
+TYPE_SHIFT_FOR_FL = 1
 
 COLUMN_FOR_SL = [15, 22]
 TIME_SHIFT_FOR_SL = 13
 HOLIDAY_FOR_SL = 12
+TYPE_SHIFT_FOR_SL = 12
 
 COLUMN_FOR_LINE = {
     "first": COLUMN_FOR_FL,
@@ -67,6 +65,12 @@ HOLIDAY_FOR_LINE = {
     "first": HOLIDAY_FOR_FL,
     "second": HOLIDAY_FOR_SL,
     "gsma": HOLIDAY_FOR_GSMA
+}
+
+TYPE_SHIFT_FOR_LINE = {
+    "first": TYPE_SHIFT_FOR_FL,
+    "second": TYPE_SHIFT_FOR_SL,
+    "gsma": TYPE_SHIFT_FOR_GSMA
 }
 
 MONTHS = {

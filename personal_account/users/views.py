@@ -8,7 +8,6 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.core.paginator import Paginator
-from django.http import Http404
 
 from users.forms import MySetPassword
 from users.models import GroupJob, User, DepartmentJob
@@ -196,3 +195,58 @@ def groups_detail(request, id):
         "boss": boss
     }
     return render(request, "groups/groups_detail.html", context)
+
+
+@login_required
+def group_calendar(request, id):
+
+    try:
+        month = int(request.GET.get("month", GetCurrentDate.current_month()))
+    except ValueError:
+        month = GetCurrentDate.current_month()
+
+    try:
+        year = int(request.GET.get("year", GetCurrentDate.current_year()))
+    except ValueError:
+        year = GetCurrentDate.current_year()
+
+    dates = days_month(month=month, year=year)
+
+    group = GroupJob.objects.filter(id=id).prefetch_related("users")
+
+    result = []
+
+    for employees in group:
+        for employee in employees.users.all():
+            schedule = {}
+            for date in dates:
+                work = employee.workshifts.filter(date_start=date).first()
+                holiday = employee.holidays.filter(date=date).first()
+                date_format = date.strftime("%Y-%m-%d")
+                if work:
+                    schedule[date_format] = {
+                        "time": (
+                            f"{work.time_start.strftime('%H:%M')} - "
+                            f"{work.time_end.strftime('%H:%M')}"
+                        ),
+                        "type_shift": work.type
+                    }
+                elif holiday:
+                    schedule[date_format] = {
+                        "time": "",
+                        "type_shift": "Отпуск"
+                    }
+            user = {
+                "id": employee.id,
+                "name": f"{employee.last_name} {employee.first_name}",
+                "initials": f"{employee.last_name[0]}{employee.first_name[0]}",
+                "schedule": schedule
+            }
+            result.append(user)
+
+    context = {
+        "month_data": MONTHS.get(month),
+        "year_data": year,
+        "schedule": json.dumps({"employees": result}, cls=DjangoJSONEncoder)
+    }
+    return render(request, "groups/groups_calendar.html", context=context)

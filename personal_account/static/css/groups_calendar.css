@@ -1,0 +1,448 @@
+/* Контейнер недель */
+.weeks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 20px;
+}
+
+/* Блок недели */
+.week-block {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    position: relative;
+}
+
+.week-header {
+    background-color: #2c3e50;
+    padding: 12px 16px;
+    color: white;
+    text-align: center;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+/* Упрощенная таблица недели */
+.week-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.week-table th {
+    background-color: #f8f9fa;
+    padding: 10px 6px;
+    text-align: center;
+    font-weight: 500;
+    color: #2c3e50;
+    border: 1px solid #e0e0e0;
+    width: calc(100% / 7);
+    min-width: 110px; /* Уменьшил с 120px */
+}
+
+/* Заголовки дней */
+.day-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.day-date {
+    font-weight: 600;
+    font-size: 15px; /* Уменьшил с 16px */
+    color: #2c3e50;
+}
+
+.day-weekday {
+    font-size: 13px; /* Уменьшил с 14px */
+    color: #7f8c8d;
+    text-transform: uppercase;
+}
+
+.today {
+    background-color: #3498db;
+    color: white;
+    width: 24px; /* Уменьшил с 28px */
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px; /* Уменьшил с 14px */
+    margin: 0 auto;
+}
+
+/* Ячейки с сотрудниками */
+.week-table td {
+    padding: 8px 6px; /* Уменьшил с 10px 8px */
+    border: 1px solid #e0e0e0;
+    text-align: left;
+    vertical-align: top;
+    min-height: 90px; /* Уменьшил с 100px */
+    background-color: white;
+    position: relative;
+}
+
+/* Группировка сотрудников по дням */
+.day-employees {
+    display: flex;
+    flex-direction: column;
+    gap: 6px; /* Уменьшил с 8px */
+    min-height: 70px; /* Уменьшил с 80px */
+}
+
+/* КАРТОЧКА СОТРУДНИКА - УМЕНЬШЕННЫЙ РАЗМЕР */
+.employee-card-calendar {
+    padding: 6px; /* Уменьшил с 8px */
+    border-radius: 6px;
+    background-color: #f8f9fa;
+    border-left: 3px solid #3498db; /* Уменьшил с 4px */
+    transition: all 0.2s;
+}
+
+.employee-card-calendar:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.employee-time {
+    font-weight: 600;
+    font-size: 12px; /* Уменьшил с 13px */
+    color: #2c3e50;
+    margin-bottom: 4px; /* Уменьшил с 6px */
+    padding-bottom: 3px; /* Уменьшил с 4px */
+    border-bottom: 1px solid #e0e0e0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.employee-info-calendar {
+    display: flex;
+    align-items: center;
+    gap: 6px; /* Уменьшил с 8px */
+}
+
+.employee-initials {
+    width: 28px; /* Уменьшил с 32px */
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 13px; /* Уменьшил с 14px */
+    color: white;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.employee-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1px; /* Уменьшил с 2px */
+    flex-grow: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.employee-name {
+    font-weight: 500;
+    font-size: 13px; /* Уменьшил с 14px */
+    color: #2c3e50;
+    line-height: 1.2; /* Уменьшил с 1.3 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.employee-position {
+    font-size: 11px; /* Уменьшил с 12px */
+    color: #7f8c8d;
+    line-height: 1.1; /* Уменьшил с 1.2 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Прочерк для пустых дней */
+.empty-day {
+    color: #bdc3c7;
+    font-style: italic;
+    font-size: 13px; /* Уменьшил с 14px */
+    height: 70px; /* Уменьшил с 80px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Цвета для разных типов смен */
+.shift-day {
+    border-left-color: #43a047;
+}
+
+.shift-night {
+    border-left-color: #2196f3;
+}
+
+.shift-vacation {
+    border-left-color: #ff9800;
+}
+
+.shift-sick {
+    border-left-color: #9c27b0;
+}
+
+.shift-off {
+    border-left-color: #e53935;
+}
+
+/* ОСНОВНАЯ ОПТИМИЗАЦИЯ - УМЕНЬШАЕМ ТАБЛИЦУ ДЛЯ ПОЛНОЙ НЕДЕЛИ */
+@media (min-width: 1200px) {
+    /* Для больших экранов можно оставить побольше, но уменьшим для гарантии */
+    .week-table th {
+        min-width: 105px;
+        padding: 8px 5px;
+    }
+    
+    .week-table td {
+        padding: 7px 5px;
+        min-height: 85px;
+    }
+}
+
+/* АДАПТИВНОСТЬ - УМЕНЬШАЕМ ДЛЯ УМЕРЕННЫХ ЭКРАНОВ */
+@media (max-width: 1199px) and (min-width: 1025px) {
+    .week-table th {
+        min-width: 100px;
+        padding: 8px 4px;
+    }
+    
+    .week-table td {
+        padding: 6px 4px;
+        min-height: 80px;
+    }
+    
+    .employee-card-calendar {
+        padding: 5px;
+    }
+    
+    .employee-initials {
+        width: 26px;
+        height: 26px;
+        font-size: 12px;
+    }
+    
+    .employee-name {
+        font-size: 12px;
+    }
+    
+    .employee-position {
+        font-size: 10px;
+    }
+    
+    .employee-time {
+        font-size: 11px;
+    }
+}
+
+/* ПЛАНШЕТЫ - ЕЩЕ КОМПАКТНЕЕ */
+@media (max-width: 1024px) {
+    .week-block {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .week-table {
+        min-width: 720px; /* Уменьшил с 800px */
+    }
+    
+    .week-table th {
+        min-width: 105px; /* Уменьшил с 140px */
+        padding: 8px 4px; /* Уменьшил с 12px 6px */
+    }
+    
+    .week-table td {
+        min-width: 105px;
+        padding: 6px 4px; /* Уменьшил с 8px 6px */
+        min-height: 75px; /* Уменьшил с 80px */
+    }
+    
+    /* Уменьшаем карточку */
+    .employee-card-calendar {
+        padding: 5px; /* Уменьшил с 6px */
+    }
+    
+    .employee-initials {
+        width: 24px; /* Уменьшил с 28px */
+        height: 24px;
+        font-size: 12px; /* Уменьшил с 13px */
+    }
+    
+    .employee-name {
+        font-size: 12px; /* Уменьшил с 13px */
+    }
+    
+    .employee-position {
+        font-size: 10px; /* Уменьшил с 11px */
+    }
+    
+    .employee-time {
+        font-size: 11px; /* Уменьшил с 12px */
+        margin-bottom: 3px;
+        padding-bottom: 2px;
+    }
+    
+    .day-employees {
+        gap: 5px; /* Уменьшил с 6px */
+    }
+    
+    .week-header {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+}
+
+/* МОБИЛЬНЫЕ - МАКСИМАЛЬНО КОМПАКТНО */
+@media (max-width: 768px) {
+    .week-table {
+        min-width: 630px; /* Уменьшил с 700px */
+    }
+    
+    .week-table th,
+    .week-table td {
+        min-width: 90px; /* Уменьшил с 120px */
+        padding: 6px 3px; /* Уменьшил с 8px 4px */
+    }
+    
+    /* Еще меньше карточка */
+    .employee-card-calendar {
+        padding: 4px; /* Уменьшил с 5px */
+        border-left-width: 2px; /* Уменьшил с 3px */
+    }
+    
+    .employee-info-calendar {
+        gap: 4px; /* Уменьшил с 6px */
+    }
+    
+    .employee-initials {
+        width: 20px; /* Уменьшил с 24px */
+        height: 20px;
+        min-width: 20px;
+        font-size: 10px; /* Уменьшил с 12px */
+    }
+    
+    .employee-name {
+        font-size: 11px; /* Уменьшил с 12px */
+    }
+    
+    .employee-position {
+        font-size: 9px; /* Уменьшил с 10px */
+    }
+    
+    .employee-time {
+        font-size: 10px; /* Уменьшил с 11px */
+        margin-bottom: 2px; /* Уменьшил с 4px */
+        padding-bottom: 1px; /* Уменьшил с 2px */
+    }
+    
+    .day-employees {
+        gap: 4px; /* Уменьшил с 6px */
+    }
+    
+    .week-header {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    .day-date {
+        font-size: 13px;
+    }
+    
+    .day-weekday {
+        font-size: 11px;
+    }
+    
+    .today {
+        width: 20px;
+        height: 20px;
+        font-size: 11px;
+    }
+}
+
+/* ОЧЕНЬ МАЛЕНЬКИЕ ЭКРАНЫ */
+@media (max-width: 576px) {
+    .week-table {
+        min-width: 540px; /* Уменьшил с 600px */
+    }
+    
+    .week-table th,
+    .week-table td {
+        min-width: 80px; /* Уменьшил с 100px */
+        padding: 5px 2px; /* Уменьшил с 6px 3px */
+    }
+    
+    /* Минимальный размер карточки */
+    .employee-card-calendar {
+        padding: 3px; /* Уменьшил с 4px */
+        border-radius: 4px;
+        border-left-width: 2px;
+    }
+    
+    .employee-info-calendar {
+        gap: 3px; /* Уменьшил с 4px */
+    }
+    
+    .employee-initials {
+        width: 18px; /* Уменьшил с 20px */
+        height: 18px;
+        min-width: 18px;
+        font-size: 9px; /* Уменьшил с 11px */
+    }
+    
+    .employee-name {
+        font-size: 10px; /* Уменьшил с 11px */
+        line-height: 1.1;
+    }
+    
+    .employee-position {
+        font-size: 8px; /* Уменьшил с 9px */
+        line-height: 1;
+    }
+    
+    .employee-time {
+        font-size: 9px; /* Уменьшил с 10px */
+        margin-bottom: 2px;
+        padding-bottom: 1px;
+    }
+    
+    .day-employees {
+        gap: 3px; /* Уменьшил с 4px */
+    }
+    
+    .empty-day {
+        font-size: 12px;
+        height: 60px;
+    }
+}
+
+/* Индикатор скролла */
+.week-block::-webkit-scrollbar {
+    height: 5px; /* Уменьшил с 6px */
+}
+
+.week-block::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 2px; /* Уменьшил с 3px */
+}
+
+.week-block::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 2px;
+}
+
+.week-block::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}

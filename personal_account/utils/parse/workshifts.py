@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 from lk.models import WorkShifts
 from users.models import User
 from utils.constants import (COLUMN_FOR_LINE, CURRENT_MONTH, LINE_JOB,
-                             TIME_SHIFT_FOR_LINE)
-from utils.parse.parse import open_wb, preparation_time
+                             TIME_SHIFT_FOR_LINE, TYPE_SHIFT_FOR_LINE)
+from utils.parse.parse import open_wb, preparation_time, preparation_type_shift
 
 
 def parse_work_shifts(type_line: str, file: any) -> bool:
@@ -53,6 +53,9 @@ def parse_work_shifts(type_line: str, file: any) -> bool:
                             f"допущена ошибка в имени/фамилии."
                             f"Ячейка {data[cell]}"
                         )
+                    type_shift = data[TYPE_SHIFT_FOR_LINE.get(type_line)].value
+                    prepare_type_shift = preparation_type_shift(type_shift)
+
                     if cell in [9, 10]:
                         time = data[
                             TIME_SHIFT_FOR_LINE.get(type_line)[1]
@@ -70,7 +73,6 @@ def parse_work_shifts(type_line: str, file: any) -> bool:
                     else:
                         try:
                             time_start, time_end = time.strip().split("-", 1)
-                            print(time.strip())
                         except Exception as e:
                             raise ValueError(
                                 f"При обработке файла возникла ошибка: {e}\n"
@@ -88,13 +90,15 @@ def parse_work_shifts(type_line: str, file: any) -> bool:
                                 date_start=date,
                                 date_end=(
                                     date+timedelta(days=1)
-                                    if prepare_time.get("night_shift")
+                                    if prepare_type_shift.get("night_shift")
                                     else date
                                 ),
                                 time_start=prepare_time.get("time_start"),
                                 time_end=prepare_time.get("time_end"),
-                                night_shift=prepare_time.get("night_shift"),
-                                type=prepare_time.get("type")
+                                night_shift=prepare_type_shift.get(
+                                    "night_shift"
+                                ),
+                                type=prepare_type_shift.get("type")
                             )
                         )
     try:

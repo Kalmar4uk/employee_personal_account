@@ -1,8 +1,7 @@
 from django.db import models
 
 from users.models import User
-from utils.constants import (CHOICES_STATUS_HOLIDAY, CHOICES_TYPE_HOLIDAY,
-                             CHOICES_TYPE_WORK_SHIFT)
+from utils.constants import (CHOICES_STATUS_HOLIDAY, CHOICES_TYPE_HOLIDAY)
 
 
 class AbstractWorkShifts(models.Model):
@@ -33,8 +32,7 @@ class WorkShifts(AbstractWorkShifts):
     )
     type = models.CharField(
         "Тип графика",
-        max_length=7,
-        choices=CHOICES_TYPE_WORK_SHIFT,
+        max_length=50,
         null=True,
         blank=True
     )

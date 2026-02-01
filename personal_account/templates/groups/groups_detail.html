@@ -6,13 +6,16 @@
         <h1>{{ group.title }}</h1>
         {% if boss %}
         <p>
-            <strong>Руководитель:</strong>
-            <a href="{% url 'users:profile' boss.id %}">
-                <button class="profile-boss-btn">{{ boss.last_name }} {{ boss.first_name }}</button>
-            </a>
+            <strong>Руководитель:</strong> {{ boss.last_name }} {{ boss.first_name }}
         </p>
         {% endif %}
         <p><strong>Количество сотрудников:</strong> {{ group.users.count }}</p>
+        <p>
+            <strong>График смен на месяц:</strong>
+            <a href="{% url 'users:group_shifts' request.resolver_match.kwargs.id %}">
+                <button class="profile-boss-btn">Открыть график</button>
+            </a>
+    </p>
     </div>
     <div class="group-stats">
         <div class="stat-card">

@@ -41,21 +41,6 @@ def preparation_time(
         time_start, time_end
 ) -> dict[str, str | datetime]:
 
-    night_shift = False
-    type = ""
-
-    if time_start.startswith("21:00"):
-        night_shift = True
-
-    if (
-        time_end.endswith("21:00") or
-        time_start.startswith("21:00")
-    ):
-        type = TYPE_SHIFTS.get("schedule")
-
-    else:
-        type = TYPE_SHIFTS.get("standart")
-
     time_start = datetime.strptime(
         time_start.rstrip(),
         TIME_FORMAT
@@ -67,8 +52,20 @@ def preparation_time(
     ).time()
 
     return {
-        "night_shift": night_shift,
-        "type": type,
         "time_start": time_start,
         "time_end": time_end,
+    }
+
+
+def preparation_type_shift(type_shift: str) -> dict[str, str]:
+    night_shift = False
+
+    type = type_shift.strip()
+
+    if (type := type_shift.strip()) == "Ночное дежурство":
+        night_shift = True
+
+    return {
+        "type": type,
+        "night_shift": night_shift
     }
