@@ -37,6 +37,8 @@
 </div>
 <script>
     window.shiftsData = JSON.parse('{{ schedule|escapejs }}');
+    window.month = parseInt('{{ month_for_js }}');
+    window.year = parseInt('{{ year_data }}');
 </script>
 <script src="{% static 'js/groups_calendar.js' %}"></script>
 {% endblock %}

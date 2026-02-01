@@ -3,12 +3,10 @@ let scheduleData = {
     employees: []
 };
 
-let currentYear = new Date().getFullYear();
-let currentMonth = new Date().getMonth();
+let currentYear = window.year;
+let currentMonth = window.month;
 
 const shiftsData = window.shiftsData;
-
-console.log(shiftsData);
 
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', async function() {
@@ -19,7 +17,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 // Загрузка данных
 async function loadScheduleData() {
     scheduleData = window.shiftsData;
-    console.log("Загружено сотрудников:", scheduleData.employees.length);
 }
 
 // Генерация недельного представления
@@ -110,10 +107,6 @@ function getWeeksOfMonth(year, month) {
         }
         weeks.push(week);
     }
-    
-    console.log(`Сгенерировано недель для ${year}-${month + 1}:`, weeks.length);
-    console.log("Первая неделя начинается с:", weeks[0][0].toDateString());
-    console.log("Последняя неделя заканчивается:", weeks[weeks.length - 1][6].toDateString());
     
     return weeks;
 }

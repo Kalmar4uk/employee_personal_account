@@ -247,6 +247,7 @@ def group_calendar(request, id):
     context = {
         "month_data": MONTHS.get(month),
         "year_data": year,
+        "month_for_js": month - 1,
         "schedule": json.dumps({"employees": result}, cls=DjangoJSONEncoder)
     }
     return render(request, "groups/groups_calendar.html", context=context)
