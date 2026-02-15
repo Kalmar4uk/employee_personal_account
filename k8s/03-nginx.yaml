@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: kalmmar4uk/nginx_k8s  # замените на ваш образ
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: static-storage
+          mountPath: /staticfiles  # куда Nginx смотрит в конфиге
+          readOnly: true
+      volumes:
+      - name: static-storage
+        persistentVolumeClaim:
+          claimName: static-volume
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer

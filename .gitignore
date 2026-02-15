@@ -10,3 +10,4 @@ ENV/
 env.bak/
 venv.bak/
 personal_account/*.sqlite3
+k8s/00-secrets*

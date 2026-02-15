@@ -36,11 +36,14 @@ class User(AbstractUser):
         if self.id:
             self.personnel_number = self.id
         else:
-            self.personnel_number = (
-                User.objects.aggregate(
-                    models.Max("id")
-                    )["id__max"] + 1
-            )
+            try:
+                self.personnel_number = (
+                    User.objects.aggregate(
+                        models.Max("id")
+                        )["id__max"] + 1
+                    )
+            except TypeError:
+                self.personnel_number = 1
 
         super().save(*args, **kwargs)
 

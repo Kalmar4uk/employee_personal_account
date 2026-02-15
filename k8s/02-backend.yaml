@@ -1,0 +1,78 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: kalmmar4uk/lk_project # замените на ваш образ
+        imagePullPolicy: Always 
+        ports:
+        - containerPort: 8000  # измените на порт вашего бэкенда
+        env:
+        - name: DB_HOST
+          value: "postgres-service"
+        - name: DB_PORT
+          value: "5432"
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: database
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: password
+        - name: SECRET_KEY_DJANGO
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: django-secret-key
+        - name: DSN
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: dsn
+        - name: DEBUG
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: debug
+        volumeMounts:
+        - name: static-storage
+          mountPath: /app/collected_static/
+      volumes:
+      - name: static-storage
+        persistentVolumeClaim:
+          claimName: static-volume
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000  # должен совпадать с containerPort
+  type: ClusterIP
